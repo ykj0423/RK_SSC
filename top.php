@@ -7,7 +7,7 @@ $_SESSION['sysname'] = $ini['SYSTEM_NAME'];
 $_SESSION['centername'] = $ini['CENTER_NAME'];
 $errmsg = "";
 //header
-$pageTitle =  "トップページ";
+$pageTitle = "トップページ";
 include('include/header.php');
 
 /**
@@ -52,6 +52,7 @@ if (!empty($url)){
 //エラーメッセージ
 include('include/err.php')
 ?>
+<form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <div class="alert alert-info" role="alert">
 	<p class="lead">ご利用登録されている方はこちら</p>
   <input type="submit" class="btn btn-warning btn-lg" name="search" role="button" value="空き状況・予約申込み　>>">
@@ -72,6 +73,7 @@ include('include/err.php')
     <h3 class="panel-title">お知らせ</h3>
   </div>
   <div class="panel-body">
+</form>
 <?php
 //TODO　InformationClassを作成する
 //XXXX/XX/XX  定期メンテナンスの実施のお知らせetc....お知らせマスタの内容

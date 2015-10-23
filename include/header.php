@@ -6,10 +6,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta NAME="ROBOTS" CONTENT="NOINDEX,NOFOLLOW,NOARCHIVE">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title><?php echo $pageTitle." | ".$_SESSION['sysname']; ?> </title>
+<title><?php echo ($pageTitle." | ".$_SESSION['sysname']);?></title>
+<link href="css/bootstrap-glyphicons.css" rel="stylesheet">
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/custom.css" rel="stylesheet">
-<link href="css/bootstrap-glyphicons.css" rel="stylesheet">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <!--[if lt IE 9]>
@@ -19,5 +19,4 @@
 </head>
 <body class="container">
 <p class="bg-head text-right"><?php echo $_SESSION['centername']; ?></p>
-<h1><span class="midashi">|</span><?php echo $_SESSION['sysname']; ?><small>$pageTitle</small></h1>
-?>
+<h1><span class="midashi">|</span><?php echo $_SESSION['sysname']."<small>".$pageTitle."</small>" ?></h1>

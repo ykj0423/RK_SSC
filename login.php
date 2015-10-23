@@ -40,7 +40,7 @@ if (!$errmsg) {
 //$obj->close();
 
 //エラーメッセージ
-include('include/err.php')
+include('include/err.php');
 ?>
     <div class="text-center">
         <p>発行された「ログインID」と「パスワード」をご入力いただき、「ログイン」ボタンを押してください。</p>

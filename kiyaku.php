@@ -18,6 +18,18 @@ include('include/header.php');
  * @license    G&G Co.ltd.
  * @version    0.1
 **/
+
+if ( !empty( $_POST ) ){
+  if( $_POST['agree'] == 1 ){
+      header( 'location: login.php' );
+      exit();
+  }else{
+      $errmsg = "ご利用規約にご意いただけない場合は、システムを使用できません。"; 
+  }
+}
+
+//エラーメッセージ
+include('include/err.php');
 ?>
 <p>
 手続きを行うためには、以下にご同意いただくことが必要です。 <br>
@@ -56,12 +68,14 @@ include('include/header.php');
       <dd>この規約は、平成XX年X月X日から施行します </dd>
       </dl>
    </div>
-    <div style="text-align:center">
-          <label class="mr10 f120"><input name="agree" type="radio" checked="checked" value="">同意しない</label>
-          <label class="mr10 f120"><input name="agree" type="radio" value="">同意する</label><br><br>
+  <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+  <div style="text-align:center">
+    <label class="mr10 f120"><input name="nonagree" type="radio" checked value="0">同意しない</label>
+    <label class="mr10 f120"><input name="agree" id="agree" type="radio" value="1">同意する</label><br><br>
     <a class="btn btn-default btn-lg mb20" href="top.php" role="button"><< 戻る</a>
-    <a class="btn btn-primary btn-lg mb20" href="login.php" role="button">次へ進む　>></a>
-    </div>
- </div>
+    <input type="submit" value="次へ進む&gt;&gt;" class="btn btn-primary btn-lg mb20"/>
+  </div>
+  </form>
+</div>
 </body>
 </html>
