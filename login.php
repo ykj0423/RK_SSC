@@ -5,7 +5,7 @@ $errmsg = "";
 //header
 $pageTitle =  "ログイン";
 include('include/header.php');
-
+include('model/Kyaku.php');
 /**
  * ReserveKeeperWeb予約システム
  *
@@ -19,51 +19,57 @@ include('include/header.php');
  * @version    0.1
 **/
 
-//TODO DBにログインしてパスワードチェック
-//require_once("model/Kyaku.php");
-//$obj = new Kyaku();
-//$conErr = $obj->connect();
-//if (!empty($conErr)) { echo $conErr; die();}
+if( isset( $_POST['submit'] ) ){
 
-if (!empty($_POST['loginid'])){
+    if (empty($_POST['wloginid'])){
+        $errmsg = "ログインIDを入力してください。"; 
+    }else if (empty($_POST['wpwd'])){
+        $errmsg = "パスワードを入力してください。";  
+    }
+    
+    //ログインIDとパスワードのチェック
+    $Kyaku = new Kyaku();
 
-    $errmsg = "ログインIDを入力してください。"; 
+    $login = $Kyaku->login( $_POST['wloginid'], $_POST['wpwd'] );
 
-}else if (!empty($_POST['pass'])){
-    $errmsg = "パスワードを入力してください。"; 
+    if(!$login){
+        $errmsg = "ログインIDもしくはパスワードが違います。";
+    }
+
+    if ( !$errmsg ) {
+        $_SESSION['wloginid'] = $_POST['wloginid'];
+        header( 'location: hitudoku.php' );
+        exit();
+    }
+
 }
-
-if (!$errmsg) {
-    header('location: '.$_SESSION['next_page']);
-    exit();
-}
-//$obj->close();
 
 //エラーメッセージ
 include('include/err.php');
 ?>
-    <div class="text-center">
+   <div class="text-center">
         <p>発行された「ログインID」と「パスワード」をご入力いただき、「ログイン」ボタンを押してください。</p>
         <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
             <div class="form-horizontal">
                 <div class="form-group text-center">
                     <label class="col-xs-5 control-label" for="loginid">ログインID</label>
                     <div class="col-xs-3">
-                        <input type="text" class="form-control" id="loginid" name="loginid">
+                        <input type="text" class="form-control" id="wloginid" name="wloginid">
                     </div>
                 </div>
                 <div class="form-group text-center">
                     <label class="col-xs-5 control-label" for="pass">パスワード</label>
                     <div class="col-xs-3">
-                        <input type="password" class="form-control" id="pass" name="pass">
+                        <input type="password" class="form-control" id="wpwd" name="wpwd">
                     </div>
                 </div>
                  <div class="form-group">
                     <div class="col-xs-offset-5 col-xs-1">
-                        <a href="top.html"><input type="submit" value="戻る" class="btn btn-default btn-lg"></a>
+                        <!-- //TODO -->
+                        <a href="top.php"><input type="submit" value="戻る" class="btn btn-default btn-lg"></a>
                     </div>
                     <div class="col-xs-1">
-                        <a href="hitudoku.html"><input type="submit" value="ログイン" class="btn btn-primary btn-lg"></a>
+                        <input type="submit" name="submit" id="submit" value="ログイン" class="btn btn-primary btn-lg">
                     </div>
                 </div>
             </div>

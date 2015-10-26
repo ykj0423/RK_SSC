@@ -19,4 +19,4 @@
 </head>
 <body class="container">
 <p class="bg-head text-right"><?php echo $_SESSION['centername']; ?></p>
-<h1><span class="midashi">|</span><?php echo $_SESSION['sysname']."<small>".$pageTitle."</small>" ?></h1>
+<h1><span class="midashi">|</span><?php echo $pageTitle; ?><?php echo "<small>".$_SESSION['sysname']."</small>" ?></h1>

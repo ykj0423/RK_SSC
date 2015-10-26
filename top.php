@@ -5,9 +5,11 @@ $ini = parse_ini_file('model/config.ini');
 
 $_SESSION['sysname'] = $ini['SYSTEM_NAME'];
 $_SESSION['centername'] = $ini['CENTER_NAME'];
+$next_page = "";
 $errmsg = "";
+
 //header
-$pageTitle = "トップページ";
+$pageTitle = "予約システムトップページ";
 include('include/header.php');
 
 /**
@@ -23,30 +25,29 @@ include('include/header.php');
  * @version    0.1
 **/
 
-//選択された画面へ遷移する。未ログインであれば、ログイン画面に遷移する。
-$next_page = 'kiyaku.php';
-//$next_page = 'login.php';
-
 if (!empty($_POST['pre_search'])){
     //空き状況検索
-    $url = 'pre_search.php';
+    $next_page = 'pre_search.php';
 }else if (!empty($_POST['new_regist'])){
     //新規利用者登録
-    $url = 'kiyaku.php';
+    $_SESSION['next_page'] = 'regist.php';
+    $next_page = 'kiyaku.php';
 }else if (!empty($_POST['search'])){
     //空き状況・予約申込み　
-    $url = (isset($_SESSION['loginid'])) ? 'search.php' : $next_page;
+    $_SESSION['next_page'] = 'search.php';
+    $next_page = (isset($_SESSION['loginid'])) ? 'search.php' : 'kiyaku.php';
 }else if (!empty($_POST['rsvlist'])){
-    //予約照会　
-    $url = (isset($_SESSION['loginid'])) ? 'rsvlist.php' : $next_page;
+    //予約照会
+    $_SESSION['next_page'] = 'rsvlist.php';
+    $next_page = (isset($_SESSION['loginid'])) ? 'rsvlist.php' : 'kiyaku.php';
 }else if (!empty($_POST['member'])){
-    //利用者情報変更　
-    $url = (isset($_SESSION['loginid'])) ? 'member_top.php' : $next_page;
+    //利用者情報変更
+    $_SESSION['next_page'] = 'member_top.php';
+    $next_page = (isset($_SESSION['loginid'])) ? 'member_top.php' : 'kiyaku.php';
 }
 
-if (!empty($url)){
-    $_SESSION['next_page'] = $url;
-    header('location: '.$url);
+if (!empty($next_page)){
+    header('location: '.$next_page);
     exit();
 }
 //エラーメッセージ

@@ -7,7 +7,7 @@
          <ul class="nav navbar-nav">
             <li><a href="search.php">空き状況</a></li>
             <li><a href="rsvlist.php">予約照会</a></li>
-            <li><a  href="member_top.php">パスワード情報変更</a></li>
+            <li><a  href="member_top.php">利用者情報変更</a></li>
             <li><a href="http://www.kobe-kinrou.jp/shisetsu/kinroukaikan/ryokin.html#h3473" target="_blank">料金表</a></li>
             <li><a href="help.html" target="_blank">システムガイド</a></li>
          </ul>

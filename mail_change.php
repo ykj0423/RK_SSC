@@ -1,12 +1,13 @@
 <?php
 @session_start();
-
+require_once('model/Kyaku.php');
 $errmsg = "";
 //header
 $pageTitle =  "メールアドレス変更";
 include('include/header.php');
 //メニュー
 include('include/menu.php');
+
 /**
  * ReserveKeeperWeb予約システム
  *
@@ -20,11 +21,38 @@ include('include/menu.php');
  * @version    0.1
 **/
 
-if (empty($_POST['regist'])){
+$infomsg = "";
+
+//メールアドレス
+$mail_adress = "";
+
+$Kyaku = new Kyaku();
+$mail_adress = $Kyaku->get_mail_adress( $_SESSION['wloginid'] );
+
+if( empty( $_POST['regist'] ) ){
+    
+
     $infomsg = "予約申込の結果等はメールで連絡します。<br>連絡のとれるメールアドレスをご入力のうえ、「このアドレスで登録する」ボタンを押してください。";
+
 }else{
-    $infomsg = "ご入力いただいたメールアドレスの変更が完了致しました。"; 
+
+print_r($_POST);
+ 
+    if( empty( $_POST['mail'] ) ){
+        $errmsg = "メールアドレスを入力してください。";
+    }else if( empty( $_POST['remail'] )) {
+        $errmsg = "確認のため、もう一度メールアドレスを入力してください。";
+    }else if( $_POST['mail'] != $_POST['remail'] ){
+        $errmsg = "メールアドレスが一致しません。";
+    }else{
+        if( $Kyaku->change_mail_adress( $_SESSION['wloginid'] , $_POST['mail'] ) ){
+            $infomsg = "メールアドレスの変更が完了致しました。"; 
+        }
+    }
 }
+
+//エラーメッセージ
+include('include/err.php');
 ?>
 <p><?php echo $infomsg; ?></p><br>
 <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
@@ -34,11 +62,14 @@ if (empty($_POST['regist'])){
         <tr><th>ログインID</th><td>012345678</td></tr>
         <tr><th>新パスワード<span class="text-danger">(必須)</span></th><td><input type="password" name="pass" value=""></td></tr>
         <tr><th>新パスワード(再入力)</th><td><input type="password" name="pass" value=""></td></tr-->
-        <tr><th>連絡先メールアドレス</th>
+        <tr><th>現在のメールアドレス</th>
         <td>
-            <input type="text" name="mail" style="width:60%" value="m.murai@gandg.co.jp">
-            <input type="submit" class="btn btn-primary btn-sm" role="button" name="mail" value="テスト送信>>"><br>
-              <span class="text-danger">※ご注意ください※</span><br>
+            <?php echo $mail_adress; ?><br>
+        </td>
+        <tr><th>新しいメールアドレス</th>
+        <td>
+            <input type="text" name="mail" style="width:60%" value=""><br>
+            <span class="text-danger">※ご注意ください※</span><br>
                 ※「テスト送信」ボタンを押しすと、テストメールが送信されます。<br>メールが正しく届くかどうかを事前に確認するためにご利用ください。<br>
                 もし「テストメール」が届かない場合は、メールアドレスの入力間違い、迷惑メールの拒否設定が考えられます。<br>
 
@@ -52,12 +83,12 @@ if (empty($_POST['regist'])){
             </span>
         </td>
         </tr>
-        <tr><th>連絡先メールアドレス(再入力)</th>
-            <td><input type="text" name="remail" style="width:60%" value="m.murai@gandg.co.jp"></td>
+        <tr><th>新しいメールアドレス(再入力)</th>
+            <td><input type="text" name="remail" style="width:60%" value=""></td>
         </tr>
         </tbody>
     </table>
-    <input type="submit" class="btn btn-primary" role="button" name="regist" value="このアドレスで登録する　>>"><br><br>
+    <input type="submit" class="btn btn-primary" role="button" name="regist" value="このアドレスで登録する"><br><br>
 </form>
 </body>
 </html>
