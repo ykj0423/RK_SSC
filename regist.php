@@ -3,7 +3,7 @@
 
 $errmsg = "";
 //header
-$pageTitle = "利用者情報登録[入力]";
+$pageTitle = "新規利用者登録[入力]";
 include('include/header.php');
 include('model/Kyaku.php');
 /**
@@ -11,7 +11,7 @@ include('model/Kyaku.php');
  *
  * PHP versions 4
  *
- * @category   公益財団法人神戸市産業振興財団／利用者情報登[入力]
+ * @category   公益財団法人神戸市産業振興財団／新規利用者登録[入力]
  * @package    none
  * @author     y.kamijo <y.kamijo@gandg.co.jp>
  * @copyright  2015 G&G Co.ltd.
@@ -19,17 +19,30 @@ include('model/Kyaku.php');
  * @version    0.1
 **/
 if( isset( $_POST['submit'] ) && !empty( $_POST['submit'] ) ){
-    
-    //利用者クラス
-    $Kyaku = new Kyaku();
-    
+        
+    /* TODO　入力チェック */
     if ( !$errmsg ) {
+
+        //利用者クラス
+        $Kyaku = new Kyaku();
+        $Kyaku->push_data( $_POST, 'dannm', true, false　);
+        $Kyaku->push_data( $_POST, 'danmk', true, false　);
+        $Kyaku->push_data( $_POST, 'daihyo', true, false　);
+        $Kyaku->push_data( $_POST, 'renraku', true, false　);
+        $Kyaku->push_data( $_POST, 'tel2_1', true, false　);
+        $Kyaku->push_data( $_POST, 'fax_1', false, false　);
+        $Kyaku->push_data( $_POST, 'mail', true, false　);
+        $Kyaku->push_data( $_POST, 'zipcd_1', true, false　);        
+        $Kyaku->push_data( $_POST, 'adr1', true, false　);
+        $Kyaku->push_data( $_POST, 'gyscd', true, false　);
+        $Kyaku->push_data( $_POST, 'sihon', true, false　);
+        $Kyaku->push_data( $_POST, 'jygsu', true, false　);
+
         //オブジェクトのシリアル化
-        $_SESSION['Kyaku'] = serialize($Kyaku);
-        //header( 'location: regist_cnf.php' );
-        //exit();
-      $Kyaku = new Kyaku();
-      //$Kyaku->add_kyaku( $_POST );
+        $_SESSION['Kyaku'] = serialize( $Kyaku );
+        header( 'location: regist_cnf.php' );
+        exit();
+
     }
 
 }
@@ -44,7 +57,7 @@ include('include/err.php');
         <a href="loginqa.html#regist"   class="btn alert-danger" target="window_name"  onClick="disp('loginqa.html#regist')"><li class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">&nbsp;入力にあたってのご注意はこちら>></li></a> 
       </div>
   </div>
-  <form role="form" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>>
+  <form role="form" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
     <div class="form-group">
       <table id="regist" align="center" class="table table-bordered table-condensed  form-inline f120" >
           <th >利用者名<span class="red">(必須)</span></th>
