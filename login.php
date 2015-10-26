@@ -19,7 +19,7 @@ include('model/Kyaku.php');
  * @version    0.1
 **/
 
-if( isset( $_POST['submit'] ) ){
+if( isset( $_POST['submit'] ) && !empty( $_POST['submit'] ) ){
 
     if (empty($_POST['wloginid'])){
         $errmsg = "ログインIDを入力してください。"; 
@@ -38,6 +38,10 @@ if( isset( $_POST['submit'] ) ){
 
     if ( !$errmsg ) {
         $_SESSION['wloginid'] = $_POST['wloginid'];
+        //オブジェクトのシリアル化
+        unset( $_SESSION['Kyaku'] );
+        $_SESSION['Kyaku'] = serialize( $Kyaku );
+
         header( 'location: hitudoku.php' );
         exit();
     }

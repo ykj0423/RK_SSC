@@ -20,10 +20,9 @@ include('model/Kyaku.php');
 **/
 if( isset( $_POST['submit'] ) && !empty( $_POST['submit'] ) ){
         
-    /* TODO　入力チェック */
-    if ( !$errmsg ) {
-    //
-    }
+    $_SESSION['next_page'] = $_POST['next_page'];
+    header( 'location: hitudoku.php' );
+    exit();
 
 }
 
@@ -45,8 +44,8 @@ include('include/err.php');
     下記がお客様のログインIDとパスワードになります。ログインの際、必要となります。 <br>
 	<span class="status2">※この画面を印刷するなどしてログインIDとパスワードを保管してください。</span>
     <br><div class="alert alert-info" role="alert" style="width:50%">
-          <h3>ログインID は　 123456 　です。</h3>
-          <h3>パスワード は　 abcde1234　です。</h3>
+          <h3>ログインID は　 <?php echo $Kyaku->get_wloginid(); ?>です。</h3>
+          <h3>パスワード は　 <?php echo $Kyaku->get_wpwd(); ?>です。</h3>
       </div>
 	<br>
 	<span class="text-danger">※ご注意ください※</span><br>
@@ -66,14 +65,22 @@ include('include/err.php');
     <div class="alert alert-success" role="alert">
 	<h4>＊＊ お問い合わせ窓口＊＊</h4><h3>TEL:078-360-3200 お問い合わせ時間：9:00～17:00</h3> ※登録状況を確認するにあたり、「ログインID」をお知らせください。
 	</div>
-
-    </div>
+    </div>    
 	<div class="alert alert-info" role="alert" >
 		<p class="lead">ご利用開始はこちらから>></p>
-		<a class="btn btn-primary btn-lg" href="login.html" role="button">空き状況・予約申込　>></a>
+		<!--a class="btn btn-primary btn-lg" href="login.php" role="button">空き状況・予約申込　>></a-->
+        <form role="form" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+            <input type="submit" name="submit" id="submit" value="空き状況・予約申込　" class="btn btn-primary btn-lg">
+            <input type="hidden" name="next_page" value="search.php" class="btn btn-primary btn-lg">
+        </form>
 		<!--a class="btn btn-primary btn-lg" href="login.html" role="button">予約照会　>></a-->
-		<a class="btn btn-primary btn-lg" href="login.html" role="button">利用者情報変更　>></a>
+		<form role="form" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+            <!--a class="btn btn-primary btn-lg" href="login.php" role="button">利用者情報変更　>></a-->
+            <input type="submit" name="submit" id="submit" value="利用者情報変更　" class="btn btn-primary btn-lg">
+            <input type="hidden" name="next_page" value="member_top.php" class="btn btn-primary btn-lg">
+        </form>
 	</div>
+    </form>
  </div>
 </body>
 </html>

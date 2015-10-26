@@ -43,7 +43,7 @@ include('include/err.php');
       </tr>
       <tr>
         <th>利用者名（カナ）</th>
-        <td><?php echo  $Kyaku->put_data('danmk'); ?></td>
+        <td><?php echo  $Kyaku->put_data('dannmk'); ?></td>
       </tr>
       <tr>
         <th>代表者名</th>

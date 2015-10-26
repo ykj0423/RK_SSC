@@ -26,7 +26,7 @@ if( isset( $_POST['submit'] ) && !empty( $_POST['submit'] ) ){
         //利用者クラス
         $Kyaku = new Kyaku();
         $Kyaku->push_data( $_POST, 'dannm', true, false　);
-        $Kyaku->push_data( $_POST, 'danmk', true, false　);
+        $Kyaku->push_data( $_POST, 'dannmk', true, false　);
         $Kyaku->push_data( $_POST, 'daihyo', true, false　);
         $Kyaku->push_data( $_POST, 'renraku', true, false　);
         $Kyaku->push_data( $_POST, 'tel2_1', true, false　);

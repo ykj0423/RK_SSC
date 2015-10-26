@@ -7,7 +7,12 @@ class Kyaku extends ModelBase {
     // プロパティの宣言
     //public $conn;
     var $data;
+    var $wloginid;//ログインID
+    var $wpwd;//パスワード
+    var $dannm;//団体名
+    var $mail;//メールアドレス
     /*--------------------
+
     // ログイン処理
     ---------------------*/
     function __construct() {
@@ -25,6 +30,22 @@ class Kyaku extends ModelBase {
         
     }
 
+    public function get_wpwd() {
+        return $this->wpwd;       
+    }
+
+    public function get_wloginid() {
+        return $this->wloginid;       
+    }
+    
+    public function get_dannm() {
+        return $this->data['dannm'];       
+    }
+    
+    public function get_mail() {
+        return $this->data['mail'];       
+    }
+    
     public function push_data( $source_array, $key_name, $require , $beZero　) {
         //見直しが必要かもしれない
         
@@ -154,34 +175,28 @@ class Kyaku extends ModelBase {
               $kyaku_cd = intval( $row[0] ) + 1;
         }
 
+        $this->wloginid = (string)$kyaku_cd;
+        $this->wpwd = (string)hash('adler32', $kyaku_cd );
+        
         $sql = "insert into mt_kyaku ( kyacd, dannm, dannm2, dannmk, daihyo, renraku, tel1, tel2,
             fax, url, mail, zipcd, adr1, adr2, gyscd, sihon, jygsu, kyakb, biko, login, udate, utime, wloginid, wpwd )";
         $sql .= " values  ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,? )";
-
+        
         $params = array( $kyaku_cd, 
             parent::convertToSJIS( $this->data['dannm'] ),
-            "''", 
-            parent::convertToSJIS( $this->data['dannmk'] ), 
-            parent::convertToSJIS( $this->data['daihyo'] ), 
-            parent::convertToSJIS( $this->data['renraku'] ),
-            $this->data['tel1'], $this->data['tel2'], 
-            $this->data['fax'],　"''",
-            $this->data['mail'], $this->data['zipcd'],
-            parent::convertToSJIS( $this->data['adr1'] ), 
-            parent::convertToSJIS( $this->data['adr2'] ), 
-            parent::convertToZero( $this->data['gyscd'] ),
-            parent::convertToZero( $this->data['sihon'] ), 
-            parent::convertToZero( $this->data['jygsu'] ), 
-            parent::convertToZero( $this->data['kyakb'] ), 
-            "''", $this->data['login'],
-            parent::getUdate(), parent::getUtime(),
-            $this->data['wloginid'],
-            $this->data['wpwd']);
+            "''",
+            parent::convertToSJIS( $this->data['dannmk'] ), parent::convertToSJIS( $this->data['daihyo'] ), 
+            parent::convertToSJIS( $this->data['renraku'] ), $this->data['tel1'], $this->data['tel2'], $this->data['fax'], "''", $this->data['mail'], $this->data['zipcd'],
+            parent::convertToSJIS( $this->data['adr1'] ), parent::convertToSJIS( $this->data['adr2'] ), 
+            parent::convertToZero( $this->data['gyscd'] ), parent::convertToZero( $this->data['sihon'] ),parent::convertToZero( $this->data['jygsu'] ), 
+            parent::convertToZero( $this->data['kyakb'] ),"''", $this->data['login'], parent::getUdate(),parent::getUtime(),
+            $this->wloginid,$this->wpwd);
         
         $stmt = sqlsrv_query( $this->conn, $sql, $params);
 
         if( $stmt === false) {
-            echo $sql;
+            echo "false:".$sql."<br>";
+            print_r($params);
             print_r( sqlsrv_errors(), true) ;
             return false;
         }
@@ -193,42 +208,30 @@ class Kyaku extends ModelBase {
     function get_user_info( $wloginid ) 
 	{
 	 
-		$serverName = "WEBRK\SQLEXPRESS";
-        $connectionInfo = array( "Database"=>"RK_SSC_DB", "UID"=>"sa", "PWD"=>"Webrk_2015" );
-
-		$conn = sqlsrv_connect( $serverName, $connectionInfo);
-
-		if( $conn === false ) {
-			 //TODO
-            die( print_r( sqlsrv_errors(), true));
-		}
+		//if( $this->conn === false ) {
+			 $this->connectDb();
+		//}
 
 		/* --------------------*/
 		/*  顧客情報取得処理  */
 		/* --------------------*/
-		$sql = "SELECT * FROM mt_kyaku WHERE wloginid =  ". $wloginid;
-
-		$stmt = sqlsrv_query( $conn, $sql );
+		$sql = "SELECT * FROM mt_kyaku WHERE wloginid = '". $wloginid."'";
+//echo "get_user_info ".$sql;
+		$stmt = sqlsrv_query( $this->conn, $sql );
 		
 		if( $stmt === false) {
-			ie( print_r( sqlsrv_errors(), true) );
+			print_r( sqlsrv_errors(), true);
 		}
 
 		while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
-			/* セッションに入れるのがあまりいい形ではないがとりあえず */
-			$_SESSION[ 'webrk' ][ 'kyacd' ] = $row[ 'kyacd' ];
-			$_SESSION[ 'webrk' ][ 'dannm' ] = $row[ 'dannm' ];
-			//$_SESSION[ 'webrk' ][ 'dannm2' ] = $row[ 'dannm2' ];
-			$_SESSION[ 'webrk' ][ 'wpwd' ] = $row[ 'wpwd' ];
-			$_SESSION[ 'webrk' ][ 'mail' ] = $row[ 'mail' ];
-			$_SESSION[ 'webrk' ][ 'wlastlogindt' ] = $row[ 'wlastlogindt' ];
-			$_SESSION[ 'webrk' ][ 'wuserupd' ] = $row[ 'lastlogin' ];
+
+			$this->data['dannm']= $row['dannm'];
+            $this->data['mail']= $row['mail'];
+
 		}
 		
 	 }
     
-
-	
 
     /*--------------------
     // ユーザ情報の変更
@@ -304,7 +307,6 @@ class Kyaku extends ModelBase {
 		if( $conn === false ) {
 			 die( print_r( sqlsrv_errors(), true));
 		}
-
 		
 		$sql = "SELECT pwd FROM web_mkyaku where kyacd = ".$kyacd;
 		
@@ -330,7 +332,6 @@ class Kyaku extends ModelBase {
 		}
 		
 		return false;
-
 
 		$sql = "update web_mkyaku set pwd='".$passnew."' where kyacd = ".$kyacd;
 		$params = array($pass);

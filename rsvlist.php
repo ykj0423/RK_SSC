@@ -7,6 +7,7 @@ $pageTitle =  "予約照会";
 include('include/header.php');
 //メニュー
 include('include/menu.php');
+require_once('func.php');
 /**
  * ReserveKeeperWeb予約システム
  *
@@ -19,6 +20,7 @@ include('include/menu.php');
  * @license    G&G Co.ltd.
  * @version    0.1
 **/
+
 ?>
     <div class="row mb20">
 		<div class="col-xs-7">
@@ -62,14 +64,61 @@ include('include/menu.php');
       	<tr>
       		<th width="8%">状態</th>
       		<th width="10%">お問い合わせ<br>番号<br>/申込日</th>
-			<th width="18%">使用日<br>/施設名</th>
-			<th width="15%">使用時 間</th>
-			<th width="3%">人数</th>
-			<th width="22%">行事名<br>/確認事項</th>
+          <th width="18%">使用日<br>/施設名</th>
+          <th width="15%">使用時 間</th>
+          <th width="3%">人数</th>
+          <th width="22%">行事名<br>/確認事項</th>
        		<th width="10%">納付期限</th>
        		<th>請求書<br>/使用許可書</th>
       	</tr>
       </thead>
+      
+<tbody>
+<?php 
+define("KARIYOHAKU", "仮予約");
+define("YOHAKU", "予約完了");
+define("TORIKESHI", "予約取消");
+
+require_once("model/db.php");
+$db = new DB;
+$conErr = $db->connect();
+if (!empty($conErr)) { echo $conErr; die();}
+
+$rsvlist = $db->select_rsvlist($_SESSION['wloginid']);//客コード
+
+for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
+
+  
+    echo "<tr>";
+        
+    //入金チェック（入金有無にかかわらず、予約は取り消しできる）
+    if( $db->select_nyukin_status( $rsvlist[ $i ][ 'ukeno' ] ) ) {
+      echo "<td class=\"status6\">予約</td>";     
+      echo "<div id=\"data-".$rmcd.$usedt."1\" data-usedt=\"".$usedt."\" data-yobi=".$k." data-timekb=\"1\" data-jkn1=\"9:00\" data-jkn2=\"12:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" />";
+    }else{
+      echo "<td class=\"status3\">仮予約</td>";
+    }
+    
+  
+    echo "<td><span class=\"green\">".$rsvlist[$i]['ukeno']."-".$rsvlist[$i]['gyo']."</span><br>";
+    echo substr( $rsvlist[$i]['udate'], 0, 4 )."/".substr( $rsvlist[$i]['udate'], 4, 2 )."/".substr( $rsvlist[$i]['udate'], 6, 2 )."</td>";
+    /* hidden */
+    echo "<input type='hidden' name='ukeno".$i."' id='ukeno".$i."'  value=\"".$rsvlist[$i]['ukeno']."\">";//受付№
+    echo "<input type='hidden' name='gyo".$i."' id='gyo".$i."' value=\"".$rsvlist[$i]['gyo']."\">";//申し込み日
+    /* 明細 */
+    echo "<td>".substr( $rsvlist[$i]['usedt'], 0, 4 )."/".substr( $rsvlist[$i]['usedt'], 4, 2 )."/".substr( $rsvlist[$i]['usedt'], 6, 2 )."(".mb_convert_encoding($rsvlist[$i]['yobi'], "utf8", "SJIS").")<br>";//使用日
+    echo mb_convert_encoding($rsvlist[$i]['rmnm'], "utf8", "SJIS")."<br>";//施設名
+    echo "<td>使用時間：".format_jkn( $rsvlist[$i]['stjkn'] , ":" )."～".format_jkn( $rsvlist[$i]['edjkn'] , ":" )."<br/>";//使用時間
+    echo "<td>".$rsvlist[$i]['ninzu']."人</td>";//人数
+    echo "<td>「".mb_convert_encoding($rsvlist[$i]['kaigi'], "utf8", "SJIS")."」</td>";//行事内容
+    echo "<td>&nbsp;</td>";
+    echo "<td>&nbsp;</td>";
+    echo "</tr>";
+
+  }
+?>
+    </tbody>
+
       <tbody>
     	<tr>
     		<td class="status1"></td>
@@ -163,7 +212,7 @@ include('include/menu.php');
     	</tr>
       </tbody>
    </table>
-   <a class="btn btn-default btn-lg" href="top.html" role="button">トップページへ戻る</a>
+   <a class="btn btn-default btn-lg" href="top.php" role="button">トップページへ戻る</a>
 <br><br>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>

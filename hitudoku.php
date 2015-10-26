@@ -1,6 +1,6 @@
 <?php
 @session_start();
-echo $_SESSION['next_page'];
+//echo $_SESSION['next_page'];
 //header
 $pageTitle = "お申し込みにあたってのご注意";
 include('include/header.php');
@@ -27,8 +27,8 @@ include('include/notice.txt');
 ?>  
     <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
         <div style="text-align:center">
-            <a class="btn btn-primary btn-lg mb20" href="search.html" role="button">次へ進む　>></a>
-            <input type="submit" name="submit" id="submit" value="ログイン" class="btn btn-primary btn-lg">
+            <!--a class="btn btn-primary btn-lg mb20" href="search.html" role="button">次へ進む　>></a-->
+            <input type="submit" name="submit" id="submit" value="次へ進む" class="btn btn-primary btn-lg">
         </div>
     </form>
 </body>
