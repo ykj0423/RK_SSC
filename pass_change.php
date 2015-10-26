@@ -27,18 +27,19 @@ if (empty($_POST['regist'])){
 }
 ?>
 <p><?php echo $infomsg; ?></p><br>
-  <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-      	<div class="col-xs-4  text-right">
+  <form role="form" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+      	<!--div class="col-xs-4  text-right">
           <span class="f120">現在の時間：　2015/9/29   16:26:22</span>
-       </div>
+       </div-->
    </div>
 	<table class="table table-bordered">
     <tbody>
       <!--tr><th width="30%">現在のパスワード<span class="text-danger">(必須)</span></th><td><input type="password" name="pass" value=""></td></tr-->
       <tr><th>新しいパスワード<span class="text-danger">(必須)</span></th><td><input type="password" name="passnew" value=""><span class="small note">(半角英数字記号　8～10文字）</span></td></tr>
-      <tr><th>新しいパスワード（再入力）<span class="text-danger">(必須)</span></th><td><input type="password" name="passnew2" value=""><span class="small note">(半角英数字記号　8～10文字）</span></td></tr>	     </tbody>
+      <tr><th>新しいパスワード（再入力）<span class="text-danger">(必須)</span></th><td><input type="password" name="passnew2" value=""><span class="small note">(半角英数字記号　8～10文字）</span></td></tr>
+    </tbody>
     </table>
     <input type="submit" class="btn btn-primary" role="button" name="regist" value="変更する　>>"><br><br>
-</form>
+  </form>
 </body>
 </html>

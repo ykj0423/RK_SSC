@@ -36,7 +36,7 @@ if( empty( $_POST['regist'] ) ){
 
 }else{
 
-print_r($_POST);
+//print_r($_POST);
  
     if( empty( $_POST['mail'] ) ){
         $errmsg = "メールアドレスを入力してください。";
@@ -46,7 +46,8 @@ print_r($_POST);
         $errmsg = "メールアドレスが一致しません。";
     }else{
         if( $Kyaku->change_mail_adress( $_SESSION['wloginid'] , $_POST['mail'] ) ){
-            $infomsg = "メールアドレスの変更が完了致しました。"; 
+            $infomsg = "メールアドレスの変更が完了致しました。";
+            $mail_adress = $_POST['mail'];
         }
     }
 }

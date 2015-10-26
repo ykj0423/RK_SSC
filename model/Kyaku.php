@@ -21,9 +21,9 @@ class Kyaku extends ModelBase {
 
         if( $this->conn === false ) {
              //TODO
-            echo "err";
+            echo "db-err";
         }else{
-            echo "suc";
+            //echo "suc";
         }
 
         $this->data = array();    
@@ -157,6 +157,8 @@ class Kyaku extends ModelBase {
 
     public function add_kyaku() {
         //TODO
+        //$this->connectDb();
+
         $kyaku_cd = "";
 
         $sql = "select max(kyacd) from mt_kyaku ";
@@ -174,7 +176,7 @@ class Kyaku extends ModelBase {
         while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_NUMERIC ) ) {
               $kyaku_cd = intval( $row[0] ) + 1;
         }
-
+//$this->connectDb();
         $this->wloginid = (string)$kyaku_cd;
         $this->wpwd = (string)hash('adler32', $kyaku_cd );
         
@@ -182,15 +184,11 @@ class Kyaku extends ModelBase {
             fax, url, mail, zipcd, adr1, adr2, gyscd, sihon, jygsu, kyakb, biko, login, udate, utime, wloginid, wpwd )";
         $sql .= " values  ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,? )";
         
-        $params = array( $kyaku_cd, 
-            parent::convertToSJIS( $this->data['dannm'] ),
-            "''",
-            parent::convertToSJIS( $this->data['dannmk'] ), parent::convertToSJIS( $this->data['daihyo'] ), 
-            parent::convertToSJIS( $this->data['renraku'] ), $this->data['tel1'], $this->data['tel2'], $this->data['fax'], "''", $this->data['mail'], $this->data['zipcd'],
-            parent::convertToSJIS( $this->data['adr1'] ), parent::convertToSJIS( $this->data['adr2'] ), 
-            parent::convertToZero( $this->data['gyscd'] ), parent::convertToZero( $this->data['sihon'] ),parent::convertToZero( $this->data['jygsu'] ), 
-            parent::convertToZero( $this->data['kyakb'] ),"''", $this->data['login'], parent::getUdate(),parent::getUtime(),
-            $this->wloginid,$this->wpwd);
+        $params = array( $kyaku_cd, parent::convertToSJIS( $this->data['dannm'] ),
+            "''",parent::convertToSJIS( $this->data['dannmk'] ), parent::convertToSJIS( $this->data['daihyo'] ), 
+            parent::convertToSJIS( $this->data['renraku'] ), "", $this->data['tel2'], $this->data['fax'], "", $this->data['mail'], $this->data['zipcd'],
+            parent::convertToSJIS( $this->data['adr1'] ), parent::convertToSJIS( $this->data['adr2'] ), parent::convertToZero( $this->data['gyscd'] ), parent::convertToZero( $this->data['sihon'] ),parent::convertToZero( $this->data['jygsu'] ), 
+            parent::convertToZero( $this->data['kyakb'] ),"", $this->data['login'], parent::getUdate(),parent::getUtime(),$this->wloginid,$this->wpwd);
         
         $stmt = sqlsrv_query( $this->conn, $sql, $params);
 

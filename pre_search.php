@@ -32,7 +32,7 @@
 		var strlist = new Array(8);
 		//strlist = JSON.parse( localStorage.getItem("sentaku") );//選択リスト
 		//$(".selcnt").text("現在の選択 ： " + strlist.length + "件");
-		$(".selcnt").text("現在の選択 ： 0 件");
+		//$(".selcnt").text("現在の選択 ： 0 件");
         
         jQuery('#date_timepicker_start').datetimepicker({
             format: 'Y/m/d',
@@ -297,7 +297,7 @@
 			}
 
 			//現在の選択件数の更新
-			$(".selcnt").text("現在の選択 ： " + strlist.length + "件");
+			//$(".selcnt").text("現在の選択 ： " + strlist.length + "件");
 		});
 
 		//選択解除ボタン押下時
@@ -323,7 +323,7 @@
 			//ローカルストレージstrlistクリア
 			//localStorage.removeItem('sentaku', JSON.stringify(strlist));
 			//現在の選択件数の更新
-			$(".selcnt").text("現在の選択 ： " + strlist.length + "件");
+			//$(".selcnt").text("現在の選択 ： " + strlist.length + "件");
         });
 
 		//フォーム送信時
@@ -361,7 +361,7 @@
 <body class="container">
 <?php
 //メニュー
-include('include/menu.php');
+//include('include/menu.php');
 require_once( "func.php" );
 require_once( "model/db.php" );
 
@@ -482,23 +482,20 @@ if( isset( $_POST[ 'yobi' ] )  && ( count( $_POST[ 'yobi' ] ) > 0 ) ){
 </form>
 
 	<!--検索結果-->
-    <p class="h4 ml10">ご利用になりたい時間帯の[空]を押して、[○]にしてください。選択後、[予約申請へ進む]を押してください。</p>
     <div id="result">
-		<div class="row mb10">
-			<div class="col-xs-5">
-			<p class="h4"><div class="h4 selcnt">現在の選択 ： &nbsp;件</div></p>
-			</div>
-			<div class="text-right  col-xs-7">
-				<form name="yoyaku_form" id="yoyaku_form" role="form"  action="input.php" method="post">
-					<a class="btn btn-default btn-lg" id="release_select" col-xs-1 role="button">選択解除</a>
-					<input type='submit' class="btn btn-warning btn-lg" role="button" name="submit_Click" id="submit_Click" value="予約申請へ進む&nbsp;>>">
-				</form>
-			</div>
-		</div>
+<div class="col-xs-5">
+
+
+        </div>
+      	<div class="text-right  col-xs-7">
+      		<a class="btn btn-lg btn-primary ml20"  href="top.php" role="button">ご利用登録・予約申込はこちら　>></a>
+
+    	  </div>
+    	</div>
+
 		<p>
       		[凡例]
-      		空：予約可　
-      		<span class="selcol" style="padding-left:5px;padding-right:5px">○</span>：選択中　
+      		空：予約可      		
       		<span class="dgray" style="padding-left:5px;padding-right:5px">×</span>：予約不可　
       		<span class="dgray" style="padding-left:5px;padding-right:5px">休</span>：休館日　
       </p>
@@ -551,16 +548,16 @@ for ($i = 0; $i < ( count( $room ) ) ; $i++ ) {
 		
 		if( !array_key_exists( $usedt, $mor['data'] ) )
 		{
-			echo "<td  class=\"can\" id=".$rmcd.$usedt."1\" ><a id=\"a-".$rmcd.$usedt."1\">";
-            echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."1\"></a>";
+			echo "<td  class=\"can\" id=".$rmcd.$usedt."1\">";
+            echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."1\">";
             //各種定数化。
 			echo "<div id=\"data-".$rmcd.$usedt."1\" data-usedt=\"".$usedt."\" data-yobi=".$k." data-timekb=\"1\" data-jkn1=\"9:00\" data-jkn2=\"12:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" />";
             echo "</td>";
 		}elseif( array_key_exists( $usedt, $mor['data'] ) && ( $mor['data'][$usedt] == 0 ) ){
 		//空室の場合
 			
-			echo "<td  class=\"can\"><a id=\"a-".$rmcd.$usedt."1\">";
-            echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."1\"></a>";
+			echo "<td  class=\"can\">";
+            echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."1\">";
             //各種定数化。
 			echo "<div id=\"data-".$rmcd.$usedt."1\" data-usedt=\"".$usedt."\" data-yobi=".$k." data-timekb=\"1\" data-jkn1=\"9:00\" data-jkn2=\"12:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" />";
             echo "</td>";
@@ -587,15 +584,15 @@ for ($i = 0; $i < ( count( $room ) ) ; $i++ ) {
 
         if( !array_key_exists( $usedt, $noon['data'] ) ){
 		
-        	echo "<td  class=\"can\"><a id=\"a-".$rmcd.$usedt."2\">";
-            echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."2\"></a>";
+        	echo "<td  class=\"can\">";
+            echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."2\">";
             echo "<div id=\"data-".$rmcd.$usedt."2\" data-usedt=\"".$usedt."\" data-timekb=\"2\" data-jkn1=\"13:00\" data-jkn2=\"17:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" />";
             echo "</td>";
 
 		}elseif ( array_key_exists( $usedt, $noon['data'] ) && ( $noon['data'][$usedt] == 0 ) ) {
             //echo "<td  class=\"can\"><a href=\"#\"><img src=\"icon/kara.jpg\"></a></td>";
-			echo "<td  class=\"can\"><a id=\"a-".$rmcd.$usedt."2\">";
-            echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."2\"></a>";
+			echo "<td  class=\"can\">";
+            echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."2\">";
             echo "<div id=\"data-".$rmcd.$usedt."2\" data-usedt=\"".$usedt."\" data-timekb=\"2\" data-jkn1=\"13:00\" data-jkn2=\"17:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" />";
             echo "</td>";
         }else{
@@ -620,14 +617,14 @@ for ($i = 0; $i < ( count( $room ) ) ; $i++ ) {
         
 		if( !array_key_exists( $usedt, $night['data'] ) ){
 		
-			echo "<td  class=\"can\"><a id=\"a-".$rmcd.$usedt."3\">";
-            echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."3\"></a>";
+			echo "<td  class=\"can\">";
+            echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."3\">";
             echo "<div id=\"data-".$rmcd.$usedt."3\" data-usedt=\"".$usedt."\" data-timekb=\"3\" data-jkn1=\"17:30\" data-jkn2=\"21:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" />";
             echo "</td>";	
         }elseif ( array_key_exists( $usedt, $night['data'] ) && ( $night['data'][$usedt] == 0 ) ) {
             //echo "<td  class=\"can\"><a href=\"#\"><img src=\"icon/kara.jpg\"></a></td>";
-			echo "<td  class=\"can\"><a id=\"a-".$rmcd.$usedt."3\">";
-            echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."3\"></a>";
+			echo "<td  class=\"can\">";
+            echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."3\">";
             echo "<div id=\"data-".$rmcd.$usedt."3\" data-usedt=\"".$usedt."\" data-timekb=\"3\" data-jkn1=\"17:30\" data-jkn2=\"21:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" />";
             echo "</td>";		
         }else{

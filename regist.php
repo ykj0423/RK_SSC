@@ -69,7 +69,7 @@ include('include/err.php');
         </tr>    
         <tr>
           <th >利用者名（カナ）<span class="red">(必須)</span></th>
-          <td><input type="text" name="danmk" class="long" value="" maxlength="20"><br>
+          <td><input type="text" name="dannmk" class="long" value="" maxlength="20"><br>
               <span class="ml10 note">（例：コウベシサンギョウシンコウザイダン ソウムブ シセツカンリカ）</span><!--カナ20文字--></td>
         </tr>
         <tr>
