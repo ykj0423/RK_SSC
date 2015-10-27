@@ -55,11 +55,11 @@ include('include/err.php');
       </tr>
       <tr>
         <th >連絡者TEL</th>
-        <td><?php echo $Kyaku->put_data('tel2_1'); ?></td>
+        <td><?php echo $Kyaku->put_data('tel2_1'); ?>-<?php echo $Kyaku->put_data('tel2_2'); ?>-<?php echo $Kyaku->put_data('tel2_3'); ?></td>
       </tr>
       <tr>
         <th>FAX</th>
-        <td><?php echo $Kyaku->put_data('fax_1'); ?></td>
+        <td><?php echo $Kyaku->put_data('fax_1'); ?>-<?php echo $Kyaku->put_data('fax_2'); ?>-<?php echo $Kyaku->put_data('fax_3'); ?></td>
       </tr>
       <tr>
         <th>メールアドレス</th>

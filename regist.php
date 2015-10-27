@@ -30,7 +30,11 @@ if( isset( $_POST['submit'] ) && !empty( $_POST['submit'] ) ){
         $Kyaku->push_data( $_POST, 'daihyo', true, false　);
         $Kyaku->push_data( $_POST, 'renraku', true, false　);
         $Kyaku->push_data( $_POST, 'tel2_1', true, false　);
+        $Kyaku->push_data( $_POST, 'tel2_2', true, false　);
+        $Kyaku->push_data( $_POST, 'tel2_3', true, false　);
         $Kyaku->push_data( $_POST, 'fax_1', false, false　);
+        $Kyaku->push_data( $_POST, 'fax_2', false, false　);
+        $Kyaku->push_data( $_POST, 'fax_3', false, false　);
         $Kyaku->push_data( $_POST, 'mail', true, false　);
         $Kyaku->push_data( $_POST, 'zipcd_1', true, false　);        
         $Kyaku->push_data( $_POST, 'adr1', true, false　);
