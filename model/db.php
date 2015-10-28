@@ -17,7 +17,7 @@ class DB
     public function connect()
     {
         $info = '';
-        $ini = parse_ini_file('config.ini');
+        $ini = parse_ini_file('./config.ini');
 
         $conInfo = array(
             'UID' => $ini['UID'],
@@ -559,8 +559,8 @@ class DB
 	
 		$ret = array();
 
-		//施設コード、WEB名称、定員
-		$sql = "select rmcd , rmnmw , capacity from mt_room"; 
+		//施設コード、WEB名称、定員、WEBリンク
+		$sql = "select rmcd, rmnmw, capacity, weblink from mt_room"; 
 		
 		//if ( !empty ( $bldkb ) ){
 		//	$sql = $sql." where";
@@ -593,12 +593,6 @@ class DB
 
 		while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC) ) {				
 			array_push( $ret, $row );
-				/*
-				$ret[ $row[ 'rmcd' ]]  = array(
-														"rmnmw" => mb_convert_encoding($row['rmnmw'], "utf8", "SJIS"),
-														"capacity" => $row['capacity']
-												);
-				*/
 		}
 
 		return $ret;

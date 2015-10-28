@@ -5,6 +5,13 @@ $errmsg = "";
 //header
 $pageTitle =  "ログイン";
 include('include/header.php');
+?>
+<script src="js/clear.storage.js"></script>
+</head>
+<body class="container">
+<p class="bg-head text-right"><?php echo $_SESSION['centername']; ?></p>
+<h1><span class="midashi">|</span><?php echo $pageTitle; ?><?php echo "<small>".$_SESSION['sysname']."</small>" ?></h1>
+<?php
 include('model/Kyaku.php');
 /**
  * ReserveKeeperWeb予約システム
@@ -18,6 +25,7 @@ include('model/Kyaku.php');
  * @license    G&G Co.ltd.
  * @version    0.1
 **/
+$_SESSION['wloginid'] ="";
 
 if( isset( $_POST['submit'] ) && !empty( $_POST['submit'] ) ){
 
@@ -78,7 +86,9 @@ include('include/err.php');
                 </div>
             </div>
         </form>
-        <a href="loginqa.html#login"  target="window_name"  onClick="disp('loginqa.html#login')"><li class="glyphicon glyphicon-question-sign" aria-hidden="true">ログインでお困りの方はこちら</li></a> 
+        <a href="loginqa.html#login"  target="_blank" onClick="disp('loginqa.html#login')">
+            <li class="glyphicon glyphicon-question-sign" aria-hidden="true">ログインでお困りの方はこちら</li>
+        </a> 
     </div>
 <script type="text/javascript">
 <!--

@@ -4,6 +4,12 @@
 //header
 $pageTitle = "お申し込みにあたってのご注意";
 include('include/header.php');
+?>
+</head>
+<body class="container">
+<p class="bg-head text-right"><?php echo $_SESSION['centername']; ?></p>
+<h1><span class="midashi">|</span><?php echo $pageTitle; ?><?php echo "<small>".$_SESSION['sysname']."</small>" ?></h1>
+<?php
 
 if( isset( $_POST['submit'] ) ){
     header( 'location: '.$_SESSION['next_page'] );

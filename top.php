@@ -1,7 +1,7 @@
 <?php
 @session_start();
 
-$ini = parse_ini_file('model/config.ini');
+$ini = parse_ini_file('config.ini');
 
 $_SESSION['sysname'] = $ini['SYSTEM_NAME'];
 $_SESSION['centername'] = $ini['CENTER_NAME'];
@@ -9,9 +9,14 @@ $next_page = "";
 $errmsg = "";
 
 //header
-$pageTitle = "予約システムトップページ";
+$pageTitle = "トップページ";
 include('include/header.php');
-
+?>
+</head>
+<body class="container">
+<p class="bg-head text-right"><?php echo $_SESSION['centername']; ?></p>
+<h1><span class="midashi">|</span><?php echo $_SESSION['sysname']; ?><?php echo "<small>".$pageTitle."</small>" ?></h1>
+<?php
 /**
  * ReserveKeeperWeb予約システム
  *
@@ -56,9 +61,9 @@ include('include/err.php')
 <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <div class="alert alert-info" role="alert">
 	<p class="lead">ご利用登録されている方はこちら</p>
-  <input type="submit" class="btn btn-warning btn-lg" name="search" role="button" value="空き状況・予約申込み　>>">
-  <input type="submit" class="btn btn-warning btn-lg" name="rsvlist" role="button" value="予約照会　>>">
-  <input type="submit" class="btn btn-warning btn-lg" name="member" role="button" value="利用者情報変更　>>">
+  <input type="submit" class="btn btn-primary btn-lg" name="search" role="button" value="空き状況・予約申込み　>>">
+  <input type="submit" class="btn btn-primary btn-lg" name="rsvlist" role="button" value="予約照会　>>">
+  <input type="submit" class="btn btn-primary btn-lg" name="member" role="button" value="利用者情報変更　>>">
 </div>
 <div class="alert alert-warning" role="alert">
   <p class="lead">新規利用者登録をされる方はこちら</p>
@@ -66,7 +71,7 @@ include('include/err.php')
 </div>
 <div class="alert alert-success" role="alert">
 <p class="lead">ご利用登録せず、空き状況のみご覧になる場合はこちら</p>
-  <input type="submit" class="btn btn-warning btn-lg" name="pre_search" role="button" value="空き状況　>>">
+  <input type="submit" class="btn btn-success btn-lg" name="pre_search" role="button" value="空き状況　>>">
 </div>
 </div>
 <div class="panel panel-default">

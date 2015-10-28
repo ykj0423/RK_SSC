@@ -5,9 +5,16 @@ $errmsg = "";
 //header
 $pageTitle =  "メールアドレス変更";
 include('include/header.php');
+?>
+</head>
+<body class="container">
+<p class="bg-head text-right"><?php echo $_SESSION['centername']; ?></p>
+<?php
 //メニュー
 include('include/menu.php');
-
+?>
+<h1><span class="midashi">|</span><?php echo $pageTitle; ?><?php echo "<small>".$_SESSION['sysname']."</small>" ?></h1>
+<?php
 /**
  * ReserveKeeperWeb予約システム
  *

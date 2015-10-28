@@ -5,6 +5,13 @@ $errmsg = "";
 //header
 $pageTitle =  "予約照会";
 include('include/header.php');
+?>
+</head>
+<body class="container">
+<p class="bg-head text-right"><?php echo $_SESSION['centername']; ?></p>
+<h1><span class="midashi">|</span><?php echo $pageTitle; ?><?php echo "<small>".$_SESSION['sysname']."</small>" ?></h1>
+<?php
+
 //メニュー
 include('include/menu.php');
 require_once('func.php');
