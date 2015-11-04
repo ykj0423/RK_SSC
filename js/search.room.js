@@ -1,7 +1,7 @@
 jQuery(function () {
 
 		/* 予約件数の復元 */		
-		var strlist = new Array(8);
+		var strlist = new Array(99);
 		//strlist = JSON.parse( localStorage.getItem("sentaku") );//選択リスト
 		//$(".selcnt").text("現在の選択 ： " + strlist.length + "件");
 		$(".selcnt").text("現在の選択 ： 0 件");
@@ -71,20 +71,16 @@ jQuery(function () {
 			//やり方ダサすぎる
 			calc = 0;
 			
-			for (var j = 0; j < 8 ; j++) {
-			
-				for (var i = 1; i < 8; i++) {
-			
+			for (var j = 0; j < 8 ; j++) {			
+				for (var i = 1; i < 8; i++) {			
 					if($("#yobi" + i).prop('checked')) {
 						
 						calc++;
 						
 						if(　calc　>　12 ) {
 							break;
-						}
-					
-					}
-				
+						}					
+					}				
 				}
 				
 				if(　calc　>　12 ) {
@@ -113,7 +109,7 @@ jQuery(function () {
 
 			$('#date_timepicker_start').attr({'value': sttdt });
 			$('#date_timepicker_end').attr({'value': enddt });
-			$( '#search_form' ).submit();
+			$('#search_form').submit();
 
 		});
 
@@ -155,26 +151,21 @@ jQuery(function () {
 			
 			calc=0;
 			
-			for (var j = 0; j < 8 ; j++) {
-			
-				for (var i = 1; i < 8; i++) {
-			
+			for (var j = 0; j < 8 ; j++) {			
+				for (var i = 1; i < 8; i++) {			
 					if($("#yobi" + i).prop('checked')) {
 						
 						calc++;
 						
 						if(　calc　>　12 ) {
 							break;
-						}
-					
-					}
-				
+						}					
+					}				
 				}
 				
 				if(　calc　>　12 ) {
 					break;
-				}
-			
+				}			
 			}
 
 			var calcDate = new Date( sttDate.getTime() + calc*24*60*60*1000 );//開始日
@@ -194,7 +185,7 @@ jQuery(function () {
 			
 			$('#date_timepicker_start').attr({'value': sttdt });			
 			$('#date_timepicker_end').attr({'value': enddt });
-			$( '#search_form' ).submit();
+			$('#search_form').submit();
 
 		});
 
@@ -227,6 +218,7 @@ jQuery(function () {
             var timekb = $("#" + datastr).attr('data-timekb');	//時間帯区分
             var jkn1 = $("#" + datastr).attr('data-jkn1');		//時間（自）
             var jkn2 = $("#" + datastr).attr('data-jkn2');		//時間（至）
+            var tnk = $("#" + datastr).attr('data-tnk');		//時間（至）
             var src = $("#" + imgstr).attr('src');
 			
 			if (src == 'icon/kara.jpg') {	//空室選択時
@@ -242,7 +234,26 @@ jQuery(function () {
 					yobi: yobi,
                     jkn1: jkn1,
                     jkn2: jkn2,
+                    jstjkn_h: 0,
+                    jstjkn_m: 0,
+                    jedjkn_h: 0,
+                    jedjkn_m: 0,
+                    hstjkn_h: 0,
+                    hstjkn_m: 0,
+                    hedjkn_h: 0,
+                    hedjkn_m: 0,
+                    tstjkn_h: 0,
+                    tstjkn_m: 0,
+                    tedjkn_h: 0,
+                    tedjkn_m: 0,
+                    tnk: tnk,
 					ninzu: 0,
+					commercially: 0,
+					fee: 0,
+					piano: 0,
+					partition: 0,
+					rmkin: 0,
+					hzkin: 0,
                     value: 1
                 }
                 strlist.push(data);

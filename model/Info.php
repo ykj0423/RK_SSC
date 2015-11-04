@@ -38,7 +38,7 @@ class Info extends ModelBase {
 		//}
 
 		/* --------------------*/
-		/*  顧客情報取得処理  */
+		/*  お知らせ情報取得処理  */
 		/* --------------------*/
 		$sql = "SELECT * FROM wdt_info order by infodate desc";
 

@@ -56,14 +56,12 @@ class input_validation
             array_push($errors, "利用目的を入力してください。");
             //数字チェック、範囲チェック
 			$ret =  false;
-			echo "利用目的を入力してください。"."<br />";//仮
         } 
         //利用人数
         if ( !isset( $_GET['ninzu'] ) ){
             array_push($errors, "人数を入力してください。");
             //数字チェック、範囲チェック
 			$ret =  false;
-			echo "人数を入力してください。"."<br />";//仮
         } 
 		//return true;
 		//return $ret;
@@ -107,8 +105,8 @@ $Kyaku->get_user_info( $_SESSION['wloginid'] );
     <br>
 	</p>
 	<div class="col-xs-4">
-		<a href="help.html#input"  class="btn alert-info" target="window_name"  onClick="disp('help.html#input')"><li class="glyphicon glyphicon-question-sign" aria-hidden="true">&nbsp;この画面の操作方法についてはこちら>></li></a> 
-		<a href="loginqa.html#input"   class="btn alert-danger" target="window_name"  onClick="disp('loginqa.html#input')"><li class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">&nbsp;予約申込にあたってのご注意はこちら>></li></a> 
+		<a href="help.html#input" class="btn alert-info" target="window_name" onClick="disp('help.html#input')"><li class="glyphicon glyphicon-question-sign" aria-hidden="true">&nbsp;この画面の操作方法についてはこちら>></li></a> 
+		<a href="loginqa.html#input" class="btn alert-danger" target="window_name" onClick="disp('loginqa.html#input')"><li class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">&nbsp;予約申込にあたってのご注意はこちら>></li></a> 
 	</div>
 </div>
 <span class="status2">＊＊ この画面では、ご予約は確保されていません。ご希望の内容を送信後、受付結果をメールでお知らせいたします。＊＊</span><br><br>
@@ -116,29 +114,29 @@ $Kyaku->get_user_info( $_SESSION['wloginid'] );
 	<table id ="rsv_input" class="table table-bordered table-condensed  form-inline">
   	<tr><th colspan="7">お申込み内容</th></tr>
   	<tr>
-		<th  colspan="2">利用者名</th>
-  		<td  colspan="5">
+		<th colspan="2">利用者名</th>
+  		<td colspan="5">
 		<?php echo mb_convert_encoding($Kyaku->get_dannm(), "UTF-8", "SJIS"); ?>
 		</td>
   	</tr>
   	<tr>
-  		<th  colspan="2">メールアドレス</th>
-  		<td  colspan="5">
+  		<th colspan="2">メールアドレス</th>
+  		<td colspan="5">
 		<?php echo $Kyaku->get_mail(); ?>
-  		 <br>※お申し込み受け付け時、こちらのアドレスに請求書のメールが送付されますのでご注意ください。
+  		<br>※お申し込み受け付け時、こちらのアドレスに請求書のメールが送付されますのでご注意ください。
   		</td>
   	</tr>
   	<tr>
   		<th colspan="2" width="20%">行事名<span class="text-danger">（必須)</span></th>
   		<td colspan="5" width="70%">
-  			<input type="text"  class="form-control" name="kaigi" id="kaigi" value="" style="width:70%">
+  			<input type="text"  class="form-control" name="kaigi" id="kaigi" value="<?php echo $_POST[ 'kaigi' ]; ?>" style="width:70%">
   			<br>こちらの内容が案内板に表示されます。<span class="note">（例：人材育成セミナー、ピアノ発表会、幹部会議…)</span>
   		</td>
   	</tr>
   	<tr>
 	<th colspan="2">利用目的<span class="text-danger">（必須)</span></th>
   		<td colspan="5">
-  		<select  class="form-control" name="riyokb"  id="riyokb">
+  		<select  class="form-control" name="riyokb" id="riyokb">
 		<option value="">(選択してください)</option>
 	<?php 
 	//利用目的をマスタから読み込む
@@ -148,17 +146,34 @@ $Kyaku->get_user_info( $_SESSION['wloginid'] );
 	
 		$riyocd = $riyo[ $i ][ 'code' ];   			//施設コード
 		$riyonm = mb_convert_encoding($riyo[ $i ][ 'name' ], "utf8", "SJIS");//施設名称
-		echo "<option value=\"".$riyocd."\">".$riyonm."</option>";
+
+		if ( $_POST[ 'riyokb' ] == $riyocd ){
+			echo "<option value=\"".$riyocd."\" selected>".$riyonm."</option>";
+		}else{
+			echo "<option value=\"".$riyocd."\">".$riyonm."</option>";
+		}
+	
 	}
 	
 	?>
   		</select>
   		</td>
   	</tr>
+	<tr>
+		<th colspan="2" width="20%">内容</th>
+		<td colspan="5" width="70%">
+			<input type="text" maxlength="10" class="form-control" name="naiyo" id="naiyo" value="<?php echo $_POST[ 'naiyo' ]; ?>" style="width:20%"><br>利用目的が「その他」の場合、具体的なご利用内容をご入力ください。<span class="note">（例：詩吟、カラオケ…)</span>
+		</td>
+	</tr>
+  	<tr>
+  		<th colspan="2">利用当日の管理責任者名<span class="text-danger">（必須)</span></th>
+  		<td colspan="5">
+  			<input type="text" class="form-control" name="sekinin"  id="sekinin" value="<?php echo $_POST[ 'sekinin' ]; ?>" style="width:70%">
+  		</td>
+    </tr>
     </tbody>
     <tbody id="">
-	  	<tr><th colspan="7">お申込み施設</th>
-	  	</tr>
+	  	<tr><th colspan="7">お申込み施設</th></tr>
 		<tr>
 	    	<th width="5%">No.</th>
 		    <th width="10%">利用日/施設名</th>
@@ -166,7 +181,7 @@ $Kyaku->get_user_info( $_SESSION['wloginid'] );
 			<th width="25%">時間内訳<span class="text-danger">（必須)</span></th>
 			<th width="8%">利用人数</th>
 			<th >その他確認事項<span class="text-danger">（必須)</span></th>
-		</tr>        
+		</tr>       
 		<!-- お申し込み明細エリア-->
 		<tbody id="list">
         </tbody>

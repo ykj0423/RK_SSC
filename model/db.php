@@ -560,8 +560,10 @@ class DB
 		$ret = array();
 
 		//施設コード、WEB名称、定員、WEBリンク
-		$sql = "select rmcd, rmnmw, capacity, weblink from mt_room"; 
-		
+		//$sql = "select rmcd, rmnmw, capacity, weblink from mt_room"; 
+		$sql = "select mt_room.rmcd, mt_room.rmnmw, mt_room.capacity, mt_room.weblink , mt_rmtnk.tnk from mt_room "; 
+        $sql = $sql." left outer join mt_rmtnk on mt_room.rmcd = mt_rmtnk.rmcd "; 
+        
 		//if ( !empty ( $bldkb ) ){
 		//	$sql = $sql." where";
 		//	$sql = $sql." bldkb = ".$bldkb;
@@ -575,14 +577,19 @@ class DB
 			$sql = $sql." where ( rmclkb = ".$rmclkb[0];
 
 			for ( $i = 1;  $i < count ( $rmclkb );  $i++ ) {
-				$sql = $sql." or  rmclkb = ".$rmclkb[ $i ];
+				$sql = $sql." or  rmclkb = ".$rmclkb[$i];
 			}
 
 			$sql = $sql." )";
 
 		}
 		
-		$sql = $sql." order by rmcd";
+        $sql = $sql." and kyakb =1 "; 
+        $sql = $sql." and stjkn = 900 and edjkn = 1200 ";
+        //$sql = $sql." and stjkn = 1300 and edjkn = 1700 ";
+        //$sql = $sql." and stjkn = 1800 and edjkn = 2100 "; 
+
+		$sql = $sql." order by mt_room.rmcd";
 
 		$result = sqlsrv_query( $this->con, $sql );
 

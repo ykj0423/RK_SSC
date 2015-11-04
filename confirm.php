@@ -22,6 +22,7 @@
 jQuery(function () {
     //HTMLを初期化  
     $("table.rsv_input tbody.list").html("");
+    
     var objData = JSON.parse(localStorage.getItem("sentaku"));
     
 	for ( var i = 0; i < objData.length; i++ ){
@@ -38,7 +39,12 @@ jQuery(function () {
 		var td9 = $("<div></div>");
 		var td10 = $("<div></div>");
 		var td11 = $("<div></div>");
-		
+		var td12 = $("<td></td>");
+		var td13 = $("<td></td>");
+		var td14 = $("<td></td>");
+		var td15 = $("<td></td>");
+		var td16 = $("<td></td>");
+		var td17 = $("<td></td>");
 		/* 日付のフォーマット もう少しスマートな方法がないか検討*/
 		/* 前の画面とまったく同じ処理を書いているので整理*/
 		var usedt = objData[i]['usedt'];
@@ -52,7 +58,7 @@ jQuery(function () {
 		var gyo = i + 1;
 
 		$("#list").append(tr);
-		tr.append( td1 ).append( td2 ).append( td3 ).append( td4 ).append( td5 ).append( td6 ).append( td7 ).append( td8 ).append( td9 ).append( td10 ).append( td11 );
+		tr.append( td1 ).append( td2 ).append( td3 ).append( td4 ).append( td5 ).append( td6 ).append( td7 ).append( td8 ).append( td9 ).append( td10 ).append( td11 ).append( td12 ).append( td13 ).append( td14 ).append( td15 ).append( td16 ).append( td17 );
 		td1.html( gyo );
 		td2.html( useyyyy + "/" + usemm + "/" +  usedd  + yobi );
 		td3.html( objData[i]['jkn1']  + "～" + objData[i]['jkn2']  );
@@ -64,23 +70,49 @@ jQuery(function () {
 		td9.html( "<input type='hidden' name='timekb" + i + "' id='timekb" + i  + "' value='" + objData[i]['timekb'] + "'>" ); //時間帯
 		td10.html( "<input type='hidden' name='stjkn" + i + "' id='stjkn" + i + "' value='" + objData[i]['jkn1'] + "' style='width:70px'><input type='hidden' class='form-control' name='edjkn" + i + "' id='edjkn" + i + "' value='"+ objData[i]['jkn2'] + "'' style='width:70px'>" );
 		td11.html( "<input type='hidden' name='ninzu" + i + "' id='ninzu" + i + "' value='" + objData[i]['ninzu'] + "' style='width:50px'>" );
+		var jjkn = objData[i]['jstjkn_h'] + "時" + objData[i]['jstjkn_m'] + "分～" + objData[i]['jedjkn_h'] + "時" + objData[i]['jedjkn_m'] + "分";
+		var hjkn = objData[i]['hstjkn_h'] + "時" + objData[i]['hstjkn_m'] + "分～" + objData[i]['hedjkn_h'] + "時" + objData[i]['hedjkn_m'] + "分";
+		var tjkn = objData[i]['tstjkn_h'] + "時" + objData[i]['tstjkn_m'] + "分～" + objData[i]['tedjkn_h'] + "時" + objData[i]['tedjkn_m'] + "分";
+		td12.html( "<tr><th>準備・リハ時間</th><td>" + jjkn + "</td></tr>" + "<tr><th>催物時間</th><td>" + hjkn + "</td></tr>" + "<tr><th>撤去時間</th><td>" + tjkn + "</td></tr>" );
+		td13.html();
+		var str_option;
+		if(objData[i]['commercially']==1){
+			str_option = str_option + "営利目的で使用する。<br>"
+		}
+		if(objData[i]['fee']==1){
+			str_option = str_option + "入場料・受講料を徴収する。<br>"
+		}
+		if(objData[i]['piano']==1){
+			str_option = str_option + "グランドピアノを使用する。<br>"
+		}
+		if(objData[i]['partition']==0){
+			str_option = str_option + "間仕切りをあける。<br>"
+		}else{
+			str_option = str_option + "間仕切りをしめる。<br>"
+		}
+		td14.html( str_option );
+
+		td15.html( objData[i]['rmkin'] + "円");
+		td16.html( objData[i]['hzkin'] + "円" );
+	}
+
+	$('#submit_prev').click(function(){
 		
-		//test
-		//td5.html(objData[i]['data-rmcd']);
-		//var form = $('confirm_form');
-		//使用日(hidden)
-		//form.append($('<input>',{type:'hidden',id:'usedt'.i,name:'usedt'.i,value:objData[i]['usedt']}));
-		//施設コード(hidden)
-		//form.append($('<input>',{type:'hidden',id:'rmcd'.i,name:'rmcd'.i,value:objData[i]['rmcd']}));
-		
-	} 
+		$('#confirm_form').attr("action","input.php");
+		return true;
+	});
+
+	$('#submit_next').click(function(){
+		$('#confirm_form').attr("action","end.php");
+		return true;
+	});
 
 	/* submit */
 	$('#confirm_form').submit(function(){
-			//バリデーションチェックの結果submitしない場合、return falseすることでsubmitを中止することができる。
-			//return false;
-			$('#confirm_form').append($('<input>',{type:'hidden',name:'meisai_count',value:objData.length}));
-			return true;
+		//バリデーションチェックの結果submitしない場合、return falseすることでsubmitを中止することができる。
+		//件数を追加;
+		$('#confirm_form').append($('<input>',{type:'hidden',name:'meisai_count',value:objData.length}));
+		return true;
 	});
 	//formを作成
 	/*$(".btn_Click").click(function(){
@@ -108,13 +140,17 @@ jQuery(function () {
 <?php 
 
 //echo "<br>POST";
-//print_r($_POST);
+print_r($_POST);
 //echo "<br>GET";
 //print_r($_GET);
 
 include("navi.php"); 
 require_once( "func.php" );
 require_once( "model/db.php" );
+include("model/Kyaku.php"); 
+
+$Kyaku = unserialize( $_SESSION['Kyaku'] );
+$Kyaku->get_user_info( $_SESSION['wloginid'] );
 
 /* データベース接続 */
 $db = new DB;
@@ -124,34 +160,42 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 ?>
 
    <div class="row">
-      	<div class="col-xs-6" style="padding:0">
-        <h1><span class="midashi">|</span>予約申込み[確認]</h1>
-       </div>
-
+  		<div class="col-xs-6" style="padding:0">
+        	<h1><span class="midashi">|</span>予約申込み[確認]</h1>
+       	</div>
       	<div class="col-xs-6  text-right">
-          <span class="f120">現在の時間：　<span id="currentTime"></span></span>
-       </div>
+        	<span class="f120">現在の時間：　<span id="currentTime"></span>
+       	</div>
    </div>
-<!------------------->
-<!-- main -->
-    	<h4>入力内容をご確認頂き、問題がなければ送信ボタンを押してください。</h4>
-<!--form name="confirm_form" id="confirm_form" role="form" action="end.php"　method="post"-->
-<form class="form-horizontal" name="confirm_form" id="confirm_form" role="form" method="post" action="end.php">
-    <table id ="rsv_input" class="table table-bordered table-condensed  form-inline">
-    	    <tbody>
-                <tr><th colspan="5">お申込み内容</th></tr>
-    	        <tr>
-    		        <th colspan="2" width="20%">行事名<span class="red">（必須)</span></th>
-    		        <td colspan="3" width="70%"><?php echo $_POST[ 'kaigi' ]; ?></td>
-					<?php 
-						echo "<input type='hidden' name='kaigi' id='kaigi' value=\"".$_POST[ 'kaigi' ]."\">";
-						echo "<input type='hidden' name='riyokb' id='riyokb' value=\"".$_POST[ 'riyokb' ]."\">";
-						echo "<input type='hidden' name='riyokb' id='riyokb' value=\"".$_POST[ 'ninzu' ]."\">";
-					?>
-    	        </tr>
-    	        <tr>
-    		        <th colspan="2">利用目的<span class="red">（必須)</span></th>
-    		        <td colspan="3">
+	<h4>入力内容をご確認頂き、問題がなければ送信ボタンを押してください。</h4>
+	<!--form name="confirm_form" id="confirm_form" role="form" action="end.php"　method="post"-->
+	<form class="form-horizontal" name="confirm_form" id="confirm_form" role="form" method="post">
+		<?php 
+			echo "<input type='hidden' name='kaigi' id='kaigi' value=\"".$_POST[ 'kaigi' ]."\">";
+			echo "<input type='hidden' name='riyokb' id='riyokb' value=\"".$_POST[ 'riyokb' ]."\">";
+			echo "<input type='hidden' name='naiyo' id='riyokb' value=\"".$_POST[ 'naiyo' ]."\">";
+			echo "<input type='hidden' name='sekinin' id='riyokb' value=\"".$_POST[ 'sekinin' ]."\">";
+		?>
+		<table id ="rsv_input" class="table table-bordered table-condensed  form-inline">
+		    <tbody>
+		        <tr><th colspan="5">お申込み内容</th></tr>
+		        <tr>
+    				<th colspan="2">利用者名</th>
+    				<td colspan="6"><?php echo mb_convert_encoding($Kyaku->get_dannm(), "UTF-8", "SJIS"); ?></td>
+    			</tr>
+		        <tr>
+			    	<th colspan="2">メールアドレス</th>
+			    	<td  colspan="3"><?php echo $Kyaku->get_mail(); ?>
+			        <p>こちらのアドレスに予約受付のメールをお送りいたします。</p>
+			        </td>
+		        </tr>
+		        <tr>
+			        <th colspan="2" width="20%">行事名称<span class="red">（必須)</span></th>
+			        <td colspan="3" width="70%"><?php echo $_POST[ 'kaigi' ]; ?></td>
+		        </tr>
+		        <tr>
+			        <th colspan="2">利用目的<span class="red">（必須)</span></th>
+			        <td colspan="3">
 					<?php 
 					//利用目的はマスタから読み込む
 					if ( !empty( $_POST['riyokb'] ) ) {
@@ -165,46 +209,43 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 					
 					}
 					?></td>
-    	        </tr>
-    	        <!--tr>
-    		        <th  colspan="2">利用人数<span class="red">（必須)</span></th>
-    		        <td  colspan="2"><?php //echo $_POST['ninzu']; ?></td>
-    	        </tr-->
-    	        <tr>
-    		        <th  colspan="2">団体名</th>
-    		        <td  colspan="3"></td>
-    	        </tr>
-    	        <tr>
-    		        <th  colspan="2">メールアドレス</th>
-    		        <td  colspan="3">
-    		            <p>こちらのアドレスに予約受付のメールをお送りいたします。</p>
-    		        </td>
-    	        </tr>
-    	        <tr><th colspan="5">お申込み施設</th></tr>
-    	        <tr>
-    		        <th width="10%">No.</th>
-    		        <th width="20%">ご利用日</th>
-    		        <th width="20%">ご利用時間</th>
+		        </tr>
+		        <!--tr>
+			        <th  colspan="2">利用人数<span class="red">（必須)</span></th>
+			        <td  colspan="2"><?php //echo $_POST['ninzu']; ?></td>
+		        </tr-->
+		         <tr>
+		      		<th colspan="2">内容</th>
+		      		<td colspan="6"><?php echo $_POST[ 'naiyo' ]; ?></td>
+		      	</tr>
+			    <tr>
+		      		<th  colspan="2">使用当日の管理責任者名</th>
+		      		<td  colspan="6"><?php echo $_POST[ 'sekinin' ]; ?></td>
+		      	</tr>			   
+		        <tr><th colspan="5">お申込み施設</th></tr>
+		        <tr>
+			        <th width="10%">No.</th>
+			        <th width="20%">ご利用日</th>
+			        <th width="20%">ご利用時間</th>
 					<th width="20%">人数</th>
-    		        <th>施設名</th>
-    	        </tr>
-            </tbody>
-            <tbody id="list">
-            </tbody>
-            <tbody>
-    	    <!--tr><th colspan="4">上記のうち、ひとつでも予約できなかった場合</th></tr>
-    	    <tr>
-    		    <td  colspan="4">全ての申込をキャンセルする</td>
-    	    </tr-->
-            </tbody>
-    	</table>
-		 <div class="form-group">
-			<a class="btn btn-default btn-lg" href="input.php" role="button"><<　修正する</a>
-			<input type='submit' class="btn btn-warning btn-lg" role="button" name="submit_Click" id="submit_Click" value='送信する&nbsp;>>'>
-        </div>
-    </div>
-</form>
-
+			        <th>施設名</th>
+		        </tr>
+	        </tbody>
+	        <tbody id="list">
+	        </tbody>
+	        <tbody>
+	    	    <!--tr><th colspan="4">上記のうち、ひとつでも予約できなかった場合</th></tr>
+	    	    <tr>
+	    		    <td  colspan="4">全ての申込をキャンセルする</td>
+	    	    </tr-->
+	        </tbody>
+	    	</table>
+			 <div class="form-group">
+				<input type='submit' class="btn btn-default btn-lg" role="button" name="submit_prev" id="submit_prev" value='修正する'>
+				<input type='submit' class="btn btn-warning btn-lg" role="button" name="submit_next" id="submit_next" value='送信する'>
+	        </div>
+	    </div>
+	</form>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>

@@ -1,5 +1,18 @@
 jQuery(function () {
-        //HTMLを初期化  
+			
+		$("#naiyo").attr("disabled","disabled");
+		$("#naiyo").val='';
+		$('#riyokb').change(function() {
+			if($(this).val()==99){
+				$("#naiyo").removeAttr("disabled");
+				
+			}else{
+				$("#naiyo").attr("disabled","disabled");
+				$("#naiyo").val='';
+			}
+		}
+
+        //HTMLを初期化 
         $("table.rsv_input tbody.list").html("");
         
 		var objData = JSON.parse(localStorage.getItem("sentaku"));
@@ -20,7 +33,7 @@ jQuery(function () {
 			var td8 = $("<div></div>");
 			var td9 = $("<div></div>");
 			var td10 = $("<div></div>");
-			var td11 = $("<div></div>");
+			var td11 = $("<td></td>");
 			
 			/* 日付のフォーマット もう少しスマートな方法がないか検討*/
 			var usedt = objData[i]['usedt'];
@@ -37,33 +50,70 @@ jQuery(function () {
 			/* 命名を配列っぽくしてもいいかもしれない */
 			/* 後で変更 jkn1 jkn2 →　stjkn　edjkn */
 			$("#list").append(tr);
-			tr.append( td1 ).append( td2 ).append( td3 ).append( td4 ).append( td5 ).append( td6 ).append( td7 ).append( td8 ).append( td9 ).append( td10 );
+			tr.append( td1 ).append( td2 ).append( td3 ).append( td4 ).append( td5 ).append( td6 ).append( td7 ).append( td8 ).append( td9 ).append( td10 ).append( td11 );
 			//td1.html( gyo );
 			td1.html( "<a class=\"btn btn-default btnclass\" id='btn-" + objData[i]['rmcd'] + objData[i]['usedt'] + objData[i]['timekb'] + "' name='" + i + "' href=\"#\" role=\"button\">削除</a>" );
 			td2.html( useyyyy + "/" + usemm + "/" +  usedd  + yobi + "<br>" + objData[i]['rmnm'] );
 			td3.html( objData[i]['jkn1'] + "～" + objData[i]['jkn2'] );
 			//td4.html( "時間内訳" );
-			td4.html( "<table class=\"table table-condensed  form-inline nest mb0\"><tr><th>催物時間</th><td>"
-               + "<input type=\"text\" class=\"form-control\" value=\"\" style=\"width:30px\" maxlength=\"2\" >時"
-               + "<input type=\"text\" class=\"form-control\" value=\"\" style=\"width:30px\"  maxlength=\"2\" >分～"
-               + "<input type=\"text\" class=\"form-control\" value=\"\" style=\"width:30px\" maxlength=\"2\" >時"
-               + "<input type=\"text\" class=\"form-control\" value=\"\" style=\"width:30px\"  maxlength=\"2\" >分"
-               + "</td></tr></table>");
-			td5.html( "<input type='text' class='form-control' name='ninzu" + i + "' id='ninzu" + i + "' value='' style='width:50px'>人<span class='text-danger'>（必須)</span>" );
+			var jjkn ="<table class=\"table table-condensed  form-inline nest mb0\"><tr><th>練習・準備時間</th><td>"
+           		+ "<input type=\"text\" class=\"form-control\" name='jstjkn_h" + i + "' id='jstjkn_h" + i + "' value=\"\" style=\"width:30px\" maxlength=\"2\" >時"
+               	+ "<input type=\"text\" class=\"form-control\" name='jstjkn_m" + i + "' id='jstjkn_m" + i + "' value=\"\" style=\"width:30px\"  maxlength=\"2\" >分～"
+               	+ "<input type=\"text\" class=\"form-control\" name='jedjkn_h" + i + "' id='jedjkn_h" + i + "' value=\"\" style=\"width:30px\" maxlength=\"2\" >時"
+               	+ "<input type=\"text\" class=\"form-control\" name='jedjkn_m" + i + "' id='jedjkn_m" + i + "' value=\"\" style=\"width:30px\"  maxlength=\"2\" >分"
+               	+ "</td></tr></table>";
+            var hjkn = "<table class=\"table table-condensed  form-inline nest mb0\"><tr><th>催物時間</th><td>"
+	            + "<input type=\"text\" class=\"form-control\" name='hstjkn_h" + i + "' id='hstjkn_h" + i + "' value=\"\" style=\"width:30px\" maxlength=\"2\" >時"
+	            + "<input type=\"text\" class=\"form-control\" name='hstjkn_m" + i + "' id='hstjkn_m" + i + "' value=\"\" style=\"width:30px\"  maxlength=\"2\" >分～"
+	            + "<input type=\"text\" class=\"form-control\" name='hedjkn_h" + i + "' id='hedjkn_h" + i + "' value=\"\" style=\"width:30px\" maxlength=\"2\" >時"
+	            + "<input type=\"text\" class=\"form-control\" name='hedjkn_m" + i + "' id='hedjkn_m" + i + "' value=\"\" style=\"width:30px\"  maxlength=\"2\" >分"
+	            + "</td></tr></table>";
+	        var tjkn = "<table class=\"table table-condensed  form-inline nest mb0\"><tr><th>撤去時間</th><td>"
+	            + "<input type=\"text\" class=\"form-control\" name='tstjkn_h" + i + "' id='tstjkn_h" + i + "' value=\"\" style=\"width:30px\" maxlength=\"2\" >時"
+	            + "<input type=\"text\" class=\"form-control\" name='tstjkn_m" + i + "' id='tstjkn_m" + i + "' value=\"\" style=\"width:30px\"  maxlength=\"2\" >分～"
+	            + "<input type=\"text\" class=\"form-control\" name='tedjkn_h" + i + "' id='tedjkn_h" + i + "' value=\"\" style=\"width:30px\" maxlength=\"2\" >時"
+	            + "<input type=\"text\" class=\"form-control\" name='tedjkn_m" + i + "' id='tedjkn_m" + i + "' value=\"\" style=\"width:30px\"  maxlength=\"2\" >分"
+	            + "</td></tr></table>";
+			if((objData[i]['rmcd']=="201")||(objData[i]['rmcd']=="301")){
+				td4.html( jjkn + hjkn + tjkn );	
+			}else{				
+				td4.html( hjkn );	
+			}
+			td5.html( "<input type='text' class='form-control' name='ninzu" + i + "' id='ninzu" + i + "' value='" + objData[i]['ninzu'] + "' style='width:50px'>人<span class='text-danger'>（必須)</span>" );
 			//td6.html( "営利目的での利用" + "入場料・受講料等の徴収" );			
-			td6.html( "<table class=\"table table-condensed  form-inline nest2 mb0\"><tr><th>営利目的での利用<br>（販売やPR活動も含む）</th><td>"
-	            + "<label class=\"\"><input type=\"radio\" name=\"j0[1]\" value=\"2\">あてはまる</label>"
-	            + "<label class=\"\"><input type=\"radio\" name=\"j0[1]\" value=\"2\" >あてはまらない</label>"
-	            + "</td></tr><tr><th>入場料・受講料等の徴収</th><td>"
-	            + "<label class=\"radio-inline\"><input type=\"radio\" name=\"j1[1]\" value=\"2\">する</label>"
-	            + "<label class=\"radio-inline\"><input type=\"radio\" name=\"j1[1]\" value=\"2\">しない</label>"
-	            + "</td></tr></table>");
+			if(objData[i]['rmcd']=="301"){
+				td6.html( "<table class=\"table table-condensed  form-inline nest2 mb0\">"
+					+ "<tr><th>グランドピアノ</th><td>"
+		            + "<label class=\"radio-inline\"><input type=\"radio\" name=\"piano" + i + "\" id=\"piano" + i + "\" value=\"1\">使用する</label>"
+		            + "<label class=\"radio-inline\"><input type=\"radio\" name=\"piano" + i + "\" id=\"piano" + i + "\" value=\"0\">使用しない</label>"
+		            + "</td></tr>"
+					+ "<tr><th>営利目的での利用<br>（販売やPR活動も含む）</th><td>"
+		            + "<label class=\"\"><input type=\"radio\" name=\"commercially" + i + "\" id=\"commercially" + i + "\" value=\"1\">あてはまる</label>"
+		            + "<label class=\"\"><input type=\"radio\" name=\"commercially" + i + "\" id=\"commercially" + i + "\" value=\"0\" >あてはまらない</label>"
+		            + "</td></tr><tr><th>入場料・受講料等の徴収</th><td>"
+		            + "<label class=\"radio-inline\"><input type=\"radio\" name=\"fee" + i + "\" id=\"fee" + i + "\" value=\"1\">する</label>"
+		            + "<label class=\"radio-inline\"><input type=\"radio\" name=\"fee" + i + "\" id=\"fee" + i + "\" value=\"0\">しない</label>"
+		            + "</td></tr></table>");
+			}else{
+				td6.html( "<table class=\"table table-condensed  form-inline nest2 mb0\"><tr><th>営利目的での利用<br>（販売やPR活動も含む）</th><td>"
+		            + "<label class=\"\"><input type=\"radio\" name=\"commercially" + i + "\"  id=\"commercially" + i + "\" value=\"1\">あてはまる</label>"
+		            + "<label class=\"\"><input type=\"radio\" name=\"commercially" + i + "\"  id=\"commercially" + i + "\" value=\"0\" >あてはまらない</label>"
+		            + "</td></tr><tr><th>入場料・受講料等の徴収</th><td>"
+		            + "<label class=\"radio-inline\"><input type=\"radio\" name=\"fee" + i + "\"  id=\"fee" + i + "\" value=\"1\">する</label>"
+		            + "<label class=\"radio-inline\"><input type=\"radio\" name=\"fee" + i + "\"  id=\"fee" + i + "\" value=\"0\">しない</label>"
+		            + "</td></tr></table>");
+			}
 			td7.html( "<input type='hidden' name='rmcd" + i + "' id='rmcd" + i + "' value='" + objData[i]['rmcd'] + "'>" );
 			td8.html( "<input type='hidden' name='gyo" + i + "' id='gyo" + i + "' value='" + gyo + "'>" );	//行番
 			td9.html( "<input type='hidden' name='usedt" + i + "' id='usedt" + i + "' value=" + useyyyy + usemm + usedd + ">" ); //使用日付
-			td10.html( "<input type='hidden' name='timekb" + i + "' id='timekb" + i  + "' value='" + objData[i]['timekb'] + "'>" ); //時間帯
-		}
+			td10.html( "<input type='hidden' name='timekb" + i + "' id='timekb" + i + "' value='" + objData[i]['timekb'] + "'>" ); //時間帯
+			
 
+			td11.html( "<input type='text' name='tnk" + i + "' id='tnk" + i + "' value='" + objData[i]['tnk'] + "'>" ); //単価
+			}
+		});
+
+		
 		//フォーム送信時
 		$('#input_form').submit(function(){
 
@@ -73,24 +123,93 @@ jQuery(function () {
 				return false;
 			}
 			if($('#riyokb').val()=='' ){
-				alert("利用目的を入力してください。");
+				alert( "利用目的を入力してください。");
 				return false;
 			}
-			
-			for ( var i = 0; i < objData.length; i++ ){
-					if($('#ninzu' + i ).length){
-						//後でちゃんと書き直す
-						if(  $('#ninzu' + i ).val()=='' ){
-							alert("人数を入力してください。");
-							return false;
-						}
-						if(  $('#ninzu' + i ).val()==0){
-							alert("人数は０以上で入力してください。");
-							return false;
-						}
-						objData[i]['ninzu'] = $('#ninzu' + i ).val();//入力された人数を格納
-					}
+			if($('#naiyo').val()=='' ){
+				if($('#riyokb').val()=='99' ){
+					alert( "内容を具体的に入力してください。");
+					return false;
+				}
 			}
+
+			if( $('#sekinin').val()=='' ){
+				alert("当日の利用責任者を入力してください。");
+				return false;
+			}
+
+			for ( var i = 0; i < objData.length; i++ ){
+				
+				//本番時間
+				if($('#hstjkn_h' + i ).length){
+					//後でちゃんと書き直す
+					if( $('#hstjkn_h' + i ).val()=='' ){
+						alert( "催物時間を入力してください。" );
+						return false;
+					}
+					if( $('#hstjkn_m' + i ).val()=='' ){
+						alert( "催物時間を入力してください。" );
+						return false;
+					}
+					if( $('#hedjkn_h' + i ).val()=='' ){
+						alert( "催物時間を入力してください。" );
+						return false;
+					}
+					if( $('#hedjkn_m' + i ).val()=='' ){
+						alert( "催物時間を入力してください。" );
+						return false;
+					}
+									
+
+				}
+				//練習・準備
+				if($('#jstjkn_h' + i ).length){
+					objData[i]['jstjkn_h'] =$( '#jstjkn_h' + i ).val();
+					objData[i]['jstjkn_m'] =$( '#jstjkn_m' + i ).val();
+					objData[i]['jedjkn_h'] =$( '#jedjkn_h' + i ).val();
+					objData[i]['jedjkn_m'] =$( '#jedjkn_m' + i ).val();
+				}
+				//if($('#hstjkn_h' + i ).length){	
+					//本番
+					alert($( '#hstjkn_h' + i ).val());
+					objData[i]['hstjkn_h'] = $( '#hstjkn_h' + i ).val();
+					objData[i]['hstjkn_m'] = $( '#hstjkn_m' + i ).val();
+					objData[i]['hedjkn_h'] = $( '#hedjkn_h' + i ).val();
+					objData[i]['hedjkn_m'] = $( '#hedjkn_m' + i ).val();
+				//}
+				if($('#tstjkn_h' + i ).length){	
+					//撤去
+					objData[i]['tstjkn_h'] = $( '#tstjkn_h' + i ).val();
+					objData[i]['tstjkn_m'] = $( '#tstjkn_m' + i ).val();
+					objData[i]['tedjkn_h'] = $( '#tedjkn_h' + i ).val();
+					objData[i]['tedjkn_m'] = $( '#tedjkn_m' + i ).val();
+				}	
+				
+				if($('#ninzu' + i ).length){
+					//後でちゃんと書き直す
+					if(  $('#ninzu' + i ).val()=='' ){
+						alert( "人数を入力してください。" );
+						return false;
+					}
+					if(  $('#ninzu' + i ).val()==0){
+						alert( "人数は0以上で入力してください。" );
+						return false;
+					}
+					objData[i]['ninzu'] = $( '#ninzu' + i ).val();//入力された人数を格納
+				}
+
+				objData[i]['commercially'] = $( '#commercially' + i ).val();//営利目的
+				objData[i]['fee'] = $( '#fee' + i ).val();//入場料
+				objData[i]['piano'] = $( '#piano' + i ).val();//グランドピアノ
+				objData[i]['partition'] = $( '#partition' + i ).val();//間仕切り
+
+				//明細使用料
+				objData[i]['rmkin'] = objData[i]['tnk'];
+				objData[i]['hzkin'] = objData[i]['tnk'];
+
+
+			}
+			
 			localStorage.removeItem('sentaku');
 			//alert('removeitem');
 			localStorage.setItem('sentaku', JSON.stringify(objData));
@@ -102,7 +221,7 @@ jQuery(function () {
 			//return false;
 			return true;
 		});
-
+});
 		//申し込みをやめる処理
 		$(".btnclass").click(function(){
 			if (!confirm('この施設のお申込みを取りやめます。よろしいですか？')) {
@@ -193,4 +312,4 @@ jQuery(function () {
 		・type：予期されるデータの形式（省略してもxml,json,script,html位は判断してくれます）
 		*/
 		
-    });   
+ //);
