@@ -561,8 +561,11 @@ class DB
 
 		//施設コード、WEB名称、定員、WEBリンク
 		//$sql = "select rmcd, rmnmw, capacity, weblink from mt_room"; 
-		$sql = "select mt_room.rmcd, mt_room.rmnmw, mt_room.capacity, mt_room.weblink , mt_rmtnk.tnk from mt_room "; 
-        $sql = $sql." left outer join mt_rmtnk on mt_room.rmcd = mt_rmtnk.rmcd "; 
+		$sql = "select mt_room.rmcd, mt_room.rmnmw, mt_room.capacity, mt_room.oyakokb, mt_room.weblink, "; 
+        $sql = $sql." asa.tnk as asatnk, hiru.tnk as hirutnk , yoru.tnk as yorutnk from mt_room "; 
+        $sql = $sql." left outer join mt_rmtnk as asa on mt_room.rmcd = asa.rmcd "; 
+        $sql = $sql." left outer join mt_rmtnk as hiru on mt_room.rmcd = hiru.rmcd ";
+        $sql = $sql." left outer join mt_rmtnk as yoru on mt_room.rmcd = yoru.rmcd "; 
         
 		//if ( !empty ( $bldkb ) ){
 		//	$sql = $sql." where";
@@ -584,8 +587,12 @@ class DB
 
 		}
 		
-        $sql = $sql." and kyakb =1 "; 
-        $sql = $sql." and stjkn = 900 and edjkn = 1200 ";
+        $sql = $sql." and asa.kyakb =1 "; 
+        $sql = $sql." and asa.stjkn = 900 and asa.edjkn = 1200 ";
+        $sql = $sql." and hiru.kyakb =1 "; 
+        $sql = $sql." and hiru.stjkn = 1300 and hiru.edjkn = 1700 ";
+        $sql = $sql." and yoru.kyakb =1 "; 
+        $sql = $sql." and yoru.stjkn = 1800 and yoru.edjkn = 2100 ";
         //$sql = $sql." and stjkn = 1300 and edjkn = 1700 ";
         //$sql = $sql." and stjkn = 1800 and edjkn = 2100 "; 
 
@@ -651,8 +658,8 @@ class DB
 		$sql = "select count(*) from dt_roomrmei left outer join dt_roomr on dt_roomr.ukeno = dt_roomrmei.ukeno";
 		$sql = $sql." where candt = 0 and dt_roomr.kyacd = ".$kyakucd;
 		$sql = $sql." and dt_roomrmei.usedt > ".$year.$month."00" ." and dt_roomrmei.usedt < ".$year.$nextmonth."00";
-echo $sql;
-echo "<br>";
+//echo $sql;
+//echo "<br>";
 		$result = sqlsrv_query( $this->con, $sql );
 
 		if( $result === false ) {

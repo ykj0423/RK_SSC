@@ -11,7 +11,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta NAME="ROBOTS" CONTENT="NOINDEX,NOFOLLOW,NOARCHIVE">
-<title>予約申込み[完了]　 |  <?php echo $_SESSION['webrk']['sysname']; ?></title>
+<title>予約申込 送信済み　 |  <?php echo $_SESSION['webrk']['sysname']; ?></title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/custom.css" rel="stylesheet">
 <script src="js/custom.js"></script>
@@ -64,10 +64,10 @@ for ( $i = 0; $i < $meisai_count; $i++ ) {
 	$checkm = substr($checkdt, 4, 2);
 
 	if( $db->check_monthly_count($checkkyaku,$checky,$checkm) > 9){
-		echo $checky."年".$checkm."月に関してはお申し込みの上限を超えています。";
+		//echo $checky."年".$checkm."月に関してはお申し込みの上限を超えています。";
 		die();
 	}else{
-		echo $checky."年".$checkm."月に関してはお申し込みの上限を超えていません。";
+		//echo $checky."年".$checkm."月に関してはお申し込みの上限を超えていません。";
 	}
 	
 }
@@ -97,10 +97,13 @@ if( sqlsrv_fetch( $stmt ) === false) {
      //die( print_r( sqlsrv_errors(), true));
 }
 
-$max_webukeno = (int)sqlsrv_get_field( $stmt, 0);//nullの場合を考慮し、キャストする
+$webukeno = (int)sqlsrv_get_field( $stmt, 0);//nullの場合を考慮し、キャストする
+//$financial_year = str_pad((int)get_financial_year() , 8, "0", STR_PAD_RIGHT);
+//$webukeno =  $financial_year  +  $max_webukeno + 1;
+/*$max_webukeno = (int)sqlsrv_get_field( $stmt, 0);//nullの場合を考慮し、キャストする
 $financial_year = str_pad((int)get_financial_year() , 8, "0", STR_PAD_RIGHT);
 $webukeno =  $financial_year  +  $max_webukeno + 1;
-
+*/
 ?>
 	
 
@@ -167,7 +170,7 @@ for ( $i = 0; $i < $meisai_count; $i++ ) {
 		/* 既に予約が埋まっていた場合の処理 */
 		//チェックはks_を見に行く
 		//kがうまっていらたweb_ksを元に戻す。
-		echo $_POST[ 'usedt'.$i ]."日の予約は申し込めません";
+		//echo $_POST[ 'usedt'.$i ]."日の予約は申し込めません";
 	
 	}
 
@@ -416,25 +419,24 @@ sqlsrv_close($conn);
 <!-- main -->
 	<div class="row">
       	<div class="col-xs-6" style="padding:0">
-        <h1><span class="midashi">|</span>予約申込み[完了]</h1>
-       </div>
-
+        <h1><span class="midashi">|</span>予約申込 送信済み</h1>
+       	</div>
       	<div class="col-xs-6  text-right">
           <span class="f120">現在の時間：　<span id="currentTime"></span></span>
        </div>
 	</div>
-<h4>ご予約のお申込を受け付けました。</h4>
-<p class="red">※ご注意※　施設利用料のお支払が完了するまで、予約は確定していません。</p>
-<p>
-	以下の内容でお申込みを受け付けましたが、先着順となりますのでご希望通りに受理できない可能性がございます。<br>
-	ご予約結果については、<a href="rsvlist.php">予約照会画面</a>にてご確認下さい。<br>
-	なお、下記のアドレス宛にご予約結果のメールを送信しておりますので、ご確認をお願いします。
-</p>
-<br>
-<div class="alert alert-warning" role="alert">WEB受付番号：  <span style="font-size:1.2em"><?php  echo "4-".$webukeno ?></span></div>
-<a class="btn btn-default btn-lg logout" href="top.php" role="button">トップページに戻る</a>
-<a class="btn btn-default btn-lg logout" href="login.php" role="button">ログアウト</a>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-</body>
+	<h4 class="status2"> ご希望の内容は、システムへ送信されましたが、まだ受付できておりません。<br>お申し込みが成立したかどうかは、改めてメールでお知らせします。 </h4>
+	<li>受付は先着順となります。</li>
+  	<li>お申し込みの受付状況は、<a href="rsvlist.php">予約照会画面</a>でもご覧いただけます。</li>
+  	<br>
+	<div class="alert alert-info" role="alert">
+	お問い合わせ番号：  <span style="font-size:1.2em"><?php echo $webukeno ?></span></div>
+	<p>・ハーバーホールのご使用については、必ずこちらの<a href="#">「ご利用案内」</a>をご確認ください。</p>
+	<p>・展示場のご使用については、事前にこちらの<a href="#">「使用計画書」</a>をご提出ください。</p><br>
+	<a class="btn btn-default btn-lg" href="top.php" role="button">トップページに戻る</a>
+	<a class="btn btn-primary btn-lg" href="search.php" role="button"><small>続けて申し込む場合・・・</small>空き状況へ >> </a>
+	<a class="btn btn-primary btn-lg logout" href="login.php" role="button">ログアウト</a>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	</body>
 </html>

@@ -219,7 +219,12 @@ jQuery(function () {
             var jkn1 = $("#" + datastr).attr('data-jkn1');		//時間（自）
             var jkn2 = $("#" + datastr).attr('data-jkn2');		//時間（至）
             var tnk = $("#" + datastr).attr('data-tnk');		//時間（至）
+            var oyakokb = $("#" + datastr).attr('data-oyakokb');//親子区分　1:単独 2:親 3:子(ct_oyako)
             var src = $("#" + imgstr).attr('src');
+			/*var jstjkn_h = null;
+            var jstjkn_m = null;
+            var jedjkn_h = null;
+            var jedjkn_m = null;*/
 			
 			if (src == 'icon/kara.jpg') {	//空室選択時
 
@@ -234,24 +239,25 @@ jQuery(function () {
 					yobi: yobi,
                     jkn1: jkn1,
                     jkn2: jkn2,
-                    jstjkn_h: 0,
-                    jstjkn_m: 0,
-                    jedjkn_h: 0,
-                    jedjkn_m: 0,
-                    hstjkn_h: 0,
-                    hstjkn_m: 0,
-                    hedjkn_h: 0,
-                    hedjkn_m: 0,
-                    tstjkn_h: 0,
-                    tstjkn_m: 0,
-                    tedjkn_h: 0,
-                    tedjkn_m: 0,
+                    jstjkn_h: '',
+                    jstjkn_m: '',
+                    jedjkn_h: '',
+                    jedjkn_m: '',
+                    hstjkn_h: '',
+                    hstjkn_m: '',
+                    hedjkn_h: '',
+                    hedjkn_m: '',
+                    tstjkn_h: '',
+                    tstjkn_m: '',
+                    tedjkn_h: '',
+                    tedjkn_m: '',
                     tnk: tnk,
-					ninzu: 0,
-					commercially: 0,
-					fee: 0,
-					piano: 0,
-					partition: 0,
+					ninzu: '',
+					commercially: '',
+					fee: '',
+					piano: '',
+					partition: '',
+					oyakokb : oyakokb,
 					rmkin: 0,
 					hzkin: 0,
                     value: 1
@@ -307,6 +313,9 @@ jQuery(function () {
 			//localStorage.removeItem('sentaku', JSON.stringify(strlist));
 			//現在の選択件数の更新
 			$(".selcnt").text("現在の選択 ： " + strlist.length + "件");
+
+			location.reload();
+
         });
 
 		//フォーム送信時

@@ -179,7 +179,7 @@ $Kyaku->get_user_info( $_SESSION['wloginid'] );
 		    <th width="10%">利用日/施設名</th>
 		    <th width="8%">利用時間</th>
 			<th width="25%">時間内訳<span class="text-danger">（必須)</span></th>
-			<th width="8%">利用人数</th>
+			<th width="8%">利用人数<br><span class='text-danger'>（必須)</span></th>
 			<th >その他確認事項<span class="text-danger">（必須)</span></th>
 		</tr>       
 		<!-- お申し込み明細エリア-->
@@ -187,7 +187,7 @@ $Kyaku->get_user_info( $_SESSION['wloginid'] );
         </tbody>
 	</table>
 	<a class="btn btn-default btn-lg" href="search.php" role="button"><<　戻る</a>
-	<input type='submit' class="btn btn-warning btn-lg" role="button" name="submit_Click" id="submit_Click" value="確認画面へ&nbsp;>>">
+	<input type='submit' class="btn btn-primary btn-lg" role="button" name="submit_Click" id="submit_Click" value="確認画面へ&nbsp;>>">
 </form>
 </body>
 </html>
