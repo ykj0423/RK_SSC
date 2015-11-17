@@ -57,9 +57,6 @@ jQuery(function () {
 		var yobi = w[d.getDay()];
 		var gyo = i + 1;
 
-		//ただ加算しただけでは計算されない。		
-		total = parseInt(total) + parseInt(objData[i]['rmkin']) + parseInt(objData[i]['hzkin']);
-
 		$("#list").append(tr);
 		tr.append( td1 ).append( td2 ).append( td3 ).append( td4 ).append( td5 ).append( td6 ).append( td7 ).append( td8 ).append( td9 ).append( td10 ).append( td11 ).append( td12 ).append( td13 ).append( td14 ).append( td15 ).append( td16 ).append( td17 );
 		//td1.html( gyo );
@@ -68,7 +65,11 @@ jQuery(function () {
 		var jjkn = objData[i]['jstjkn_h'] + "：" + objData[i]['jstjkn_m'] + "～" + objData[i]['jedjkn_h'] + "：" + objData[i]['jedjkn_m'] + "";
 		var hjkn = objData[i]['hstjkn_h'] + "：" + objData[i]['hstjkn_m'] + "～" + objData[i]['hedjkn_h'] + "：" + objData[i]['hedjkn_m'] + "";
 		var tjkn = objData[i]['tstjkn_h'] + "：" + objData[i]['tstjkn_m'] + "～" + objData[i]['tedjkn_h'] + "：" + objData[i]['tedjkn_m'] + "";
-		td3.html( "準備・リハ時間&nbsp;" + jjkn + "<br>催物時間&nbsp;" + hjkn + "<br>撤去時間&nbsp;" + tjkn );
+		if(objData[i]['rmcd'] == '301'){
+			td3.html( "準備・リハ時間&nbsp;" + jjkn + "<br>催物時間&nbsp;" + hjkn + "<br>撤去時間&nbsp;" + tjkn );
+		}else{
+			td3.html( "催物時間&nbsp;" + hjkn );
+		}
 		td4.html( objData[i]['ninzu']+"人" );
 		
 		var str_option='';
@@ -88,14 +89,34 @@ jQuery(function () {
 			str_option = str_option + "・間仕切り：しめる<br>";
 		}
 		td5.html( str_option );
-		td6.html( "\\" + parseInt( objData[i]['rmkin'] ).toLocaleString() );
-		td7.html( "\\" + parseInt( objData[i]['hzkin'] ).toLocaleString() );
+		
+		var rmkin;
+		var hzkin;
+		rmkin = parseInt( objData[i]['rmkin'] );
+		hzkin = parseInt( objData[i]['hzkin'] );
+		
+		if((objData[i]['commercially']==1)&&(objData[i]['fee']==1)){
+			rmkin = rmkin * 1.5;
+			objData[i]['rmkin'] = rmkin;
+		}
+		//ただ加算しただけでは計算されない。
+		//var rmkin = parseInt(objData[i]['rmkin']);
+
+		//if((objData[i]['partition']==1)&&(objData[i]['fee']==1)){
+		//	rmkin = rmkin * 1.5;
+		//}
+		total = parseInt(total) + parseInt(rmkin) + parseInt(objData[i]['hzkin']);
+
+		td6.html( "\\" + rmkin.toLocaleString() );
+		td7.html( "\\" + hzkin.toLocaleString() );
 		td8.html( "<input type='hidden' name='rmcd" + i + "' id='rmcd" + i + "' value='" + objData[i]['rmcd'] + "'>" );
 		td9.html( "<input type='hidden' name='gyo" + i + "' id='gyo" + i + "' value='" + gyo + "'>" );	//行番
 		td10.html( "<input type='hidden' name='usedt" + i + "' id='usedt" + i + "' value=" + useyyyy + usemm + usedd + ">" ); //使用日付
 		td11.html( "<input type='hidden' name='timekb" + i + "' id='timekb" + i  + "' value='" + objData[i]['timekb'] + "'>" ); //時間帯
-		td12.html( "<input type='hidden' name='stjkn" + i + "' id='stjkn" + i + "' value='" + objData[i]['jkn1'] + "' style='width:70px'><input type='hidden' class='form-control' name='edjkn" + i + "' id='edjkn" + i + "' value='"+ objData[i]['jkn2'] + "'' style='width:70px'>" );
-		td13.html( "<input type='hidden' name='ninzu" + i + "' id='ninzu" + i + "' value='" + objData[i]['ninzu'] + "' style='width:50px'>" );
+		td12.html( "<input type='hidden' name='stjkn" + i + "' id='stjkn" + i + "' value='" + objData[i]['jkn1'] +"'><input type='hidden' class='form-control' name='edjkn" + i + "' id='edjkn" + i + "' value='"+ objData[i]['jkn2'] + "'>" );
+		td13.html( "<input type='hidden' name='ninzu" + i + "' id='ninzu" + i + "' value='" + objData[i]['ninzu'] +"'");
+		td14.html( "<input type='hidden' name='rmkin" + i + "' id='rmkin" + i + "' value='" + rmkin + "'");
+		td15.html( "<input type='hidden' name='hzkin" + i + "' id='hzkin" + i + "' value='" + objData[i]['hzkin'] + "'");
 	}
 	
 	$("#total").html("\\" + total.toLocaleString());

@@ -1,10 +1,10 @@
 <?php
 /*
-// –{“ú‚Ì“ú•t‚©‚ç”N“x‚ğZo‚·‚é(¼—ï2Œ…)
+// æœ¬æ—¥ã®æ—¥ä»˜ã‹ã‚‰å¹´åº¦ã‚’ç®—å‡ºã™ã‚‹(è¥¿æš¦2æ¡)
 */
 function get_financial_year(){
 	
-	define('CLOSING_MONTH', 3); //ŒˆZŒ
+	define('CLOSING_MONTH', 3); //æ±ºç®—æœˆ
 	
 	if( (int)date( 'm' ) > CLOSING_MONTH ){
         return date( 'y' );
@@ -14,26 +14,38 @@ function get_financial_year(){
 
 }
 /*
-// ŒŸõğŒ‚É‰‚¶‚½“ú•t”z—ñ‚ğì¬‚·‚é
+// æ¤œç´¢æ¡ä»¶ã«å¿œã˜ãŸæ—¥ä»˜é…åˆ—ã‚’ä½œæˆã™ã‚‹
 */
-function get_date_array( $start , $end ,  $yobi )
+function get_date_array( $start, $end,  $yobi, $span_stt, $span_end )
 {
 
-	//‰Šú’l
+	//åˆæœŸå€¤
     $stack  = array();
-	$weekday = array( "“ú", "Œ", "‰Î", "…", "–Ø", "‹à", "“y" );//“ú–{Œê—j“ú’è‹`
+	//$weekday = array( "æ—¥", "æœˆ", "ç«", "æ°´", "æœ¨", "é‡‘", "åœŸ" );//æ—¥æœ¬èªæ›œæ—¥å®šç¾©
+	$weekday = array('æ—¥','æœˆ','ç«','æ°´','æœ¨','é‡‘','åœŸ');
 	//echo  "get_date_array param is ..." . $start ." , ". $end ;//." , ". $yobi ;
 	//print_r($yobi);
 	
-	/*ƒpƒ‰ƒ[ƒ^ƒ`ƒFƒbƒN*/
-	//I—¹“ú‚ª‚È‚¢ê‡iŸ‚Öƒ{ƒ^ƒ“j +15 week?? 
+	/*ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒã‚§ãƒƒã‚¯*/
+	//çµ‚äº†æ—¥ãŒãªã„å ´åˆï¼ˆæ¬¡ã¸ãƒœã‚¿ãƒ³ï¼‰ +15 week?? 
 	//if( empty ( $end ) ){
 	//	date("Y/m/d",strtotime("+15 week" ,strtotime($start)));
 	//}
 	
-	// ‹æØ‚è•¶š‚ğ"/"‚ğœ‹
+	// åŒºåˆ‡ã‚Šæ–‡å­—ã‚’"/"ã‚’é™¤å»
 	$start = str_replace("/", "", $start);
+	$span_stt = str_replace("/", "", $span_stt);
+	
+	if($start < $span_stt){
+		$start = $span_stt;	
+	}
+	
 	$end = str_replace("/", "", $end);
+	$span_end = str_replace("/", "", $span_end);
+	
+	if($end > $span_end){
+		$end = $span_end;	
+	}
 	//echo  "get_date_array param is ..." . $start ." , ". $end ;//." , ". $yobi ;
 	
 	for ( $element = $start;  $element <= $end;  $element++ ) {
@@ -46,14 +58,14 @@ function get_date_array( $start , $end ,  $yobi )
 		$mm = substr( $element, 4, 2 );
 		$dd = substr( $element, 6, 2 ) ;
 
-		if ( checkdate( $mm, $dd, $yyyy ) ){ //“ú•t‚Æ‚µ‚Ä‘Ã“–‚©
+		if ( checkdate( $mm, $dd, $yyyy ) ){ //æ—¥ä»˜ã¨ã—ã¦å¦¥å½“ã‹
 			
-			//—j“ú‚ÌZo
+			//æ›œæ—¥ã®ç®—å‡º
 			$w =  date( "w", mktime( 0,  0,  0, $mm, $dd, $yyyy ) );
 
-			$wd = mb_convert_encoding( $weekday[ $w ], "UTF-8", "SJIS");
-
-			if ( in_array ( $w, $yobi ) ) { //”z—ñ‚É‘¶İ‚·‚é‚©
+			//$wd = mb_convert_encoding( $weekday[ $w ], "UTF-8", "SJIS");
+			$wd = $weekday[ $w ];
+			if ( in_array ( $w, $yobi ) ) { //é…åˆ—ã«å­˜åœ¨ã™ã‚‹ã‹
 				
 				array_push( $stack , array(
 							   "yyyy" => $yyyy,
@@ -90,7 +102,7 @@ function get_wday( $param )
 function get_mb_wday( $param )
 {
 
-	$weekday = array( "“ú", "Œ", "‰Î", "…", "–Ø", "‹à", "“y" );//“ú–{Œê—j“ú’è‹`
+	$weekday = array( "æ—¥", "æœˆ", "ç«", "æ°´", "æœ¨", "é‡‘", "åœŸ" );//æ—¥æœ¬èªæ›œæ—¥å®šç¾©
 	
 	$yyyy = substr( $param, 0, 4 );
 	$mm = substr( $param, 4, 2 );

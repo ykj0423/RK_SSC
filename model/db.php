@@ -132,6 +132,47 @@ class DB
     }
 
     /*--------------------------------------------------------
+    //  コンボやリスト用:（文字項目はutf8に変換した後）配列で渡す。
+    ----------------------------------------------------------*/
+    public function select_rmcls()
+    {
+        
+        $ret = array();
+
+        $ret['sqlErrCD'] =  0;
+        $ret['sqlErrMsg'] = '';
+
+        $sql = ' select * from mm_rmcls where fild1 = 1';//web対象のもののみ抽出
+
+        $result = sqlsrv_query( $this->con, $sql );
+
+        if( $result === false ) {
+            $ret['sqlErrCD'] =  99999;
+            //$ret['sqlErrMsg'] =  $e->getMessage();
+            return $ret;        
+        }
+
+        $i = 0;
+
+        while($row = sqlsrv_fetch_array($result)) {
+            
+            $value = $row['name'];
+
+            if (!is_numeric($value)) { 
+                //数値化できないものはutf8に変換して値を返す
+                $value = (!empty($value)) ? mb_convert_encoding($value, "utf8", "SJIS") : $value;
+            }
+     
+            $ret['data'][$i]['key'] = $row['code'];
+            $ret['data'][$i]['value'] = $value;
+            $i++;
+        }
+
+        return $ret;
+
+    }
+
+    /*--------------------------------------------------------
     //  配列用:（文字項目はutf8に変換した後）配列で渡す。y.kamijo
     ----------------------------------------------------------*/
     public function select_mroom( $wh )
@@ -480,7 +521,7 @@ class DB
     public function select_rsvlist( $kyakcd )
     {
         try{
-
+            $kyakcd = 1;//テスト暫定
             $ret = array();
             //$ret['sqlErrCD'] =  0;
             //$ret['sqlErrMsg'] = '';
@@ -577,21 +618,22 @@ class DB
 
 		if ( count ( $rmclkb )  > 0 ){		
 			
-			$sql = $sql." where ( rmclkb = ".$rmclkb[0];
+			$sql = $sql." where ( mt_room.rmclkb = ".$rmclkb[0];
 
 			for ( $i = 1;  $i < count ( $rmclkb );  $i++ ) {
-				$sql = $sql." or  rmclkb = ".$rmclkb[$i];
+				$sql = $sql." or  mt_room.rmclkb = ".$rmclkb[$i];
 			}
 
 			$sql = $sql." )";
 
 		}
 		
-        $sql = $sql." and asa.kyakb =1 "; 
+        $sql = $sql." and mt_room.weboutkb = 1 "; 
+        $sql = $sql." and asa.kyakb = 1 "; 
         $sql = $sql." and asa.stjkn = 900 and asa.edjkn = 1200 ";
-        $sql = $sql." and hiru.kyakb =1 "; 
+        $sql = $sql." and hiru.kyakb = 1 "; 
         $sql = $sql." and hiru.stjkn = 1300 and hiru.edjkn = 1700 ";
-        $sql = $sql." and yoru.kyakb =1 "; 
+        $sql = $sql." and yoru.kyakb = 1 "; 
         $sql = $sql." and yoru.stjkn = 1800 and yoru.edjkn = 2100 ";
         //$sql = $sql." and stjkn = 1300 and edjkn = 1700 ";
         //$sql = $sql." and stjkn = 1800 and edjkn = 2100 "; 

@@ -201,9 +201,45 @@ jQuery(function () {
 				$("#" + imgstr).attr('src', 'icon/sentaku.png');
 			}
 		}
-		/* 空室・選択クリック時 */
+
+		/* 空室・選択クリック時 */                                                  
         $("a").click(function () {
 
+			// Display the month, day, and year. getMonth() returns a 0-based number.
+        	var dt = new Date();
+			dt.setDate(dt.getDate() + 15);//申込期限
+			var y = dt.getFullYear();
+			var m = dt.getMonth() + 1;
+			var d = dt.getDate();
+			if (m == 1) {
+			  y = y + 1;
+			}
+			if (m < 10) {
+			  m = '0' + m;
+			}
+			if (d < 10) {
+			  d = '0' + d;
+			}
+        	
+        	var limit = y.toString() + m.toString() + d.toString();
+
+        	//var dt = new Date();
+			dt = new Date();
+			y = dt.getFullYear();
+			m = dt.getMonth() + 2;
+			d = dt.getDate();
+			if (m == 1) {
+			  y = y + 1;
+			}
+			if (m < 10) {
+			  m = '0' + m;
+			}
+			if (d < 10) {
+			  d = '0' + d;
+			}
+        	
+        	var limit_hl = y.toString() + m.toString() + d.toString();
+			
 			/* 予約状態の復元 */
 			//var strlist = JSON.parse(localStorage.getItem("sentaku"));
 			//var strlist = array();
@@ -225,6 +261,18 @@ jQuery(function () {
             var jstjkn_m = null;
             var jedjkn_h = null;
             var jedjkn_m = null;*/
+			if(rmcd == '301'){
+				//alert(usedt + "<" +limit_hl);
+				if( usedt < limit_hl ){
+					alert("ご選択の日付についてはインターネット予約でお申し込みできません。受付窓口までお問い合わせください。");
+					return false;
+				}
+			}else{
+				if( usedt < limit ){
+					alert("ご選択の日付についてはインターネット予約でお申し込みできません。受付窓口までお問い合わせください。");
+					return false;
+				}
+			}
 			
 			if (src == 'icon/kara.jpg') {	//空室選択時
 

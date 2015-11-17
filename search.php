@@ -31,36 +31,59 @@
 include('include/menu.php');
 require_once( "func.php" );
 require_once( "model/db.php" );
-
+//print_r($_POST);
 /* データベース接続 */
 $db = new DB;
 $conErr = $db->connect();
 if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 
 /* 施設分類の取得 */
-$table = 'mm_rmcls';
-$idNm = "code";
-$valNm = "name";
-$wh = '';
-$rmcls = $db->listTB( $table, $idNm, $valNm,$wh );
+$rmcls = $db->select_rmcls();
 ?>
 <?php
 /* 検索日付（自至） */
 //検索開始日
-if( !empty ( $_POST['search_ymd_stt'] ) ){
-    $sttdt = $_POST['search_ymd_stt'] ; 
-}else{
-    //初期値
-    $sttdt = date("Y/m/d"); 
-}
+               
+$today = date( "Y/m/d" );
+$rsv_sttdt = date( "Y/m/d", strtotime( "".$today." +15 day" ) );       //会議室申込開始日
+$rsv_enddt = date( "Y/m/d", strtotime( "".$today." +365 day" ) );      //申込期限日
+$rsv_sttdt_hole = date( "Y/m/d", strtotime( "".$today." +1 month" ) ); //ホール申込開始日
+$rsv_before = date( "Y/m/d", strtotime( "".$today." +14 day" ) );      //申込終了日
 
-//検索終了日
-if( !empty ( $_POST['serch_ymd_end'] ) ){
-    $enddt = $_POST['serch_ymd_end'] ; 
-}else{
-    //初期値
-    $enddt = date("Y/m/d",strtotime("".$sttdt." +13 day"));
+$cal_year = (int)substr( $rsv_sttdt, 0, 4 );
+$cal_month = (int)substr( $rsv_sttdt, 5, 2 );
+
+/*  default  */
+//年月ボタン
+$calbtn_year = $cal_year;
+$calbtn_month = $cal_month;
+
+//カレンダーの開始日、終了日
+$sttdt = $rsv_sttdt;
+$enddt = date( "Y/m/d", strtotime( "".$sttdt." +13 day" ) );//14日後
+
+/*  検索ボタン押下  */
+if( isset( $_POST['calbtn'] ) ){
+
+  $calbtn = $_POST['calbtn'];
+  $calbtn_year = (int)substr( $calbtn, 0, 4 );
+  $calbtn_month = str_pad( (int)substr( $calbtn, 5, 2 ), 2, 0, STR_PAD_LEFT );
+  $sttdt = $calbtn_year."/".$calbtn_month."/01";//月初
+
+}else{ 
+  
+  if( !empty ( $_POST['search_ymd_stt'] ) ){
+      $sttdt = $_POST['search_ymd_stt'] ; 
+  }
+
 }
+//検索終了日
+//if( !empty ( $_POST['serch_ymd_end'] ) ){
+//    $enddt = $_POST['serch_ymd_end'] ; 
+//}else{
+    //初期値
+    $enddt = date("Y/m/d", strtotime("".$sttdt." +13 day"));
+//}
 
 //検索曜日
 if( isset( $_POST[ 'yobi' ] )  && ( count( $_POST[ 'yobi' ] ) > 0 ) ){
@@ -89,7 +112,6 @@ if( isset( $_POST[ 'yobi' ] )  && ( count( $_POST[ 'yobi' ] ) > 0 ) ){
             <th class="pt12">施設分類</th>
             <td>
 
-
 <?php
 /* 施設分類の表示 */
 if( isset( $_POST[ 'bunrui' ] ) && (count( $_POST[ 'bunrui' ] ) > 0) ){
@@ -116,18 +138,46 @@ for ($i = 0; $i < ( count( $rmcls['data'] ) ) ; $i++ ) {
       </td>
           </tr>
           <tr>
-            <th class="pt12">使用日</th>
+            <th>使用年月</th>
             <td>
-              <div class="form-inline">
-                <div class=" input-group date">
-                  <input type="text" id="date_timepicker_start" name="search_ymd_stt" value="<?php echo $sttdt; ?>" style="width:100px">
-                  <span id="sttbtn" class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                </div>～
-                <div class=" input-group date">
-                  <input type="text" id="date_timepicker_end" name="serch_ymd_end" value="<?php echo $enddt; ?>" style="width:100px">
-                  <span  id="endbtn" class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                </div>
-                <br>
+              <div id="cal" class="btn-group" data-toggle="buttons">
+                
+              <?php
+                
+                for ($i = 0; $i < 13; $i++) {
+                  
+                  if($cal_month > 12){
+                    $cal_month = 1;
+                    $cal_year = $cal_year + 1;
+                  }
+
+                  if( ($cal_year == $calbtn_year) && ($cal_month == $calbtn_month)){
+                    echo "<label class=\"btn btn-xs btn-cal active\">";                   
+                  }else{
+                    echo "<label class=\"btn btn-xs btn-cal\">";
+                  }
+ 
+                  echo "<input name=\"calbtn\" value=\"".$cal_year.str_pad($cal_month, 2, 0, STR_PAD_LEFT)."\" type=\"radio\">";
+
+                  if($i == 0){
+                    echo $cal_year."年<br>".$cal_month."月</label>";                   
+                  }else if($cal_month == 1){
+                    echo $cal_year."年<br>".$cal_month."月</label>";                  
+                  }else{
+                    echo "<br>".$cal_month."月</label>";
+                  }
+
+                  $cal_month++;  
+
+                }
+              
+              ?>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th class="pt12">曜日</th>
+            <td>
                 <label class="checkbox-inline"><input type="checkbox" name="yobi[]" id="yobi7" value = "0" <?php  echo ( in_array ( 0 , $yobi ) )? 'checked' : ''; ?>><div class="col-sun"> 日</div></label>
                 <label class="checkbox-inline"><input type="checkbox" name="yobi[]" id="yobi1" value = "1" <?php  echo ( in_array ( 1 , $yobi ) )? 'checked' : ''; ?>> 月</label>
                 <label class="checkbox-inline"><input type="checkbox" name="yobi[]" id="yobi2" value = "2" <?php  echo ( in_array ( 2 , $yobi ) )? 'checked' : ''; ?>> 火</label>
@@ -139,29 +189,23 @@ for ($i = 0; $i < ( count( $rmcls['data'] ) ) ; $i++ ) {
             </td>
           </tr>
           <tr>
-            <th>年月指定</th>
+            <th class="pt12">日付</th>
             <td>
-                <div id="cal" class="btn-group" data-toggle="buttons">
-                    <label class="btn btn-xs btn-cal"><input name="calbtn" value="201509" type="radio" >2015年<br>9月</label>
-                    <label class="btn btn-xs btn-cal"><input name="calbtn" value="201510" type="radio"><br>10月</label>
-                    <label class="btn btn-xs btn-cal"><input name="calbtn" value="201511" type="radio"><br>11月</label>
-                    <label class="btn btn-xs btn-cal"><input name="calbtn" value="201512" type="radio"><br>12月</label>
-                    <label class="btn btn-xs btn-cal"><input name="calbtn" value="201601" type="radio">2016年<br>1月</label>
-                    <label class="btn btn-xs btn-cal"><input name="calbtn" value="201602" type="radio"><br>2月</label>
-                    <label class="btn btn-xs btn-cal"><input name="calbtn" value="201603" type="radio"><br>3月</label>
-                    <label class="btn btn-xs btn-cal"><input name="calbtn" value="201604" type="radio"><br>4月</label>
-                    <label class="btn btn-xs btn-cal"><input name="calbtn" value="201605" type="radio"><br>5月</label>
-                    <label class="btn btn-xs btn-cal"><input name="calbtn" value="201606" type="radio"><br>6月</label>
-                    <label class="btn btn-xs btn-cal"><input name="calbtn" value="201607" type="radio"><br>7月</label>
-                    <label class="btn btn-xs btn-cal"><input name="calbtn" value="201608" type="radio"><br>8月</label>
-                    <label class="btn btn-xs btn-cal"><input name="calbtn" value="201609" type="radio"><br>9月</label>
-             </div>
+              <div class="form-inline">
+                  <div class=" input-group date">
+                    <input type="text" id="date_timepicker_start" name="search_ymd_stt" value="<?php echo $sttdt; ?>" style="width:100px">
+                    <span id="sttbtn" class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+              </div>～
+              <div class=" input-group date">
+                <input type="text" id="date_timepicker_end" name="serch_ymd_end" value="<?php echo $enddt; ?>" style="width:100px">
+                <span  id="endbtn" class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+              </div>
             </td>
           </tr>
           <tr>
-          <td colspan="2">
-            <input type="submit" class="btn btn-default " value="検索する >>">
-          </td>
+            <td colspan="2">
+              <input type="submit" class="btn btn-default " value="検索する >>">
+            </td>
           </tr>
         </tbody>
       </table>
@@ -173,19 +217,10 @@ for ($i = 0; $i < ( count( $rmcls['data'] ) ) ; $i++ ) {
     </div>
   </div><!-- row_end -->
 	<!--検索結果-->
-<?php $today =  date("Y/m/d");
- //$span1 = date("Y/m/d",strtotime("".$today." +15 day");
-$span1 = date("Y/m/d",strtotime("".$today." +15 day"));
-$span2 = date("Y/m/d",strtotime("".$today." +365 day"));
-$span3 = date("Y/m/d",strtotime("".$today." +2 month"));
-$span4 = date("Y/m/d",strtotime("".$today." +365 day"));
-?>
-
-
-    <div id="result">
-        <p class="f120">本日（<?php echo $today; ?>）現在、<b><?php echo($span1); ?>～<?php echo($span2); ?></b>
-            (※ﾊｰﾊﾞｰﾎｰﾙは<b><?php echo($span3); ?>～<?php echo($span4); ?></b>）のお申し込みが可能です。<br>
-            2015/10/12以前の使用をご希望の方は、下記窓口までお問合せください。
+  <div id="result">
+        <p class="f120">本日（<?php echo $today; ?>）現在、<b><?php echo($rsv_sttdt); ?>～<?php echo($rsv_enddt); ?></b>
+            (※ﾊｰﾊﾞｰﾎｰﾙは<b><?php echo($rsv_sttdt_hole); ?>～<?php echo($rsv_enddt); ?></b>）のお申し込みが可能です。<br>
+            <?php echo($rsv_before); ?>以前の使用をご希望の方は、下記窓口までお問合せください。
         </p>
         <span class="status2">＊＊ この画面では、ご予約は確保されていません。ご希望の内容を送信後、受付結果をメールでお知らせいたします。＊＊</span>
         <br>
@@ -206,13 +241,13 @@ $span4 = date("Y/m/d",strtotime("".$today." +365 day"));
           空：予約可
           <span class="selcol" style="padding-left:5px;padding-right:5px">○</span>：選択中　
             <span class="dgray" style="padding-left:5px;padding-right:5px">×</span>：予約不可　
-            <span class="dgray" style="padding-left:5px;padding-right:5px">空</span>：窓口にお申し付けください　<br>
+            <!--span class="dgray" style="padding-left:5px;padding-right:5px">空</span>：窓口にお申し付けください-->　<br>
           朝：9:00～12:00 昼：13:00～17:00　夜:18:00～21:00
         </p>
       </div>
       <p class="text-right">
-	    <input type='submit' class="btn btn-default mr48p prev"  href="#" role="button" value="<<前へ"></a>
-      	<input type='submit' class="btn btn-default mr20 next"  href="#" role="button" value="次へ>>"></a>
+	    <input type='submit' class="btn btn-default mr48p prev" href="#" role="button" value="<<前へ"></a>
+      <input type='submit' class="btn btn-default mr20 next" href="#" role="button" value="次へ>>"></a>
       </p>
 <?php
 //========================================================================================
@@ -222,7 +257,7 @@ echo "<tr class=\"head\">";
 echo "<th colspan=\"2\" rowspan=\"3\" width=\"300\">施設名</th>";
 
 //対象日を取得
-$date_array = get_date_array( $sttdt , $enddt ,  $yobi ) ;
+$date_array = get_date_array( $sttdt, $enddt,  $yobi, $today, $rsv_enddt );
 
 /* 対象日の表示 */
 include('date.php');
@@ -239,18 +274,19 @@ $room = $db->get_web_mroomr( $bunrui );//施設区分
 
 for ($i = 0; $i < ( count( $room ) ) ; $i++ ) {
 	
-	$rmcd = $room[ $i ][ 'rmcd' ];   			//施設コード
+  $rmcd = $room[ $i ][ 'rmcd' ];   			//施設コード
 	$rmnm = mb_convert_encoding($room[ $i ][ 'rmnmw' ], "utf8", "SJIS");//施設名称
-    $teiin = ltrim( $room[ $i ][ 'capacity' ], '0' );	//定員
-    $weblink = $room[ $i ][ 'weblink' ];   			//施設情報
-    $tnk = $room[ $i ][ 'tnk' ];
-    $asatnk = $room[ $i ][ 'asatnk' ];
-    $hirutnk = $room[ $i ][ 'hirutnk' ];
-    $yorutnk = $room[ $i ][ 'yorutnk' ];
-    $oyakokb = $room[ $i ][ 'oyakokb' ]; 
-	echo "<tr class=\"dgray\">";
-    //施設情報
- 	echo "<th rowspan=\"3\"><span class=\"f150\">".$rmnm."</span><br>[定員]".$teiin;//."[たんか]".$asatnk;
+  $teiin = ltrim( $room[ $i ][ 'capacity' ], '0' );	//定員
+  $weblink = $room[ $i ][ 'weblink' ];   			//施設情報
+  $tnk = $room[ $i ][ 'tnk' ];
+  $asatnk = $room[ $i ][ 'asatnk' ];
+  $hirutnk = $room[ $i ][ 'hirutnk' ];
+  $yorutnk = $room[ $i ][ 'yorutnk' ];
+  $oyakokb = $room[ $i ][ 'oyakokb' ]; 
+	
+  echo "<tr class=\"dgray\">";
+  //施設情報
+ 	echo "<th rowspan=\"3\"><span class=\"f150\">".$rmnm."</span><br>[定員]".$teiin;
  	echo "<a href=\"".$weblink."\" target=\"_blank\" class=\"btn btn-primary btn-xs\" role=\"button\">施設情報</a></th>";
 
     //カレンダー
@@ -259,35 +295,36 @@ for ($i = 0; $i < ( count( $room ) ) ; $i++ ) {
     echo "<th>朝</th>";
     $mor = $db->select_ksjkntai( $rmcd , 1 ,  str_replace( "/", "", $sttdt ) ,  str_replace( "/", "", $enddt ) );
 
-	for ($k = 0; $k < count( $date_array ) ; $k++) {
+    for ($k = 0; $k < count( $date_array ) ; $k++) {
 
-		//$usedt = str_replace( "/", "", $sttdt ) + $k ;//仮
-		$usedt = str_replace( "/", "", $date_array[$k]['yyyy'].$date_array[$k]['mm'].$date_array[$k]['dd'] );
-		
-		if( !array_key_exists( $usedt, $mor['data'] ) )
-		{
-			echo "<td  class=\"can\" id=".$rmcd.$usedt."1\" ><a id=\"a-".$rmcd.$usedt."1\">";
-            echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."1\"></a>";
-            //各種定数化。
-			echo "<div id=\"data-".$rmcd.$usedt."1\" data-usedt=\"".$usedt."\" data-yobi=".$k." data-timekb=\"1\" data-jkn1=\"9:00\" data-jkn2=\"12:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$asatnk."\" data-oyakokb=\"".$oyakokb."\" />";
-            echo "</td>";
-		}elseif( array_key_exists( $usedt, $mor['data'] ) && ( $mor['data'][$usedt] == 0 ) ){
-		//空室の場合
-			
-			echo "<td  class=\"can\"><a id=\"a-".$rmcd.$usedt."1\">";
-            echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."1\"></a>";
-            //各種定数化。
-			echo "<div id=\"data-".$rmcd.$usedt."1\" data-usedt=\"".$usedt."\" data-yobi=".$k." data-timekb=\"1\" data-jkn1=\"9:00\" data-jkn2=\"12:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$asatnk."\" data-oyakokb=\"".$oyakokb."\" />";
-            echo "</td>";
-        
-		}else{
-		//満室の場合
-        
-			echo "<td>×</td>";
-        
-		}
+  		//$usedt = str_replace( "/", "", $sttdt ) + $k ;//仮
+  		$usedt = str_replace( "/", "", $date_array[$k]['yyyy'].$date_array[$k]['mm'].$date_array[$k]['dd'] );
+  		
+      if( !array_key_exists( $usedt, $mor['data'] ) ){
+   
+        echo "<td class=\"can\" id=".$rmcd.$usedt."1\" ><a id=\"a-".$rmcd.$usedt."1\">";
+        echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."1\"></a>";
+        //各種定数化。
+        echo "<div id=\"data-".$rmcd.$usedt."1\" data-usedt=\"".$usedt."\" data-yobi=".$k." data-timekb=\"1\" data-jkn1=\"9:00\" data-jkn2=\"12:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$asatnk."\" data-oyakokb=\"".$oyakokb."\" />";
+        echo "</td>";
+  		
+      }elseif( array_key_exists( $usedt, $mor['data'] ) && ( $mor['data'][$usedt] == 0 ) ){
+
+  		  //空室の場合
+  			echo "<td class=\"can\"><a id=\"a-".$rmcd.$usedt."1\">";
+        echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."1\"></a>";
+        //各種定数化。
+  			echo "<div id=\"data-".$rmcd.$usedt."1\" data-usedt=\"".$usedt."\" data-yobi=".$k." data-timekb=\"1\" data-jkn1=\"9:00\" data-jkn2=\"12:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$asatnk."\" data-oyakokb=\"".$oyakokb."\" />";
+        echo "</td>";
+          
+  		}else{
+  		  //満室の場合
+  			echo "<td>×</td>";          
+  		}
 
     }
+
+    echo "</tr>";
 
     //昼
     echo "<tr class=\"dgray\" >";
@@ -298,21 +335,22 @@ for ($i = 0; $i < ( count( $room ) ) ; $i++ ) {
     for ( $k = 0; $k < count( $date_array ) ; $k++ ) {
 
         //$usedt = str_replace( "/", "", $sttdt ) + $k ;//仮
-		$usedt = str_replace( "/", "", $date_array[$k]['yyyy'].$date_array[$k]['mm'].$date_array[$k]['dd'] );
+		    $usedt = str_replace( "/", "", $date_array[$k]['yyyy'].$date_array[$k]['mm'].$date_array[$k]['dd'] );
 
         if( !array_key_exists( $usedt, $noon['data'] ) ){
 		
-        	echo "<td  class=\"can\"><a id=\"a-".$rmcd.$usedt."2\">";
-            echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."2\"></a>";
-            echo "<div id=\"data-".$rmcd.$usedt."2\" data-usedt=\"".$usedt."\" data-timekb=\"2\" data-jkn1=\"13:00\" data-jkn2=\"17:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$hirutnk."\" data-oyakokb=\"".$oyakokb."\" />";
-            echo "</td>";
+  	       echo "<td  class=\"can\"><a id=\"a-".$rmcd.$usedt."2\">";
+           echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."2\"></a>";
+           echo "<div id=\"data-".$rmcd.$usedt."2\" data-usedt=\"".$usedt."\" data-timekb=\"2\" data-jkn1=\"13:00\" data-jkn2=\"17:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$hirutnk."\" data-oyakokb=\"".$oyakokb."\" />";
+           echo "</td>";
 
-		}elseif ( array_key_exists( $usedt, $noon['data'] ) && ( $noon['data'][$usedt] == 0 ) ) {
+		    }elseif ( array_key_exists( $usedt, $noon['data'] ) && ( $noon['data'][$usedt] == 0 ) ) {
             //echo "<td  class=\"can\"><a href=\"#\"><img src=\"icon/kara.jpg\"></a></td>";
-			echo "<td  class=\"can\"><a id=\"a-".$rmcd.$usedt."2\">";
+            echo "<td  class=\"can\"><a id=\"a-".$rmcd.$usedt."2\">";
             echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."2\"></a>";
             echo "<div id=\"data-".$rmcd.$usedt."2\" data-usedt=\"".$usedt."\" data-timekb=\"2\" data-jkn1=\"13:00\" data-jkn2=\"17:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$hirutnk."\" data-oyakokb=\"".$oyakokb."\" />";
             echo "</td>";
+        
         }else{
             echo "<td>×</td>";
         }

@@ -106,48 +106,50 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
       echo "<td class=\"status3\">仮予約</td>";
     }
     
-  
+    //echo "<td>".substr( $rsvlist[$i]['usedt'], 0, 4 )."/".substr( $rsvlist[$i]['usedt'], 4, 2 )."/".substr( $rsvlist[$i]['usedt'], 6, 2 )."(".mb_convert_encoding($rsvlist[$i]['yobi'], "utf8", "SJIS").")<br>";//使用日
+    $rsvdt = date( "Y/m/d", strtotime( substr( $rsvlist[$i]['usedt'], 0, 4 )."-".substr( $rsvlist[$i]['usedt'], 4, 2 )."-".substr( $rsvlist[$i]['usedt'], 6, 2 )) );      //申込終了日
+    $paydt = date( "Y/m/d", strtotime( "".$rsvdt." +10 day" ) ); 
     echo "<td><span class=\"green\">".$rsvlist[$i]['ukeno']."-".$rsvlist[$i]['gyo']."</span><br>";
     echo substr( $rsvlist[$i]['udate'], 0, 4 )."/".substr( $rsvlist[$i]['udate'], 4, 2 )."/".substr( $rsvlist[$i]['udate'], 6, 2 )."</td>";
     /* hidden */
     echo "<input type='hidden' name='ukeno".$i."' id='ukeno".$i."'  value=\"".$rsvlist[$i]['ukeno']."\">";//受付№
     echo "<input type='hidden' name='gyo".$i."' id='gyo".$i."' value=\"".$rsvlist[$i]['gyo']."\">";//申し込み日
     /* 明細 */
-    echo "<td>".substr( $rsvlist[$i]['usedt'], 0, 4 )."/".substr( $rsvlist[$i]['usedt'], 4, 2 )."/".substr( $rsvlist[$i]['usedt'], 6, 2 )."(".mb_convert_encoding($rsvlist[$i]['yobi'], "utf8", "SJIS").")<br>";//使用日
+    echo "<td>".$rsvdt."(".mb_convert_encoding($rsvlist[$i]['yobi'], "utf8", "SJIS").")<br>";//使用日
     echo mb_convert_encoding($rsvlist[$i]['rmnm'], "utf8", "SJIS")."<br>";//施設名
     echo "<td>使用時間：".format_jkn( $rsvlist[$i]['stjkn'] , ":" )."～".format_jkn( $rsvlist[$i]['edjkn'] , ":" )."<br/>";//使用時間
     echo "<td>".$rsvlist[$i]['ninzu']."人</td>";//人数
     echo "<td>「".mb_convert_encoding($rsvlist[$i]['kaigi'], "utf8", "SJIS")."」</td>";//行事内容
-    echo "<td>&nbsp;</td>";
-    echo "<td>&nbsp;</td>";
+    echo "<td>".$paydt."</td>";
+    echo "<td><a href=\"http://localhost/rk_ssc/sample/pay.pdf\" class=\"btn-icon\"><img src=\"icon_btn_pdf.png\" alt=\"請求書\">請求書ダウンロード</a></td>";
     echo "</tr>";
 
   }
 ?>
     </tbody>
 
-      <tbody>
+    <tbody>
+      <tr>
+        <td class="status1">仮予約</td>
+      	<td><span class="green">150804-05</span><br>2015/09/29(火)</td>
+        <td>2015/10/20(月)<br>会議室９０２＋９０３</td>
+  	    <td>使用時間：13:00～17:00<hr>催　　物：13:00～17:00</td>
+  	    <td>10</td>
+  			<td>「社労士情報交換会」<br><span class="small">・営利目的での使用にあてはまらない<br>・入場料・受講料を徴収しない</span></td>
+      	<td>2015/09/30（水）</td>
+  			<td><a href="http://localhost/rk_ssc/sample/pay.pdf" class="btn-icon"><img src="icon_btn_pdf.png" alt="">請求書ダウンロード</a></td>
+    	</tr>
     	<tr>
-    		<td class="status1"></td>
-    		<td><span class="green">150804-05</span><br>2015/09/29(火)</td>
-    		<td>2015/10/20(月)<br>会議室９０２＋９０３</td>
-			<td>使用時間：13:00～17:00<hr>催　　物：13:00～17:00</td>
-	        <td>10</td>
-			<td>「社労士情報交換会<」<br><span class="small">・営利目的での使用にあてはまらない<br>・入場料・受講料を徴収しない</span></td>
-    		<td>&nbsp;</td>
-			<td>&nbsp;</td>
+      	<td class="status3">仮予約</td>
+      	<td><span class="green">150921-05</span><br>2015/09/21(月)</td>
+      	<td>2015/11/02(月)<br>会議室８０２＋８０３</td>
+  			<td>使用時間：18:00～21:00<hr>催　　物：18:00～21:00</td>
+      	<td>30</td>
+  			<td>「中小企業のための就業規則講座」<br><span class="small">・営利目的での使用にあてはまらない<br>・入場料・受講料を徴収しない<br>・間仕切りを閉める</span></td>
+      	<td>2015/09/30（水）</td>
+      	<td><a href="http://localhost/rk_ssc/sample/pay.pdf" class="btn-icon"><img src="icon_btn_pdf.png" alt="">請求書ダウンロード</a></td>
     	</tr>
-    	    	<tr>
-    		<td class="status3">仮予約</td>
-    		<td><span class="green">150921-05</span><br>2015/09/21(月)</td>
-    		<td>2015/11/02(月)<br>会議室８０２＋８０３</td>
-			<td>使用時間：18:00～21:00<hr>催　　物：18:00～21:00</td>
-    		<td>30</td>
-			<td>「中小企業のための就業規則講座」<br><span class="small">・営利目的での使用にあてはまらない<br>・入場料・受講料を徴収しない<br>・間仕切りを閉める</span></td>
-    		<td>2015/09/30（水）</td>
-    		<td><a href="" class="btn-icon"><img src="icon_btn_pdf.png" alt="">請求書ダウンロード</a></td>
-    	</tr>
-       	<tr>
+      <tr>
     		<td class="status1">予約</td>
     		<td><span class="green">140801-02</span><br>2014/08/01(金)</td>
     		<td>2015/11/30(火)<br>ハーバーホール</td>
@@ -185,7 +187,7 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
 			<td>20</td>
 			<td>「メンタルヘルス対策セミナー」<br><span class="small">・営利目的での使用にあてはまらない<br>・入場料・受講料を徴収しない</span></td>
     		<td>入金済</td>
-    		<td><a href="" class="btn-icon"><img src="icon_btn_pdf.png" alt="">使用許可書ダウンロード</a><br>許可番号：00009764</td>
+    		<td><a href="http://localhost/rk_ssc/sample/cer.pdf" class="btn-icon"><img src="icon_btn_pdf.png" alt="">使用許可書ダウンロード</a><br>許可番号：00009764</td>
     	</tr>
     	<tr class="dgray">
     		<td class="status2">予約不可</td>
@@ -217,7 +219,7 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
     		<td>2015/02/22（金）</td>
 			<td>(請求書発行済)</td>
     	</tr>
-      </tbody>
+      </tbody-->
    </table>
    <a class="btn btn-default btn-lg" href="top.php" role="button">トップページへ戻る</a>
 <br><br>

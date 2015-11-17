@@ -46,6 +46,17 @@ class Kyaku extends ModelBase {
         return $this->data['mail'];       
     }
     
+    //後納区分
+    public function kounou() {
+        return false;//暫定    
+    }
+
+    //後納区分
+    public function get_kyakb() {
+        //return $this->data['kyakb'];     
+        return 1;//暫定    
+    }
+    
     public function push_data( $source_array, $key_name, $require , $beZero　) {
         //見直しが必要かもしれない
         

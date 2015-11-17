@@ -53,27 +53,27 @@ jQuery(function () {
 			$("#list").append(tr);
 			tr.append( td1 ).append( td2 ).append( td3 ).append( td4 ).append( td5 ).append( td6 ).append( td7 ).append( td8 ).append( td9 ).append( td10 );//.append( td11 );
 			//td1.html( gyo );
-			td1.html( "<a class=\"btn btn-default btnclass\" id='btn-" + objData[i]['rmcd'] + objData[i]['usedt'] + objData[i]['timekb'] + "' name='" + i + "' href=\"#\" role=\"button\">削除</a>" );
+			td1.html( "<input type=\"button\" class=\"btn btn-default btn-del\" id='btn-" + objData[i]['rmcd'] + objData[i]['usedt'] + objData[i]['timekb'] + "' name='" + i + "' role=\"button\" value=\"削除\">" );
 			td2.html( useyyyy + "/" + usemm + "/" +  usedd  + yobi + "<br>" + objData[i]['rmnm'] );
 			td3.html( objData[i]['jkn1'] + "～" + objData[i]['jkn2'] );
 			//td4.html( "時間内訳" );
 			var jjkn ="<table class=\"table table-condensed  form-inline nest mb0\"><tr><th>練習・準備時間</th><td>"
-           		+ "<input type=\"text\" class=\"form-control\" name='jstjkn_h" + i + "' id='jstjkn_h" + i + "' value=\"" + objData[i]['jstjkn_h'] + "\" style=\"width:30px\" maxlength=\"2\" >時"
-               	+ "<input type=\"text\" class=\"form-control\" name='jstjkn_m" + i + "' id='jstjkn_m" + i + "' value=\"" + objData[i]['jstjkn_m'] + "\" style=\"width:30px\"  maxlength=\"2\" >分～"
-               	+ "<input type=\"text\" class=\"form-control\" name='jedjkn_h" + i + "' id='jedjkn_h" + i + "' value=\"" + objData[i]['jedjkn_h'] + "\" style=\"width:30px\" maxlength=\"2\" >時"
-               	+ "<input type=\"text\" class=\"form-control\" name='jedjkn_m" + i + "' id='jedjkn_m" + i + "' value=\"" + objData[i]['jedjkn_m'] + "\" style=\"width:30px\"  maxlength=\"2\" >分"
+           		+ "<input type=\"text\" class=\"form-control\" name='jstjkn_h" + i + "' id='jstjkn_h" + i + "' value=\"" + objData[i]['jstjkn_h'] + "\" style=\"width:30px; ime-mode: disabled\" maxlength=\"2\" >時"
+               	+ "<input type=\"text\" class=\"form-control\" name='jstjkn_m" + i + "' id='jstjkn_m" + i + "' value=\"" + objData[i]['jstjkn_m'] + "\" style=\"width:30px; ime-mode: disabled\"  maxlength=\"2\" >分～"
+               	+ "<input type=\"text\" class=\"form-control\" name='jedjkn_h" + i + "' id='jedjkn_h" + i + "' value=\"" + objData[i]['jedjkn_h'] + "\" style=\"width:30px; ime-mode: disabled\" maxlength=\"2\" >時"
+               	+ "<input type=\"text\" class=\"form-control\" name='jedjkn_m" + i + "' id='jedjkn_m" + i + "' value=\"" + objData[i]['jedjkn_m'] + "\" style=\"width:30px; ime-mode: disabled\"  maxlength=\"2\" >分"
                	+ "</td></tr></table>";
             var hjkn = "<table class=\"table table-condensed  form-inline nest mb0\"><tr><th>催物時間</th><td>"
-	            + "<input type=\"text\" class=\"form-control\" name='hstjkn_h" + i + "' id='hstjkn_h" + i + "' value=\"" + objData[i]['hstjkn_h'] + "\" style=\"width:30px\" maxlength=\"2\" >時"
-	            + "<input type=\"text\" class=\"form-control\" name='hstjkn_m" + i + "' id='hstjkn_m" + i + "' value=\"" + objData[i]['hstjkn_m'] + "\" style=\"width:30px\"  maxlength=\"2\" >分～"
-	            + "<input type=\"text\" class=\"form-control\" name='hedjkn_h" + i + "' id='hedjkn_h" + i + "' value=\"" + objData[i]['hedjkn_h'] + "\" style=\"width:30px\" maxlength=\"2\" >時"
-	            + "<input type=\"text\" class=\"form-control\" name='hedjkn_m" + i + "' id='hedjkn_m" + i + "' value=\"" + objData[i]['hedjkn_m'] + "\" style=\"width:30px\"  maxlength=\"2\" >分"
+	            + "<input type=\"text\" class=\"form-control\" name='hstjkn_h" + i + "' id='hstjkn_h" + i + "' value=\"" + objData[i]['hstjkn_h'] + "\" style=\"width:30px; ime-mode: disabled\" maxlength=\"2\" >時"
+	            + "<input type=\"text\" class=\"form-control\" name='hstjkn_m" + i + "' id='hstjkn_m" + i + "' value=\"" + objData[i]['hstjkn_m'] + "\" style=\"width:30px; ime-mode: disabled\"  maxlength=\"2\" >分～"
+	            + "<input type=\"text\" class=\"form-control\" name='hedjkn_h" + i + "' id='hedjkn_h" + i + "' value=\"" + objData[i]['hedjkn_h'] + "\" style=\"width:30px; ime-mode: disabled\" maxlength=\"2\" >時"
+	            + "<input type=\"text\" class=\"form-control\" name='hedjkn_m" + i + "' id='hedjkn_m" + i + "' value=\"" + objData[i]['hedjkn_m'] + "\" style=\"width:30px; ime-mode: disabled\"  maxlength=\"2\" >分"
 	            + "</td></tr></table>";
 	        var tjkn = "<table class=\"table table-condensed  form-inline nest mb0\"><tr><th>撤去時間</th><td>"
-	            + "<input type=\"text\" class=\"form-control\" name='tstjkn_h" + i + "' id='tstjkn_h" + i + "' value=\"" + objData[i]['tstjkn_h'] + "\" style=\"width:30px\" maxlength=\"2\" >時"
-	            + "<input type=\"text\" class=\"form-control\" name='tstjkn_m" + i + "' id='tstjkn_m" + i + "' value=\"" + objData[i]['tstjkn_m'] + "\" style=\"width:30px\"  maxlength=\"2\" >分～"
-	            + "<input type=\"text\" class=\"form-control\" name='tedjkn_h" + i + "' id='tedjkn_h" + i + "' value=\"" + objData[i]['tedjkn_h'] + "\" style=\"width:30px\" maxlength=\"2\" >時"
-	            + "<input type=\"text\" class=\"form-control\" name='tedjkn_m" + i + "' id='tedjkn_m" + i + "' value=\"" + objData[i]['tedjkn_m'] + "\" style=\"width:30px\"  maxlength=\"2\" >分"
+	            + "<input type=\"text\" class=\"form-control\" name='tstjkn_h" + i + "' id='tstjkn_h" + i + "' value=\"" + objData[i]['tstjkn_h'] + "\" style=\"width:30px; ime-mode: disabled\" maxlength=\"2\" >時"
+	            + "<input type=\"text\" class=\"form-control\" name='tstjkn_m" + i + "' id='tstjkn_m" + i + "' value=\"" + objData[i]['tstjkn_m'] + "\" style=\"width:30px; ime-mode: disabled\"  maxlength=\"2\" >分～"
+	            + "<input type=\"text\" class=\"form-control\" name='tedjkn_h" + i + "' id='tedjkn_h" + i + "' value=\"" + objData[i]['tedjkn_h'] + "\" style=\"width:30px; ime-mode: disabled\" maxlength=\"2\" >時"
+	            + "<input type=\"text\" class=\"form-control\" name='tedjkn_m" + i + "' id='tedjkn_m" + i + "' value=\"" + objData[i]['tedjkn_m'] + "\" style=\"width:30px; ime-mode: disabled\"  maxlength=\"2\" >分"
 	            + "</td></tr></table>";
 			if( ( objData[i]['rmcd'] == "201" ) || ( objData[i]['rmcd'] == "301" ) ){
 				td4.html( jjkn + hjkn + tjkn );	
@@ -197,13 +197,32 @@ jQuery(function () {
 				
 				//本番時間
 				if($('#hstjkn_h' + i ).length){
+					
+					
+					
+					var jkn1 = objData[i]['jkn1'];
+					jkn1 = jkn1.replace( ":" , "" ) ;
+					var jkn2 = objData[i]['jkn2'];
+					jkn2 = jkn2.replace( ":" , "" ) ;
+
 					//後でちゃんと書き直す
+					var hstjkn_h = $('#hstjkn_h' + i ).val();
+					var hstjkn_m = $('#hstjkn_m' + i ).val();
+					var hstjkn = hstjkn_h.toString() + hstjkn_m.toString();
+					var hedjkn_h = $('#hedjkn_h' + i ).val();
+					var hedjkn_m = $('#hedjkn_m' + i ).val();
+					var hedjkn = hedjkn_h.toString() + hedjkn_m.toString();
+
 					if( $('#hstjkn_h' + i ).val()=='' ){
 						alert( "催物時間を入力してください。" );
 						return false;
 					}
 					if( $('#hstjkn_m' + i ).val()=='' ){
 						alert( "催物時間を入力してください。" );
+						return false;
+					}
+					if( hstjkn　< jkn1 ){
+						alert( "催物時間を"+ jkn1 + "以降で入力してください。" );
 						return false;
 					}
 					if( $('#hedjkn_h' + i ).val()=='' ){
@@ -213,7 +232,17 @@ jQuery(function () {
 					if( $('#hedjkn_m' + i ).val()=='' ){
 						alert( "催物時間を入力してください。" );
 						return false;
-					}							
+					}
+					//alert(hedjkn +  "> " + jkn2);
+					if( hedjkn > jkn2 ){
+						alert( "催物時間を"+ jkn2 + "以前で入力してください。"+ hedjkn );
+						return false;
+					}
+
+					objData[i]['hstjkn_h'] = hstjkn_h;
+					objData[i]['hstjkn_m'] = hstjkn_m;
+					objData[i]['hedjkn_h'] = hedjkn_h;
+					objData[i]['hedjkn_m'] = hedjkn_m;
 
 				}
 				//練習・準備
@@ -224,14 +253,14 @@ jQuery(function () {
 					objData[i]['jedjkn_m'] =$( '#jedjkn_m' + i ).val();
 				}
 				
-				if($('#hstjkn_h' + i ).length){	
+				/*if($('#hstjkn_h' + i ).length){	
 					//本番
 					//alert($( '#hstjkn_h' + i ).val());
 					objData[i]['hstjkn_h'] = $( '#hstjkn_h' + i ).val();
 					objData[i]['hstjkn_m'] = $( '#hstjkn_m' + i ).val();
 					objData[i]['hedjkn_h'] = $( '#hedjkn_h' + i ).val();
 					objData[i]['hedjkn_m'] = $( '#hedjkn_m' + i ).val();
-				}
+				}*/
 				
 				if($('#tstjkn_h' + i ).length){	
 					//撤去
@@ -281,13 +310,13 @@ jQuery(function () {
 		});
 
 		//申し込みをやめる処理
-		$(".btnclass").click(function(){
+		$(".btn-del").click(function(){
 			if (!confirm('この施設のお申込みを取りやめます。よろしいですか？')) {
 				return false;
 			}
 			//name属性 からrowNo取得し、該当DOMを消去。
 			var rowNo = $(this).attr("name"); 
-			
+			//alert(rowNo);
 			//var lnkstr = $(this).attr("id"); 
 			var btnkey = $(this).attr("id").replace('btn-','a-');
 			//alert(btnkey);
@@ -308,8 +337,9 @@ jQuery(function () {
 				}
 			}
 			//localStorage.removeItem('sentaku');
-			$( '#list tr' ).eq( rowNo ).remove();
+			//$( '#list tr' ).eq( rowNo ).remove();
 			localStorage.setItem('sentaku', JSON.stringify(strlist));
+			location.reload();
 
 		});
 		
