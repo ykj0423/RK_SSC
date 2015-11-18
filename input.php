@@ -94,21 +94,24 @@ $Kyaku->get_user_info( $_SESSION['wloginid'] );
 	</div>
 <!-- main -->
 <h4>必要事項をご記入のうえ、「確認画面へ」ボタンを押してください。</h4>
-<div class="row mb20">
-    <p class="col-xs-8">・受付は先着順となっております。<br>
-    ・お申し込み後、ご登録いただいたメールアドレスに宛に、受付可否のメールを送信いたします。<br>
-    ・受付状況は予約照会画面でもご覧いただけます。<br>
-    ・「削除」ボタン：施設のお申し込みを取りやめる場合、押下してください。該当行のみ取り消されます。 <br>
-（※いったん「削除」を押すと元に戻せません。ご注意ください。）
-	<br><br>
-	※マイク・スクリーン・プロジェクター・アンプ・レーザーポインターは、各会議室にご用意しております。<br>使用当日に9階のサービスステーションにお申し付けください。<br><br>
-    <br>
-	</p>
-	<div class="col-xs-4">
-		<a href="help.html#input" class="btn alert-info" target="window_name" onClick="disp('help.html#input')"><li class="glyphicon glyphicon-question-sign" aria-hidden="true">&nbsp;この画面の操作方法についてはこちら>></li></a> 
-		<a href="loginqa.html#input" class="btn alert-danger" target="window_name" onClick="disp('loginqa.html#input')"><li class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">&nbsp;予約申込にあたってのご注意はこちら>></li></a> 
-	</div>
-</div>
+  <div class="row mb20">
+    <p class="col-xs-8">
+      ・受付は先着順となっております。<br>
+      ・お申し込み後、ご登録いただいたメールアドレスに宛に、受付可否のメールを送信いたします。<br>
+      ・受付状況は予約照会画面でもご覧いただけます。<br>
+      ・「削除」ボタン：施設のお申し込みを取りやめる場合は「削除」を押下してください。該当行のみ取り消されます。 <br>
+    （※いったん「削除」を押すと元に戻せません。ご注意ください。）
+      <br><br>
+      ※備品の貸し出しをご希望の場合は、備考欄にご記入ください。<a href="http://www.kobe-ipc.or.jp/conferenceroom_hall/rental_equip.html" target="_blank" class="btn btn-info btn-xs" role="button">貸出備品の一覧はこちら</a><br>
+  		※立看板をご希望の場合は、はじめの行の備考欄に「立看板」とご記入ください。<br>
+  	※マイク(2本)、スクリーン・プロジェクター・アンプ・レーザーポインター（各1個）は、各会議室にご用意しております。<br>追加等をご希望の場合は受付窓口までお問い合わせください。<br>
+  	<br><br>
+    </p>
+    <div class="col-xs-4">
+      <a href="help.html#input"  class="btn alert-info" target="window_name"  onClick="disp('help.html#input')"><li class="glyphicon glyphicon-question-sign" aria-hidden="true">&nbsp;この画面の操作方法についてはこちら>></li></a> 
+      <a href="loginqa.html#input"   class="btn alert-danger" target="window_name"  onClick="disp('loginqa.html#input')"><li class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">&nbsp;予約申込にあたってのご注意はこちら>></li></a> 
+    </div>
+  </div>
 <span class="status2">＊＊ この画面では、ご予約は確保されていません。ご希望の内容を送信後、受付結果をメールでお知らせいたします。＊＊</span><br><br>
 <form name="input_form" id="input_form" role="form"  action="confirm.php" method="post">
 	<table id ="rsv_input" class="table table-bordered table-condensed  form-inline">

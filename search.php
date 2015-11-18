@@ -56,6 +56,9 @@ $cal_month = (int)substr( $rsv_sttdt, 5, 2 );
 /*  default  */
 //年月ボタン
 $calbtn_year = $cal_year;
+if($cal_month<10){
+  $cal_month = "0"+$cal_month;
+}
 $calbtn_month = $cal_month;
 
 //カレンダーの開始日、終了日
@@ -67,7 +70,13 @@ if( isset( $_POST['calbtn'] ) ){
 
   $calbtn = $_POST['calbtn'];
   $calbtn_year = (int)substr( $calbtn, 0, 4 );
-  $calbtn_month = str_pad( (int)substr( $calbtn, 5, 2 ), 2, 0, STR_PAD_LEFT );
+  //$calbtn_month = str_pad( (int)substr( $calbtn, 5, 2 ), 2, 0, STR_PAD_LEFT );
+  $calbtn_month =  (int)substr( $calbtn, 4, 2 );
+  if($calbtn_month < 10)
+  {
+    $calbtn_month = "0".$calbtn_month;
+  }
+  
   $sttdt = $calbtn_year."/".$calbtn_month."/01";//月初
 
 }else{ 
@@ -77,6 +86,7 @@ if( isset( $_POST['calbtn'] ) ){
   }
 
 }
+
 //検索終了日
 //if( !empty ( $_POST['serch_ymd_end'] ) ){
 //    $enddt = $_POST['serch_ymd_end'] ; 
@@ -153,12 +163,12 @@ for ($i = 0; $i < ( count( $rmcls['data'] ) ) ; $i++ ) {
 
                   if( ($cal_year == $calbtn_year) && ($cal_month == $calbtn_month)){
                     echo "<label class=\"btn btn-xs btn-cal active\">";                   
+                    echo "<input name=\"calbtn\" value=\"".$cal_year.str_pad($cal_month, 2, 0, STR_PAD_LEFT)."\" type=\"radio\" checked>";
                   }else{
                     echo "<label class=\"btn btn-xs btn-cal\">";
+                    echo "<input name=\"calbtn\" value=\"".$cal_year.str_pad($cal_month, 2, 0, STR_PAD_LEFT)."\" type=\"radio\">";
                   }
  
-                  echo "<input name=\"calbtn\" value=\"".$cal_year.str_pad($cal_month, 2, 0, STR_PAD_LEFT)."\" type=\"radio\">";
-
                   if($i == 0){
                     echo $cal_year."年<br>".$cal_month."月</label>";                   
                   }else if($cal_month == 1){

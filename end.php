@@ -346,13 +346,21 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 //echo ("dt_roomr<br>");
 $kaigi = mb_convert_encoding( $_POST[ 'kaigi'] , "SJIS","UTF-8");
 
-$sql = "INSERT INTO dt_roomr (ukeno, ukedt, nen, krkb, krmemo, ukecd, ukehkb, kyacd, dannm, dannm2, dannmk, daihyo, renraku,
- tel1, tel2, fax, zipcd, adr1, adr2, gyscd, sihon, jygsu, kyakb, kaigi, naiyo, kbiko, kupdkb, rsbkb, riyokb, login, udate, utime)  
- VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? , ? , ? , ? , ?, ? , ? , ? , ? , ? , ? , ? , ? , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)"; 
+$sql = "INSERT INTO dt_roomr (ukeno, ukedt, nen, krkb, krmemo, ukecd, ukehkb, kyacd, 
+	dannm, dannm2, dannmk, daihyo, renraku, tel1, tel2, fax, zipcd, adr1, adr2, mail, gyscd, sihon, jygsu, kyakb, 
+	kaigi, naiyo, kbiko, kupdkb, rsbkb, riyokb, login, 
+	udate, utime)  
+ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? , ? , ? , ? , ?, ? , ? , ? , ? , ? , ? , ? , ? , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)"; 
 // 受付番号 受付日付 年度 仮予約区分 仮受付メモ 受付者コード 受付方法区分 顧客コード 団体名 団体名２ 団体カナ名 代表者名 連絡者名 ＴＥＬ１ ＴＥＬ２
 //ＦＡＸ 郵便番号 住所１ 住所２ メールアドレス 業種コード 資本金 従業員数 顧客区分 会議名称 内容 顧客備考 顧客更新区分
 //予約種別区分 利用目的区分 コンピュータ名 更新日付 更新時間
+
+$params = array($ukeno, date( 'Ymd' ), date( "Y" ), 1 , "", 1,  5,  $kyacd ,
+				$dannm, $dannm2, $dannmk, $daihyo, $renraku, $tel1, $tel2, $fax, $zipcd, $adr1, $adr2, "", $gyscd, $sihon, $jygsu, $kyakb, 
+				$kaigi, "", "", 1, 1, $_POST[ 'riyokb' ], $login, date( "Ymd" ) , date("His" ));
+
 //print_r($params);
+
 $stmt = sqlsrv_query( $conn, $sql, $params);
 
 if( $stmt === false ) {
@@ -380,8 +388,9 @@ for ($i = 0; $i < $meisai_count; $i++) {
 	$edjkn = str_replace(":","",$_POST[ 'edjkn'.$i ]);//使用終了時間
 
 	$sql = "INSERT INTO dt_roomrmei(ukeno  ,gyo  ,rmcd  ,kyono  ,kyodt  ,usedt  ,yobi  ,yobikb  ,timekb  ,stjkn  ,edjkn  ,hbstjkn  ,hbedjkn  
-	,ratekb  ,ratesb  ,zgrt  ,ninzu  ,rmtnk  ,rmentnk  ,rmtukin  ,rmenkin  ,rmkin  ,hzkin  ,rmnykin  ,hznykin  ,synykin  ,candt  ,cankb  ,hkktdt  ,hkdt  ,hkkin  ,kskbn  ,biko  ,tag1  ,tag2  ,tag3  ,login  ,udate  ,utime)
-	VALUES  (?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?  ,?)";
+	,ratekb  ,ratesb  ,zgrt  ,ninzu  ,rmtnk  ,rmentnk  ,rmtukin  ,rmenkin  ,rmkin  ,hzkin  ,rmnykin  ,hznykin  ,synykin  ,candt  ,cankb  ,hkktdt  ,hkdt  ,
+	hkkin  ,kskbn  ,biko  ,tag1  ,tag2  ,tag3  ,login  ,udate  ,utime)
+	VALUES  (? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,?,? ,? ,? ,? ,? ,? ,? ,?)";
 	
 	//	 VALUES  (15000016,1,11,0,0,20150820,".$yobi.", 3, 1, 900,  1200, 900, 1200 ,  1,0, 100, 0,  4800 , 0 , 4800 ,0 , 4800 ,  0,  4800, 0 ,0 , 0,  0, 0,0,0,0,N'',0,0,0,'webtest',".date('Ymd') .", ". date('His'). ")";
 	//受付番号 行番 施設コード 許可番号 許可日付 使用日付 使用日付曜日 使用曜日区分 時間帯区分 使用時間開始 使用時間終了 本番時間開始 本番時間終了
@@ -389,9 +398,9 @@ for ($i = 0; $i < $meisai_count; $i++) {
 	//施設使用入金金額 付属設備入金金額 償還金入金金額 キャンセル日付
 	//キャンセル区分 返還決定日付 返還日付 返還金額 状態データ更新フラグ 備考 付箋1 付箋2 付箋3 コンピュータ名 更新日付 更新時間 
 //$_POST[ 'ninzu'.$i ]
-	$params = array($ukeno, $gyo, $_POST[ 'rmcd'.$i ], 0 ,0 , $_POST[ 'usedt'.$i ], $yobi, $yobikbn, $_POST[ 'timekb'.$i ], $stjkn, $edjkn,
-	 	$stjkn, $edjkn,1, 0, 0, 3, $_POST[ 'rmkin'.$i ], 0, $_POST[ 'rmkin'.$i ], 0, 
-	 	$_POST[ 'rmkin'.$i ], $_POST[ 'hzkin'.$i ], 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, $login, date( "Ymd" ) , date( "His" ));
+	$params = array($ukeno, $gyo, $_POST[ 'rmcd'.$i ], 0 ,0 , $_POST[ 'usedt'.$i ], $yobi, $yobikbn, $_POST[ 'timekb'.$i ], $stjkn, $edjkn,$stjkn, $edjkn,
+		1, 0, 0, 0, 0, 0, 0, 0, 
+	 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, "", 0, 0, 0, $login, date( "Ymd" ) , date( "His" ));
 
 	if( $stmt === false ) {
 		if( ($errors = sqlsrv_errors() ) != null) {
@@ -422,17 +431,31 @@ sqlsrv_close($conn);
        </div>
 	</div>
 	<h4 class="status2"> ご希望の内容は、システムへ送信されましたが、まだ受付できておりません。<br>お申し込みが成立したかどうかは、改めてメールでお知らせします。 </h4>
+	
+	<br>
 	<li>受付は先着順となります。</li>
   	<li>お申し込みの受付状況は、<a href="rsvlist.php">予約照会画面</a>でもご覧いただけます。</li>
   	<br>
 	<div class="alert alert-info" role="alert">
 	お問い合わせ番号：  <span style="font-size:1.2em"><?php echo $webukeno ?></span></div>
 	<p>・ハーバーホールのご使用については、必ずこちらの<a href="#">「ご利用案内」</a>をご確認ください。</p>
-	<p>・展示場のご使用については、事前にこちらの<a href="#">「使用計画書」</a>をご提出ください。</p><br>
+	<!--p>・展示場のご使用については、事前にこちらの<a href="#">「使用計画書」</a>をご提出ください。</p><br-->
 	<a class="btn btn-default btn-lg" href="top.php" role="button">トップページに戻る</a>
 	<a class="btn btn-primary btn-lg" href="search.php" role="button"><small>続けて申し込む場合・・・</small>空き状況へ >> </a>
 	<a class="btn btn-primary btn-lg logout" href="login.php" role="button">ログアウト</a>
+
+    <a href="http://localhost/rk_ssc/mailtpl/regist.txt"  target="_blank" onClick="disp('lhttp://localhost/rk_ssc/mailtpl/regist.txt')">
+    	    <li class="glyphicon glyphicon-question-sign" aria-hidden="true">受付メールサンプル</li>
+        </a> 
+    </div>
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	</body>
 </html>
+<script type="text/javascript">
+<!--
+function disp(url){
+	window.open(url, "window_name", "scrollbars=yes");
+}
+// -->

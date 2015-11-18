@@ -157,8 +157,9 @@ jQuery(function () {
 	        	partition = partition + "</td></tr>";
 
         	}
-        	
-			td6.html( "<table class=\"table table-condensed  form-inline nest2 mb0\">" + piano + commercially + fee + partition + "</table>");	
+        	var biko = "<tr><td colspan=\"2\">備考：<input type=\"text\" class=\"form-control\" style=\"width:100%\" placeholder=\"\"></td></tr>";
+			td6.html( "<table class=\"table table-condensed  form-inline nest2 mb0\">" + piano + commercially + fee + partition + biko + "</table>");
+
 			td7.html( "<input type='hidden' name='rmcd" + i + "' id='rmcd" + i + "' value='" + objData[i]['rmcd'] + "'>" );
 			td8.html( "<input type='hidden' name='gyo" + i + "' id='gyo" + i + "' value='" + gyo + "'>" );	//行番
 			td9.html( "<input type='hidden' name='usedt" + i + "' id='usedt" + i + "' value=" + useyyyy + usemm + usedd + ">" ); //使用日付

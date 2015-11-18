@@ -73,12 +73,12 @@ jQuery(function () {
 		td4.html( objData[i]['ninzu']+"人" );
 		
 		var str_option='';
-		if(objData[i]['commercially']==1){
-			str_option = str_option + "・営利目的での利用（販売やPR活動も含む）：あてはまる<br>";
-		}
-		if(objData[i]['fee']==1){
-			str_option = str_option + "・入場料・受講料等の徴収：する<br>";
-		}
+		//if(objData[i]['commercially']==1){
+		//	str_option = str_option + "・営利目的での利用（販売やPR活動も含む）：あてはまる<br>";
+		//}
+		//if(objData[i]['fee']==1){
+		//	str_option = str_option + "・入場料・受講料等の徴収：する<br>";
+		//}
 		if(objData[i]['piano']==1){
 			str_option = str_option + "・グランドピアノの使用：する<br>";
 			objData[i]['hzkin'] = 13000;
@@ -95,10 +95,10 @@ jQuery(function () {
 		rmkin = parseInt( objData[i]['rmkin'] );
 		hzkin = parseInt( objData[i]['hzkin'] );
 		
-		if((objData[i]['commercially']==1)&&(objData[i]['fee']==1)){
-			rmkin = rmkin * 1.5;
-			objData[i]['rmkin'] = rmkin;
-		}
+		//if((objData[i]['commercially']==1)&&(objData[i]['fee']==1)){
+		//	rmkin = rmkin * 1.5;
+		//	objData[i]['rmkin'] = rmkin;
+		//}
 		//ただ加算しただけでは計算されない。
 		//var rmkin = parseInt(objData[i]['rmkin']);
 
@@ -270,6 +270,7 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
       			</tr>
 	    	</tbody>
 	        </table>
+	        <span class="red">ホールのご利用時の人件費は上記使用料に含まれません。別途ご請求させていただきます。<br>詳細は事前打合せで決定いたします。使用日の1か月前までに必ず事前打合せをお願いいたします。</span><br><br>
 			 <div class="form-group">
 			 	<div class="row mb20">
 					<input type='submit' class="btn btn-default btn-lg" role="button" name="submit_prev" id="submit_prev" value='修正する'>

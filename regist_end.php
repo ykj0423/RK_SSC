@@ -58,6 +58,7 @@ include('include/err.php');
     　　設定方法はご契約会社により異なります。<br><br>
 	◎今後、施設の使用をお申し込みの際は、予約受付やお支払に関するメールが送付されますので、メールアドレスをよくご確認ください。<br>
     ◎セキュリティを確保する為、初回ログイン後にパスワードの変更をおすすめします。<br>
+    <a href="http://localhost/rk_ssc/mailtpl/member.txt"><small>受付メールサンプル</small></a><br>
     <!-- もし「利用者登録完了メール」が届かなかった場合、メールアドレスの記載ミス等が考えられますので、<br>
       下記までお問い合わせださい。<br><br>
       ＊＊ お問合せ窓口  TEL:078-360-3200 （お問い合わせ時間：9:00～17:00）＊＊-->
@@ -81,6 +82,17 @@ include('include/err.php');
         </form>
 	</div>
     </form>
+        <a href="http://localhost/rk_ssc/mailtpl/member.txt"  target="_blank" onClick="disp('lhttp://localhost/rk_ssc/mailtpl/member.txt')">
+            <li class="glyphicon glyphicon-question-sign" aria-hidden="true">受付メールサンプル</li>
+        </a> 
+    </div>
  </div>
 </body>
 </html>
+</html>
+<script type="text/javascript">
+<!--
+function disp(url){
+    window.open(url, "window_name", "scrollbars=yes");
+}
+// -->
