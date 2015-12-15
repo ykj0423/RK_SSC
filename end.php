@@ -44,6 +44,7 @@
 <?php 
 require_once( "func.php" );
 require_once( "model/db.php" );
+require_once("model/Reserve.php");
 
 /* データベース接続 */
 $db = new DB;
@@ -85,6 +86,32 @@ if( $conn === false ) {
 }
 
 /* --------------------*/
+/* RK顧客データ          */
+/* --------------------*/
+$kyacd = 1;//テスト暫定
+$sql = "SELECT * FROM mt_kyaku WHERE kyacd = ".$kyacd;
+$stmt = sqlsrv_query( $conn, $sql );
+
+while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+	$dannm =  $row['dannm'];
+	$dannm2 =  $row['dannm2'];
+	$dannmk =  $row['dannmk'];
+	$daihyo =  $row['daihyo'];
+	$renraku =  $row['renraku'];
+	$tel1 =  $row['tel1'];
+	$tel2 =  $row['tel2'];
+	$fax =  $row['fax'];
+	$zipcd =  $row['zipcd'];
+	$adr1 =  $row['adr1'];
+	$adr2 =  $row['adr2'];
+	$gyscd =  $row['gyscd'];
+	$sihon =  $row['sihon'];
+	$jygsu =  $row['jygsu'];
+	$kyakb =  $row['kyakb'];
+}
+
+
+/* --------------------*/
 /*  WEB受付№取得処理  */
 /* --------------------*/
 $sql = "SELECT MAX(ukeno) AS webukeno FROM dt_roomr";
@@ -97,207 +124,13 @@ if( sqlsrv_fetch( $stmt ) === false) {
      //die( print_r( sqlsrv_errors(), true));
 }
 
-$webukeno = (int)sqlsrv_get_field( $stmt, 0);//nullの場合を考慮し、キャストする
+$webukeno = (int)sqlsrv_get_field( $stmt, 0) + 1 ;//nullの場合を考慮し、キャストする
 //$financial_year = str_pad((int)get_financial_year() , 8, "0", STR_PAD_RIGHT);
 //$webukeno =  $financial_year  +  $max_webukeno + 1;
 /*$max_webukeno = (int)sqlsrv_get_field( $stmt, 0);//nullの場合を考慮し、キャストする
 $financial_year = str_pad((int)get_financial_year() , 8, "0", STR_PAD_RIGHT);
 $webukeno =  $financial_year  +  $max_webukeno + 1;
 */
-?>
-	
-
-<?php
-$login = "test";//$_SESSION['webrk']['user'];
-//明細件数の取得
-$meisai_count = $_POST['meisai_count'];
-
-/* WEB空室状況（時間帯）更新処理 */
-for ( $i = 0; $i < $meisai_count; $i++ ) {
-	/*
-		（暫定コード）9:00～12:00	13:00～17:00	17:30～21:00	9:00～17:00	13:00～21:00	9:00～21:00
-	*/
-	$gyo = $i + 1;
-
-	if( $_POST[ 'timekb'.$i ]  == 1 ){
-		$stt = 9;
-		$k = 11;
-	}else if( $_POST[ 'timekb'.$i ]  == 2 ) {
-		$stt = 13;
-		$k = 16;	
-	}else if( $_POST[ 'timekb'.$i ]  == 3 ) {
-		$stt = 17;
-		$k = 20;
-	}
-	
-	$sql = "SELECT * FROM ks_jkntai WHERE usedt = ".$_POST[ 'usedt'.$i ]." AND rmcd = ".$_POST[ 'rmcd'.$i ] ." AND timekb = ".$_POST[ 'timekb'.$i ];
-	$stmt = sqlsrv_query( $conn, $sql );
-	$row_count = sqlsrv_has_rows ( $stmt );
-	
-	if ($row_count === false){
-		
-		/* 更新処理 */
-		for ( $j = $stt; $j <= $k;  $j++) {// 3時間分回す
-			
-				$sql = "INSERT INTO ks_jkntai (usedt , jikan , rmcd , timekb , ukeno , gyo , login , udate , utime)  VALUES  (?,? ,?,?,?,?,? ,?,?)";
-
-				$params = array( $_POST[ 'usedt'.$i ], $j , $_POST[ 'rmcd'.$i ], $_POST[ 'timekb'.$i ], $webukeno, $gyo, $login, date( "Ymd" ), date( "His" ) );
-
-				$stmt = sqlsrv_query( $conn, $sql, $params);
-		
-				if( $stmt === false ) {
-				
-					if( ( $errors = sqlsrv_errors() )  != null) {
-
-						/*foreach( $errors as $error ) {
-								echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-								echo "code: ".$error[ 'code']."<br />";
-								echo "message: ".mb_convert_encoding( $error[ 'message'] ,  "UTF-8" )."<br />";
-								print_r ($params);
-								echo "<br>";
-								//die();
-						}*/
-						
-					}
-				
-				}
-
-			}
-		
-	}else{
-	
-		//echo ("既に予約が埋まっていた場合の処理<br>");
-		/* 既に予約が埋まっていた場合の処理 */
-		//チェックはks_を見に行く
-		//kがうまっていらたweb_ksを元に戻す。
-		//echo $_POST[ 'usedt'.$i ]."日の予約は申し込めません";
-	
-	}
-
-}
-
-//echo "RK空室状況（時間貸し、時間帯）更新処理"."<br />";
-/* RK空室状況（時間帯）更新処理 */
-for ($i = 0; $i < $meisai_count; $i++) {
-	
-	$gyo = $i + 1;
-	
-	/*
-		（暫定コード）9:00～12:00	13:00～17:00	17:30～21:00	9:00～17:00	13:00～21:00	9:00～21:00
-	*/
-	if( $_POST[ 'timekb'.$i ]  == 1 ){
-		$stt = 9;
-		$k = 11;
-	}else if( $_POST[ 'timekb'.$i ]  == 2 ) {
-		$stt = 13;
-		$k = 16;	
-	}else if( $_POST[ 'timekb'.$i ]  == 3 ) {
-		$stt = 17;
-		$k = 20;
-	}
-	
-	//時間貸
-	for ($j = $stt; $j <= $k;  $j++) {// 3時間分回す
-
-		$sql = "SELECT * FROM ks_jknksi WHERE usedt = ".$_POST[ 'usedt'.$i ]." AND rmcd = ".$_POST[ 'rmcd'.$i ] ." AND jikan = ".$j." AND rjyokb <> 0";
-		$stmt = sqlsrv_query( $conn, $sql );
-		$row_count = sqlsrv_has_rows( $stmt );
-
-		if ($row_count === false)
-		{
-			define('MISHU',4);
-			define('YOYAKU',2);
-			
-			$sql = "INSERT INTO ks_jknksi (usedt , jikan , rmcd , rsignkb, rjyokb , login , udate , utime)  VALUES  (?,?,?,?,?,?,?,?)";
-			//使用年月日 時間 施設コード 予約記号区分 予約状態区分 コンピュータ名 更新日付 更新時間
-		
-			$params = array( $_POST[ 'usedt'.$i ], $j , $_POST[ 'rmcd'.$i ], 3, 2, $login, date( "Ymd" ), date( "His" ) );
-			$stmt = sqlsrv_query( $conn, $sql, $params);
-			
-			if( $stmt === false ) {
-				if( ($errors = sqlsrv_errors() ) != null) {
-					/*foreach( $errors as $error ) {
-						echo "ks_jknksi<br />";
-						echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-						echo "code: ".$error[ 'code']."<br />";
-						echo "message: ".mb_convert_encoding( $error[ 'message'] ,  "UTF-8" )."<br />";
-						print_r($params);
-					}*/
-				}
-			}
-		
-		
-		
-		
-		}else{
-			//echo "既に埋まっていた場合の処理";		
-		}
-		
-	}
-	
-			//時間帯
-			$sql = "SELECT * FROM ks_jkntai WHERE usedt = ".$_POST[ 'usedt'.$i ]." AND rmcd = ".$_POST[ 'rmcd'.$i ] ." AND timekb = ".$_POST[ 'timekb'.$i ];
-			$stmt = sqlsrv_query( $conn, $sql );
-			$row_count = sqlsrv_has_rows( $stmt );
-
-			if ($row_count === false){
-			
-				for ($j = $stt; $j <= $k;  $j++) {// 3時間分回す
-				
-					$sql = "INSERT INTO ks_jkntai (usedt , jikan , rmcd , timekb , ukeno , gyo , login , udate , utime)  VALUES  (?,? ,?,?,?,?,? ,?,?)";
-					
-					//いったんWEB受付ナンバーで更新する
-					$params = array( $_POST[ 'usedt'.$i ], $j , $_POST[ 'rmcd'.$i ], $_POST[ 'timekb'.$i ], $webukeno, $gyo, $login, date( "Ymd" ), date( "His" ) );
-					//print_r($params);
-					//echo "<br>";
-					
-					$stmt = sqlsrv_query( $conn, $sql, $params);
-					
-					if( $stmt === false ) {
-						/*if( ($errors = sqlsrv_errors() ) != null) {
-							foreach( $errors as $error ) {
-								echo "ks_jkntai<br />";
-								echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-								echo "code: ".$error[ 'code']."<br />";
-								echo "message: ".mb_convert_encoding( $error[ 'message'] ,  "UTF-8" )."<br />";
-								die();
-							}
-						}*/
-					}
-				}
-	
-			}else{
-				//echo ("既に予約が埋まっていた場合の処理<br>");
-				/* 既に予約が埋まっていた場合の処理 */
-			}
-	
-	//}else{
-	//	echo ("既に予約が埋まっていた場合の処理<br>");
-	//	/* 既に予約が埋まっていた場合の処理 */
-	//}
-	
-}
-
-
-/* WEB予約データ */
-/*$sql = "INSERT INTO web_droomr (Webukeno , ukeno , ukedt , nen , krkb , krmemo , ukecd , nyutncd , ukehkb , kyacd , dannm , dannm2 , dannmk , daihyo , renraku , tel1, tel2 , fax , zipcd , adr1,adr2 , gyscd , sihon , jygsu , kyakb , kaigi , kaigir , naiyo , kbiko , kupdkb , rsbkb , riyokb , login , udate,utime)  VALUES (? , ? , ? , ? , ? , ? , ?, ? , ? , ? , ? , ? , ? , ? , ?, ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ?, ?,?)"; 
-
-$params = array(1,15000016, 20150820, 2015, 0       , "",       1,          1,          1,         10,     "だんたい","だんたい２","カナ","代表者名","連絡者名","0120222221","0120222222","0120222223","655-0023","兵庫県神戸市垂水区清水通","●×ビル5-202",1,0,0,1,"会議名称","会議名称","会議内容","",0,1,2,'webtest',date("Ymd") , date("His"));
-
-$stmt = sqlsrv_query( $conn, $sql, $params);
-
-if( $stmt === false ) {
-    if( ($errors = sqlsrv_errors() ) != null) {
-        foreach( $errors as $error ) {
-            echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-            echo "code: ".$error[ 'code']."<br />";
-             echo "message: ".mb_convert_encoding( $error[ 'message'] ,  "UTF-8" )."<br />";
-			die();
-        }
-    }
-}*/
-
-
 /* --------------------*/
 /*  RK受付№取得処理  */
 /* --------------------*/
@@ -315,30 +148,20 @@ if( sqlsrv_fetch( $stmt ) === false) {
 $max_ukeno = (int)sqlsrv_get_field( $stmt, 0);//nullの場合を考慮し、キャストする
 $ukeno =  $max_ukeno + 1;
 
-//RK顧客データ
-$kyacd = 1;//テスト暫定
-$sql = "SELECT * FROM mt_kyaku WHERE kyacd = ".$kyacd;
-$stmt = sqlsrv_query( $conn, $sql );
+/*----------------------------------------------------*/
+$login = "test";//$_SESSION['webrk']['user'];//暫定
 
-while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
-	$dannm =  $row['dannm'];
-	$dannm2 =  $row['dannm2'];
-	$dannmk =  $row['dannmk'];
-	$daihyo =  $row['daihyo'];
-	$renraku =  $row['renraku'];
-	$tel1 =  $row['tel1'];
-	$tel2 =  $row['tel2'];
-	$fax =  $row['fax'];
-	$zipcd =  $row['zipcd'];
-	//$adr1 =  mb_convert_encoding( $row['adr1'], "SJIS","UTF-8");
-	//$adr2 =  mb_convert_encoding( $row['adr2'], "SJIS","UTF-8");
-	$adr1 =  $row['adr1'];
-	$adr2 =  $row['adr2'];
-	$gyscd =  $row['gyscd'];
-	$sihon =  $row['sihon'];
-	$jygsu =  $row['jygsu'];
-	$kyakb =  $row['kyakb'];
-}
+//明細件数の取得
+$meisai_count = $_POST['meisai_count'];
+
+$Reserve = new Reserve();
+
+$list = array();
+/* sample */
+$list[] = array('gyo' => 1, 'usedt' => '20151213' , 'rmcd' => '801' , 'timekb' => 2);
+
+$ret = $Reserve->reserve( $list,  15000182 , "test" ) ;
+
 
 /*RK予約データ */
 //define('UPDATE_NONE',0);
@@ -357,7 +180,7 @@ $sql = "INSERT INTO dt_roomr (ukeno, ukedt, nen, krkb, krmemo, ukecd, ukehkb, ky
 
 $params = array($ukeno, date( 'Ymd' ), date( "Y" ), 1 , "", 1,  5,  $kyacd ,
 				$dannm, $dannm2, $dannmk, $daihyo, $renraku, $tel1, $tel2, $fax, $zipcd, $adr1, $adr2, "", $gyscd, $sihon, $jygsu, $kyakb, 
-				$kaigi, "", "", 1, 1, $_POST[ 'riyokb' ], $login, date( "Ymd" ) , date("His" ));
+				$kaigi, "", "", 1, 1, $_POST[ 'riyokb' ], $login, date( "Ymd" ) , date( "His" ));
 
 //print_r($params);
 
@@ -380,6 +203,7 @@ for ($i = 0; $i < $meisai_count; $i++) {
 	
 	//$yobi =get_mb_wday($_POST[ 'usedt'.$i ]);
 	//$yobi = get_mb_wday($yobi, "SJIS","UTF-8");
+	//管理者留保
 	$yobikbn = get_wday($_POST[ 'usedt'.$i ] );
 	$weekday = array( "日", "月", "火", "水", "木", "金", "土" );//日本語曜日定義
 	$yobi = mb_convert_encoding( $weekday[ $yobikbn ], "SJIS","UTF-8");

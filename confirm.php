@@ -45,6 +45,8 @@ jQuery(function () {
 		var td15 = $("<div></div>");
 		var td16 = $("<div></div>");
 		var td17 = $("<div></div>");
+		var td18 = $("<div></div>");
+		var td19 = $("<div></div>");
 		/* 日付のフォーマット もう少しスマートな方法がないか検討*/
 		/* 前の画面とまったく同じ処理を書いているので整理*/
 		var usedt = objData[i]['usedt'];
@@ -58,11 +60,15 @@ jQuery(function () {
 		var gyo = i + 1;
 
 		$("#list").append(tr);
-		tr.append( td1 ).append( td2 ).append( td3 ).append( td4 ).append( td5 ).append( td6 ).append( td7 ).append( td8 ).append( td9 ).append( td10 ).append( td11 ).append( td12 ).append( td13 ).append( td14 ).append( td15 ).append( td16 ).append( td17 );
+		tr.append( td1 ).append( td2 ).append( td3 ).append( td4 ).append( td5 ).append( td6 ).append( td7 ).append( td8 ).append( td9 ).append( td10 ).append( td11 ).append( td12 ).append( td13 ).append( td14 ).append( td15 ).append( td16 ).append( td17 ).append( td18 ).append( td19 );
 		//td1.html( gyo );
 		td1.html( useyyyy + "/" + usemm + "/" +  usedd  + yobi + "<br>" + objData[i]['rmnm'] );
 		td2.html( objData[i]['jkn1']  + "～" + objData[i]['jkn2']  );
+
 		var jjkn = objData[i]['jstjkn_h'] + "：" + objData[i]['jstjkn_m'] + "～" + objData[i]['jedjkn_h'] + "：" + objData[i]['jedjkn_m'] + "";
+		var jjkn1 = parseInt( objData[i]['jstjkn_h'] )  * 100 +  parseInt( objData[i]['jstjkn_m'];
+
+
 		var hjkn = objData[i]['hstjkn_h'] + "：" + objData[i]['hstjkn_m'] + "～" + objData[i]['hedjkn_h'] + "：" + objData[i]['hedjkn_m'] + "";
 		var tjkn = objData[i]['tstjkn_h'] + "：" + objData[i]['tstjkn_m'] + "～" + objData[i]['tedjkn_h'] + "：" + objData[i]['tedjkn_m'] + "";
 		if(objData[i]['rmcd'] == '301'){
@@ -117,6 +123,12 @@ jQuery(function () {
 		td13.html( "<input type='hidden' name='ninzu" + i + "' id='ninzu" + i + "' value='" + objData[i]['ninzu'] +"'");
 		td14.html( "<input type='hidden' name='rmkin" + i + "' id='rmkin" + i + "' value='" + rmkin + "'");
 		td15.html( "<input type='hidden' name='hzkin" + i + "' id='hzkin" + i + "' value='" + objData[i]['hzkin'] + "'");
+		td16.html( "<input type='hidden' name='piano" + i + "' id='piano" + i + "' value='" + objData[i]['piano'] + "'");
+		td17.html( "<input type='hidden' name='partition" + i + "' id='partition" + i + "' value='" + objData[i]['partition'] + "'");
+	td18.html( "<input type='hidden' name='partition" + i + "' id='partition" + i + "' value='" + objData[i]['partition'] + "'");
+	td19.html( "<input type='hidden' name='partition" + i + "' id='partition" + i + "' value='" + objData[i]['partition'] + "'");
+
+
 	}
 	
 	$("#total").html("\\" + total.toLocaleString());
