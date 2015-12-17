@@ -170,7 +170,7 @@ $params = array($ukeno, date( 'Ymd' ), date( "Y" ), 1 , "", 1,  5,  $kyacd ,
 				$dannm, $dannm2, $dannmk, $daihyo, $renraku, $tel1, $tel2, $fax, $zipcd, $adr1, $adr2, "", $gyscd, $sihon, $jygsu, $kyakb, 
 				$kaigi, "", "", 1, 1, $_POST[ 'riyokb' ], $login, date( "Ymd" ) , date( "His" ));
 
-print_r($params);
+//print_r($params);
 
 $stmt = sqlsrv_query( $conn, $sql, $params);
 
@@ -250,7 +250,8 @@ for ($i = 0 ; $i < $meisai_count; $i++) {
 //$list[] = array('gyo' => 1, 'usedt' => '20151213', 'yobi' => '月', 'yobikb' => 1,'rmcd' => '801', 'rmnmr' => '会議室８０１', 'stjkn' => 900, 'edjkn' => 1200 , 
 //	'hbstjkn' => 900 , 'hbedjkn' => 1200, 'piano'=>1 ,'rmkin'=> 16000 , 'hzkin'=>6500);
 //echo "test2";
-//print_r($list);
+echo "seikyu<br>";
+print_r($list);
 $Seikyu->seikyu( $ukeno, $ukedt, $kyacd, $list );
 
 //echo("sei_list_before");

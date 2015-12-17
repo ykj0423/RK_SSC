@@ -1,6 +1,6 @@
 <?php
 require_once("ModelBase.php");
-class Seikyu extends ModelBase {
+class Mail extends ModelBase {
 
     // プロパティの宣言
     //var $data;
@@ -24,7 +24,7 @@ class Seikyu extends ModelBase {
     }
 
     //受付№、受付日、顧客コード、明細リスト
-    function seikyu( $ukeno, $ukedt, $kyacd, $list ) {
+    function mail( $ukeno, $ukedt, $kyacd, $list ) {
 //echo "seikyu_start";
 
         /* テーブル */
@@ -100,35 +100,39 @@ class Seikyu extends ModelBase {
             $hbedjkn = $rec['hbedjkn'];//本番終了時間
 
             $zgrt = 0;
-
-            /*$zgr = 100;
-
-            $comlkb = $rec['comlkb'];//営利目的区分
-
-            if( $comlkb == 1 ){
-                $zgr = $zgr * 1.5;
-            }
-
-            $jnbkb = $rec['jnbkb'];//準備撤去区分
-
-            if( $jnbkb == 1 ){
-                $zgr = $zgr * 0.5;
-            }
-            */
-
-            $tnk = 0;//$rec['tnk'];
-            $kin = $rec['rmkin'];
-            //$seikin = intval($seikin) + intval($kin);
-            //insert
-
-            /*後納の場合、料金通知テーブルに書き込む*/
+            /*パターン区分*/
             if( $kounoukb == 1 ){
-                $sql = "INSERT INTO dt_wbtuchi_m ( tuchino, ukeno, gyo, usedt, yobi, yobikb, hzkb, rmcd, rmnmr, hzcd, hznmr, stjkn, edjkn, hbstjkn, hbedjkn, zgrt, tnk, kin, login, udate, utime)";
+                $ptnkb=31;
             }else{
-                $sql = "INSERT INTO dt_wbseikyu_m ( seino, ukeno, gyo, usedt, yobi, yobikb, hzkb, rmcd, rmnmr, hzcd, hznmr, stjkn, edjkn, hbstjkn, hbedjkn, zgrt, tnk, kin, login, udate, utime)";
+                $ptnkb=30;
             }
 
-            $sql = $sql." VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+/*受付番号 ukeno  int8 予約明細   
+メールパターン ptnkb   int2 名称マスタ（mm_mlptn）    
+行番 gyo  int2 予約明細   
+施設コード rmcd  int4
+●施設分類区分 rmclkb   int2 施設分類マスタ参照（mm_rmcls）    
+使用日付 usedt  int8 メールには　yyyy + "年" + mm + "月" + dd  + "日" 　形式で出力　（ゼロサプレス）    
+使用日付曜日 yobi varchar4 メールには　"(" + yobi漢字 + ")"形式で出力  
+●施設名称（Web用） rmnmw    varchar20
+使用時間開始 stjkn    int4 メールには　hh + ":" + mm 形式で出力（ゼロサプレス）  
+使用時間終了 edjkn    int4 メールには　hh + ":" + mm 形式で出力（ゼロサプレス）  
+●準備リハ時間開始 jnstjkn    int4 メールには　hh + ":" + mm 形式で出力（ゼロサプレス）  
+●準備リハ時間終了 jnedjkn    int4 メールには　hh + ":" + mm 形式で出力（ゼロサプレス）  
+本番時間開始 hbstjkn  int4 メールには　hh + ":" + mm　形式で出力（ゼロサプレス）  
+本番時間終了 hbedjkn  int4 メールには　hh + ":" + mm　形式で出力（ゼロサプレス）  
+●撤去時間開始 tkstjkn  int4 メールには　hh + ":" + mm　形式で出力（ゼロサプレス）  
+●撤去時間終了 tkedjkn  int4 メールには　hh + ":" + mm　形式で出力（ゼロサプレス）  
+使用人数 ninzu  int5 メールには　ninzu + "人"  形式で出力（ゼロサプレス）   
+●営利目的区分名称 comlkb int1 「営利目的で利用：する」「営利目的で利用：しない」  
+●入場料受講料区分名称 feekb    int1 「入場料・受講料等の徴収：する」「入場料・受講料等の徴収：しない」  
+●グランドピアノ使用区分名称 pianokb   int1 「グランドピアノの使用：する」「グランドピアノの使用：しない」    
+●間仕切りフラグ名称 partkb    int1 「パーティション：開ける」「パーティション：閉める」 
+●備考 biko varchar80 利用者入力内容（パーティションの開閉、立看板の有無等）
+*/
+            //insert
+$sql = "INSERT INTO dbo.dt_mail_m (ukeno, ptnkb, gyo, rmcd, rmclkb, usedt, yobi, rmnmw, stjkn, edjkn, jnstjkn, jnedjkn, hbstjkn, hbedjkn, tkstjkn, tkedjkn, ninzu, comlkb, feekb, pianokb, partkb, biko, ucomputer, uosuser, usysuser, udate, utime, mcomputer, mosuser, msysuser, mdate, ukedt, wloginid, wudate, wutime, pgnm)";
+$sql = $sql." VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             $params = array( $ukeno, $ukeno, $gyo_num, $usedt, $yobi, $yobikb, $hzkb, $rmcd, $rmnmr, $hzcd, $hznmr,
                 $stjkn, $edjkn, $hbstjkn, $hbedjkn, $zgrt, $tnk, $kin, $login, parent::getUdate(), parent::getUtime() );
@@ -193,19 +197,54 @@ if( $stmt === false ) {
 
 //echo "請求書ヘッダー";      
         
-        /* 請求書ヘッダー */
+        /* ヘッダー */
+/*受付番号 ukeno  int 8       予約      
+メールパターン ptnkb   int 2       実行ＰＧによりセット      
+受付日付 ukedt  int 8       予約      
+顧客コード kyacd     int 6       予約      
+メールアドレス mail    varchar 255     顧客マスタ       
+団体名 dannm   varchar 50      予約      
+代表者名 daihyo     varchar 40      予約      
+連絡者名 renraku    varchar 40      予約      
+管理責任者 sekinin   varchar 40      予約      
+会議名称 kaigi  varchar 40      予約      
+利用目的 riyokbnm   varchar 40      予約＋名称（mm_riyo）      
+請求書ダウンロードＵＲＬ seikdl     varchar 255     請求データ       
+請求書ファイル名 seifile    varchar 20      請求データ       
+使用許可証ダウンロードＵＲＬ siyodl   varchar 255     予約明細        
+許可書ファイル名 kyofile    varchar 20      予約明細        
+納付期限 paylmtdt   int 8       予約      
+ホール打合せ日 apptdt  int 8       画面      
+失効予告日 expnocdt  int 8       yyyymmdd        
+メール送信処理日 sddae  int 8       西暦表示(yyyymmdd)      
+メール送信処理時間 sdtime    int 6       時分(hhmm)        
+メール送信処理結果 sdret     int ?       0:未処理 1:正常 2:エラー        
+更新コンピュータ名 ucomputer     varchar 20      
+更新ユーザー（Windows） uosuser     varchar 20      
+更新ユーザー（ｼｽﾃﾑのﾛｸﾞｲﾝﾕｰｻﾞｰ） usysuser    varchar 20      
+更新日 udate   int 8       西暦表示(yyyymmdd)      
+更新時間 utime  int 6       時分(hhmm)        
+登録コンピュータ名 mcomputer     varchar 20      
+登録ユーザー（Windows） mosuser     varchar 20      
+登録ユーザー（ｼｽﾃﾑのﾛｸﾞｲﾝﾕｰｻﾞｰ） msysuser    varchar 20      
+登録日 mdate   int 8   
+受付日付 wukedt     int 8   
+ログインユーザー名 wloginid  userid  userid  userid  int 6       顧客コード       
+WEB更新日付 wudate  int 8       西暦表示(yyyymmdd)      
+WEB更新時間 wutime  int 4       時分(hhmm)        
+最終更新プログラム名 pgnm     varchar 20      更新プログラム名をセット        
+連動方向    int 1       1:WtoL 2:LtoW 3:else 9:stop 詳細未定        
+更新区分    int 1       1:Create 2:Update 3:Reference 4:Delete 詳細未定     
+連動日     int 8       西暦表示(yyyymmdd) 詳細未定     
+連動時間    int 4       時分(hhmm) 詳細未定       
+処理フラグ   int 1       0:（未処理）  1:処理済　 9:エラー 詳細未定      
+*/
         //insert
-        /*後納の場合、料金通知テーブルに書き込む*/
+$sql = "INSERT INTO dt_mail ( ukeno, ptnkb, ukedt, kyacd, mail, dannm, daihyo, renraku, sekinin, kaigi, riyokbnm, seikdl, seifile, siyodl, kyofile, paylmtdt, apptdt, expnocdt, sddae, sdtime, sdret, ucomputer, uosuser, usysuser, udate, utime, mcomputer, mosuser, msysuser, mdate, wukedt, wloginid, wudate, wutime, pgnm )";
+$sql = $sql." VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; 
+     
 
-        if( $kounoukb == 1 ){
-            $sql = "INSERT INTO  dt_wbtuchi ( tuchino, ukeno, tuchidt, tuchiurl, tuchifile, tuchideal, tuchifbd, ukedt, nen,";
-            $sql = $sql." kyacd, dannm, dannm2, daihyo, renraku, tuchikin, paylmtdt, login, udate, utime)";
-        }else{
-            $sql = "INSERT INTO  dt_wbseikyu ( seino, ukeno, seidt, seiurl, seifile, seideal, seifbd, ukedt, nen,";
-            $sql = $sql." kyacd, dannm, dannm2, daihyo, renraku, seikin, paylmtdt, login, udate, utime)";
-        }
-        
-        $sql = $sql." VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+
 //echo $sql;
         $params = array( $ukeno, $ukeno, 0, $seiurl, '', 0, 0, $ukedt, $nen,$kyacd, $dannm, $dannm2, $daihyo, $renraku, $seikin, $paylmtdt, $login, parent::getUdate(), parent::getUtime() );
 
