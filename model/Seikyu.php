@@ -39,7 +39,7 @@ echo "seikyu_start";
              die( print_r( sqlsrv_errors(), true ));
         }
         //parent::begin_transaction( $this->conn );
-
+echo " seikyu_1 ";
         //請求書発行日
         $seidt = 0;//ZERO
         //請求書ダウンロードURL
@@ -61,10 +61,10 @@ echo "seikyu_start";
         //納付期限
         $date_ukedt = strtotime( $nen.'-'.$m.'-'.$d );
         $paylmtdt = date('Ymd', strtotime(' +9 days', $date_ukedt));
-
+echo " seikyu_2 ";
         /* 顧客データ */
         $sql = "SELECT * FROM mt_kyaku WHERE kyacd = ".$kyacd;
-
+echo $sql."<br>";
         $stmt = sqlsrv_query( $this->conn, $sql );
 
         while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
@@ -77,7 +77,7 @@ echo "seikyu_start";
             $kyakb =  $row['kyakb'];    //1:一般 2:中小企業 99:その他(ct_kyaku)
             $kounoukb = $row['kounoukb']; //後納区分
             $login = $row['wloginid'];    //ログイン
-//            echo $row['dannm'].", ".$row['dannm2']."<br />";
+            echo $row['dannm'].", ".$row['dannm2']."<br />";
         }
  
         /* 請求書明細 */
@@ -207,8 +207,7 @@ echo "請求書ヘッダー";
         
         $sql = $sql." VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 echo $sql;
-        $params = array( $ukeno, $ukeno, $ukedt, $seiurl, '', 0, 0, $ukedt, $nen,　$kyacd, $dannm, $dannm2, $daihyo, $renraku, $seikin, $paylmtdt, $login, parent::getUdate(), parent::getUtime() );
-print_r($params);
+        $params = array( $ukeno, $ukeno, 0, $seiurl, '', 0, 0, $ukedt, $nen,$kyacd, $dannm, $dannm2, $daihyo, $renraku, $seikin, $paylmtdt, $login, parent::getUdate(), parent::getUtime() );
 
         $stmt = sqlsrv_query( $this->conn, $sql, $params );
 

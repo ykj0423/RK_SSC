@@ -45,15 +45,14 @@
 require_once( "func.php" );
 require_once( "model/db.php" );
 require_once("model/Reserve.php");
-//include("model/Seikyu.php");
-//include("model/Seikyu.php");
-//require_once("model/Seikyu.php");
+require_once("model/Seikyu.php");
 /* データベース接続 */
 $db = new DB;
 $conErr = $db->connect();
 if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 
 $checkkyaku =1 ;
+/* 同月9件チェック */
 //本当は明細ごとに回さなきゃならない
 
 $meisai_count = $_POST['meisai_count'];
@@ -63,7 +62,7 @@ $connectionInfo = array( "Database"=>"RK_SSC_DB", "UID"=>"sa", "PWD"=>"Webrk_201
 $conn = sqlsrv_connect( $serverName, $connectionInfo);
 
 if( $conn === false ) {
-     die( print_r( sqlsrv_errors(), true));
+     //die( print_r( sqlsrv_errors(), true));
 }
 
 /* --------------------*/
@@ -107,7 +106,6 @@ if( sqlsrv_fetch( $stmt ) === false) {
 }
 
 $webukeno = (int)sqlsrv_get_field( $stmt, 0) + 1 ;//nullの場合を考慮し、キャストする
-
 //$financial_year = str_pad((int)get_financial_year() , 8, "0", STR_PAD_RIGHT);
 //$webukeno =  $financial_year  +  $max_webukeno + 1;
 /*$max_webukeno = (int)sqlsrv_get_field( $stmt, 0);//nullの場合を考慮し、キャストする
@@ -133,7 +131,6 @@ $ukeno =  $max_ukeno + 1;
 
 /*----------------------------------------------------*/
 $login = "test";//$_SESSION['webrk']['user'];//暫定
-echo "test1";
 
 //明細件数の取得
 $meisai_count = $_POST['meisai_count'];
@@ -170,7 +167,7 @@ $params = array($ukeno, date( 'Ymd' ), date( "Y" ), 1 , "", 1,  5,  $kyacd ,
 				$dannm, $dannm2, $dannmk, $daihyo, $renraku, $tel1, $tel2, $fax, $zipcd, $adr1, $adr2, "", $gyscd, $sihon, $jygsu, $kyakb, 
 				$kaigi, "", "", 1, 1, $_POST[ 'riyokb' ], $login, date( "Ymd" ) , date( "His" ));
 
-print_r($params);
+//print_r($params);
 
 $stmt = sqlsrv_query( $conn, $sql, $params);
 
@@ -230,35 +227,29 @@ for ($i = 0; $i < $meisai_count; $i++) {
 
 /* 請求データ作成 */
 //echo("sei_list_before");
-$sei_list = array();
+//$sei_list = array();
 
-//for ($i = 0 ; $i < $meisai_count; $i++) {
+/*for ($i = 0 ; $i < $meisai_count; $i++) {
 	
-	$i = 0;
 	//略称を取得する必要がある
-	$rmnm = "";//mb_convert_encoding( $_POST[ 'rmnm'.$i ], "SJIS","UTF-8");
-$sei_list[] = array('gyo' => 1, 'usedt' => '20151213', 'yobi' => '月', 'yobikb' => 1,'rmcd' => '801', 'rmnmr' => '会議室８０１', 'stjkn' => 900, 'edjkn' => 1200 , 
-	'hbstjkn' => 900 , 'hbedjkn' => 1200, 'piano'=>1 ,'rmkin'=> 16000 , 'hzkin'=>6500);	
-/*	$sei_list[] = array(
-		'gyo' => $_POST[ 'gyo'.$i ], 'usedt' => $_POST[ 'usedt'.$i ], 'yobi' => '月', 'yobikb' => $_POST[ 'yobikb'.$i ],
-		'rmcd' => $_POST[ 'rmcd'.$i ], 'rmnmr' => '会議室８０１', 'stjkn' => $_POST[ 'stjkn'.$i ], 'edjkn' => $_POST[ 'edjkn'.$i ], 
+	$rmnm = mb_convert_encoding( $_POST[ 'rmnm'.$i ], "SJIS","UTF-8");
+	
+	$sei_list[] = array(
+		'gyo' => $_POST[ 'gyo'.$i ], 'usedt' => $_POST[ 'usedt'.$i ], 'yobi' => $_POST[ 'yobi'.$i ], 'yobikb' => $_POST[ 'yobikb'.$i ],
+		'rmcd' => $_POST[ 'rmcd'.$i ], 'rmnmr' => $rmnm, 'stjkn' => $_POST[ 'stjkn'.$i ], 'edjkn' => $_POST[ 'edjkn'.$i ], 
 		'hbstjkn' => $_POST[ 'hbstjkn'.$i ], 'hbedjkn' => $_POST[ 'hbedjkn'.$i ], 'piano' => $_POST[ 'piano'.$i ],
 		'rmkin'=> $_POST[ 'rmkin'.$i ], 'hzkin'=>$_POST[ 'hzkin'.$i ]);
-*/	
-//}
+	
+}*/
 //echo("sei_list");
-print_r($sei_list);
-$Seikyu = new Seikyu();
-$ukeno = 9990;
-$ukedt = 20151214;
-$kyacd = 1; 
-//$Seikyu->seikyu( $ukeno, $ukedt, $kyacd, $sei_list );
-$Seikyu->seikyu( $ukeno, $ukedt, $kyacd, $sei_list );
-echo("sei_list_after");
+//print_r($sei_list);
+//$Seikyu = new Seikyu();
+//$ret = $Seikyu->seikyu( $ukeno, $ukedt, $kyacd, $sei_list );
+//echo("sei_list_after");
 
-if(!$ret){
-	die("セイキュウエラー");
-}
+//if(!$ret){
+//	die("セイキュウエラー");
+//}
 
 //クエリー結果の開放
 sqlsrv_free_stmt($result);

@@ -136,17 +136,21 @@ jQuery(function () {
 		td9.html( "<input type='hidden' name='gyo" + i + "' id='gyo" + i + "' value='" + gyo + "'>" );	//行番
 		td10.html( "<input type='hidden' name='usedt" + i + "' id='usedt" + i + "' value=" + useyyyy + usemm + usedd + ">" ); //使用日付
 		td11.html( "<input type='hidden' name='timekb" + i + "' id='timekb" + i  + "' value='" + objData[i]['timekb'] + "'>" ); //時間帯
-		td12.html( "<input type='hidden' name='stjkn" + i + "' id='stjkn" + i + "' value='" + objData[i]['jkn1'] +"'><input type='hidden' class='form-control' name='edjkn" + i + "' id='edjkn" + i + "' value='"+ objData[i]['jkn2'] + "'>" );
+		//var stjkn = 900;
+		//var edjkn = 1200;
+		var stjkn = objData[i]['jkn1'].replace( ':','' );
+		var edjkn = objData[i]['jkn2'].replace( ':','' );
+		td12.html( "stjkn<input type='text' name='stjkn" + i + "' id='stjkn" + i + "' value='" + stjkn +"'><input type='text' name='edjkn" + i + "' id='edjkn" + i + "' value='"+ edjkn + "'>" );
 		td13.html( "<input type='hidden' name='ninzu" + i + "' id='ninzu" + i + "' value='" + objData[i]['ninzu'] +"'");
 		td14.html( "<input type='hidden' name='rmkin" + i + "' id='rmkin" + i + "' value='" + parseInt( objData[i]['rmkin'] ) + "'>");
 		td15.html( "<input type='hidden' name='hzkin" + i + "' id='hzkin" + i + "' value='" + parseInt( objData[i]['hzkin'] ) + "'>");
 		td16.html( "<input type='hidden' name='piano" + i + "' id='piano" + i + "' value='" + objData[i]['piano'] + "'>");
 		td17.html( "<input type='hidden' name='partition" + i + "' id='partition" + i + "' value='" + objData[i]['partition'] + "'>");
-		td18.html( "ヨウビ<input type='text' name='yobi" + i + "' id='yobi" + i + "' value='" + yobi + "'>");//曜日
-		td19.html( "ヨウビクブン<input type='text' name='yobikb" + i + "' id='yobikb" + i + "' value='" + yobikb + "'>");//曜日区分
-		td20.html( "rmnm<input type='text' name='rmnm" + i + "' id='rmnm" + i + "' value='" + objData[i]['rmnm'] + "'>");//施設名
-		td21.html( "hstjkn<input type='text' name='hstjkn" + i + "' id='hstjkn" + i + "' value='" + hstjkn + "'>");
-		td22.html( "hedjkn<input type='text' name='hedjkn" + i + "' id='hedjkn" + i + "' value='" + hedjkn + "'>");
+		td18.html( "<input type='hidden' name='yobi" + i + "' id='yobi" + i + "' value='" + yobi + "'>");//曜日
+		td19.html( "<input type='hidden' name='yobikb" + i + "' id='yobikb" + i + "' value='" + yobikb + "'>");//曜日区分
+		td20.html( "<input type='hidden' name='rmnm" + i + "' id='rmnm" + i + "' value='" + objData[i]['rmnm'] + "'>");//施設名
+		td21.html( "hstjkn<input type='text' name='hbstjkn" + i + "' id='hbstjkn" + i + "' value='" + hstjkn + "'>");
+		td22.html( "hedjkn<input type='text' name='hbedjkn" + i + "' id='hbedjkn" + i + "' value='" + hedjkn + "'>");
 	
 //（空室マーク）usedt:使用日、rmcd:施設コード、timekb:時間帯
 //（請求データ）usedt:使用日、yobi:曜日、yobikb:曜日区分、rmcd:施設コード、rmnm:施設名、
