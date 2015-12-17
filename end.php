@@ -45,7 +45,7 @@
 require_once( "func.php" );
 require_once( "model/db.php" );
 require_once("model/Reserve.php");
-
+require_once("model/Seikyu.php");
 /* データベース接続 */
 $db = new DB;
 $conErr = $db->connect();
@@ -57,26 +57,6 @@ $checkkyaku =1 ;
 
 $meisai_count = $_POST['meisai_count'];
 
-for ( $i = 0; $i < $meisai_count; $i++ ) {
-	
-	$_POST[ 'usedt'.$i ];
-	$checkdt = $_POST[ 'usedt'.$i ];
-	$checky = substr($checkdt, 0, 4);
-	$checkm = substr($checkdt, 4, 2);
-
-	if( $db->check_monthly_count($checkkyaku,$checky,$checkm) > 9){
-		//echo $checky."年".$checkm."月に関してはお申し込みの上限を超えています。";
-		die();
-	}else{
-		//echo $checky."年".$checkm."月に関してはお申し込みの上限を超えていません。";
-	}
-	
-}
-
-?>
-
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<?php
 $serverName = "WEBRK\SQLEXPRESS";
 $connectionInfo = array( "Database"=>"RK_SSC_DB", "UID"=>"sa", "PWD"=>"Webrk_2015" );
 $conn = sqlsrv_connect( $serverName, $connectionInfo);
@@ -108,6 +88,8 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 	$sihon =  $row['sihon'];
 	$jygsu =  $row['jygsu'];
 	$kyakb =  $row['kyakb'];
+	$kounoukb = $row['kounoukb']; //後納区分
+    $login = $row['wloginid'];    //ログイン
 }
 
 
@@ -154,14 +136,18 @@ $login = "test";//$_SESSION['webrk']['user'];//暫定
 //明細件数の取得
 $meisai_count = $_POST['meisai_count'];
 
+$ks_list = array();
+
+for ($i = 0 ; $i < $meisai_count; $i++) {
+	$ks_list[] = array('gyo' => $_POST[ 'gyo'.$i ], 'usedt' => $_POST[ 'usedt'.$i ], 'rmcd' => $_POST[ 'rmcd'.$i ], 'timekb' => $_POST[ 'timekb'.$i ] );
+}
+
+//空室時間貸、時間帯
 $Reserve = new Reserve();
-
-$list = array();
-/* sample */
-$list[] = array('gyo' => 1, 'usedt' => '20151213' , 'rmcd' => '801' , 'timekb' => 2);
-
-$ret = $Reserve->reserve( $list,  15000182 , "test" ) ;
-
+$ret = $Reserve->reserve( $ks_list,  $ukeno , $login );
+if(!$ret){
+	die("reserveエラー");
+}
 
 /*RK予約データ */
 //define('UPDATE_NONE',0);
@@ -196,6 +182,8 @@ if( $stmt === false ) {
         }
     }
 }
+
+echo("meisai_start");
 
 for ($i = 0; $i < $meisai_count; $i++) {
 	
@@ -238,13 +226,31 @@ for ($i = 0; $i < $meisai_count; $i++) {
 	}
 
 }//end_for
+echo("sei_list_before");
+/* 請求データ作成 */
+$sei_list = array();
 
+for ($i = 0 ; $i < $meisai_count; $i++) {
+	
+	//略称を取得する必要がある
+	$rmnm = mb_convert_encoding( $_POST[ 'rmnm'.$i ], "SJIS","UTF-8");
+	
+	$sei_list[] = array(
+		'gyo' => $_POST[ 'gyo'.$i ], 'usedt' => $_POST[ 'usedt'.$i ], 'yobi' => $_POST[ 'yobi'.$i ], 'yobikb' => $_POST[ 'yobikb'.$i ],
+		'rmcd' => $_POST[ 'rmcd'.$i ], 'rmnmr' => $rmnm, 'stjkn' => $_POST[ 'stjkn'.$i ], 'edjkn' => $_POST[ 'edjkn'.$i ], 
+		'hbstjkn' => $_POST[ 'hbstjkn'.$i ], 'hbedjkn' => $_POST[ 'hbedjkn'.$i ], 'piano' => $_POST[ 'piano'.$i ],
+		'rmkin'=> $_POST[ 'rmkin'.$i ], 'hzkin'=>$_POST[ 'hzkin'.$i ]);
+	
+}
+echo("sei_list");
+print_r($sei_list);
+$Seikyu = new Seikyu();
+$ret = $Seikyu->seikyu( $ukeno, $ukedt, $kyacd, $sei_list );
+echo("sei_list_after");
 
-$list[] = array('gyo' => 1, 'usedt' => '20151213', 'yobi' => '月', 'yobikb' => 1,'rmcd' => '801', 'rmnmr' => '会議室８０１', 'stjkn' => 900, 'edjkn' => 1200 , 
-	'hbstjkn' => 900 , 'hbedjkn' => 1200, 'piano'=>1 ,'rmkin'=> 16000 , 'hzkin'=>6500);
-echo "test2";
-$Seikyu->seikyu( $ukeno, $ukedt, $kyacd, $list );
-
+if(!$ret){
+	die("セイキュウエラー");
+}
 
 //クエリー結果の開放
 sqlsrv_free_stmt($result);
