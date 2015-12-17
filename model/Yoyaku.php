@@ -1,6 +1,6 @@
 <?php
 require_once("ModelBase.php");
-class Seikyu extends ModelBase {
+class Yoyaku extends ModelBase {
 
     // プロパティの宣言
     //var $data;
@@ -24,7 +24,7 @@ class Seikyu extends ModelBase {
     }
 
     //受付№、受付日、顧客コード、明細リスト
-    function seikyu( $ukeno, $ukedt, $kyacd, $list ) {
+    function yoyaku( $ukeno, $ukedt, $kyacd, $list ) {
 
         /* テーブル */
         $headerTB = "dt_wbseikyu";
@@ -76,7 +76,7 @@ class Seikyu extends ModelBase {
             $kyakb =  $row['kyakb'];    //1:一般 2:中小企業 99:その他(ct_kyaku)
             $kounoukb = $row['kounoukb']; //後納区分
             $login = $row['wloginid'];    //ログイン
-            //echo $row['dannm'].", ".$row['dannm2']."<br />";
+            echo $row['dannm'].", ".$row['dannm2']."<br />";
         }
  
         /* 請求書明細 */

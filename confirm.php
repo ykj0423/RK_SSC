@@ -20,9 +20,10 @@
 <![endif]-->
 <script>
 jQuery(function () {
+	   alert();
     //HTMLを初期化  
     $("table.rsv_input tbody.list").html("");
-    
+
     var objData = JSON.parse(localStorage.getItem("sentaku"));
     var total = 0;
 	for ( var i = 0; i < objData.length; i++ ){
@@ -47,44 +48,68 @@ jQuery(function () {
 		var td17 = $("<div></div>");
 		var td18 = $("<div></div>");
 		var td19 = $("<div></div>");
+		var td20 = $("<div></div>");
+		var td21 = $("<div></div>");
+		var td22 = $("<div></div>");
+		var td23 = $("<div></div>");
+		var td24 = $("<div></div>");
+		var td25 = $("<div></div>");
 		/* 日付のフォーマット もう少しスマートな方法がないか検討*/
 		/* 前の画面とまったく同じ処理を書いているので整理*/
 		var usedt = objData[i]['usedt'];
 		var useyyyy = usedt.substring(0, 4);
 		var usemm = objData[i]['usedt'].substring(4, 6);
 		var usedd = usedt.substring(6, 8);
-			
+	
 		var d = new Date(useyyyy + "/" + usemm + "/" +  usedd);
-		var w = ["（日）","（月）","（火）","（水）","（木）","（金）","（土）"];
-		var yobi = w[d.getDay()];
+		var w = ["日","月","火","水","木","金","土"];
+		var yobikb = d.getDay();
+		var yobi = w[yobikb];
 		var gyo = i + 1;
 
 		$("#list").append(tr);
-		tr.append( td1 ).append( td2 ).append( td3 ).append( td4 ).append( td5 ).append( td6 ).append( td7 ).append( td8 ).append( td9 ).append( td10 ).append( td11 ).append( td12 ).append( td13 ).append( td14 ).append( td15 ).append( td16 ).append( td17 ).append( td18 ).append( td19 );
-		//td1.html( gyo );
-		td1.html( useyyyy + "/" + usemm + "/" +  usedd  + yobi + "<br>" + objData[i]['rmnm'] );
+		tr.append( td1 ).append( td2 ).append( td3 ).append( td4 ).append( td5 ).append( td6 ).append( td7 ).append( td8 ).append( td9 ).append( td10 ).append( td11 ).append( td12 ).append( td13 ).append( td14 ).append( td15 ).append( td16 ).append( td17 ).append( td18 ).append( td19 ).append( td20 ).append( td21 ).append( td22 );//.append( td23 ).append( td24 ).append( td25 );
+	
+		td1.html( useyyyy + "/" + usemm + "/" +  usedd + " ("+ yobi + ")<br>" + objData[i]['rmnm'] );
 		td2.html( objData[i]['jkn1']  + "～" + objData[i]['jkn2']  );
 
-		var jjkn = objData[i]['jstjkn_h'] + "：" + objData[i]['jstjkn_m'] + "～" + objData[i]['jedjkn_h'] + "：" + objData[i]['jedjkn_m'] + "";
-		var jjkn1 = parseInt( objData[i]['jstjkn_h'] )  * 100 +  parseInt( objData[i]['jstjkn_m'];
+		var jjkn_dsp = objData[i]['jstjkn_h'] + "：" + objData[i]['jstjkn_m'] + "～" + objData[i]['jedjkn_h'] + "：" + objData[i]['jedjkn_m'];
+		//var jjkn = parseInt( objData[i]['jstjkn_h'] ) * 100 +  parseInt( objData[i]['jstjkn_m'];
+		td3.html( jjkn_dsp );
+		var jjkn;
+		jjkn = 0;
+		var hjkn_dsp = objData[i]['hstjkn_h'] + "：" + objData[i]['hstjkn_m'] + "～" + objData[i]['hedjkn_h'] + "：" + objData[i]['hedjkn_m'];
+		//var jjkn = parseInt( objData[i]['jstjkn_h'] ) * 100 +  parseInt( objData[i]['jstjkn_m'];
+		td3.html( jjkn_dsp + "<br>" + hjkn_dsp );
+		var jjkn;
+		jjkn = 0;
+		var hstjkn;
+		var hedjkn;
+		//hstjkn = parseInt( objData[i]['jstjkn_h'] ) * 100 +  parseInt( objData[i]['jstjkn_m'];
+		hstjkn = 900;
+		hstjkn = 1200;
 
-
-		var hjkn = objData[i]['hstjkn_h'] + "：" + objData[i]['hstjkn_m'] + "～" + objData[i]['hedjkn_h'] + "：" + objData[i]['hedjkn_m'] + "";
-		var tjkn = objData[i]['tstjkn_h'] + "：" + objData[i]['tstjkn_m'] + "～" + objData[i]['tedjkn_h'] + "：" + objData[i]['tedjkn_m'] + "";
-		if(objData[i]['rmcd'] == '301'){
-			td3.html( "準備・リハ時間&nbsp;" + jjkn + "<br>催物時間&nbsp;" + hjkn + "<br>撤去時間&nbsp;" + tjkn );
+		/*if(!(objData[i]['jstjkn_h']){
 		}else{
-			td3.html( "催物時間&nbsp;" + hjkn );
-		}
-		td4.html( objData[i]['ninzu']+"人" );
+			if(isNaN(objData[i]['jstjkn_h'])
+			{
+
+			}else{
+			 jjkn1 = parseInt( objData[i]['jstjkn_h'] );
+			}
+			jjkn1=0;
+		}*/
 		
+		
+		
+		td4.html( objData[i]['ninzu']+"人" );
 		var str_option='';
-		//if(objData[i]['commercially']==1){
-		//	str_option = str_option + "・営利目的での利用（販売やPR活動も含む）：あてはまる<br>";
-		//}
-		//if(objData[i]['fee']==1){
-		//	str_option = str_option + "・入場料・受講料等の徴収：する<br>";
-		//}
+		if(objData[i]['commercially']==1){
+			str_option = str_option + "・営利目的での利用（販売やPR活動も含む）：あてはまる<br>";
+		}
+		if(objData[i]['fee']==1){
+			str_option = str_option + "・入場料・受講料等の徴収：する<br>";
+		}
 		if(objData[i]['piano']==1){
 			str_option = str_option + "・グランドピアノの使用：する<br>";
 			objData[i]['hzkin'] = 13000;
@@ -101,16 +126,11 @@ jQuery(function () {
 		rmkin = parseInt( objData[i]['rmkin'] );
 		hzkin = parseInt( objData[i]['hzkin'] );
 		
-		//if((objData[i]['commercially']==1)&&(objData[i]['fee']==1)){
-		//	rmkin = rmkin * 1.5;
-		//	objData[i]['rmkin'] = rmkin;
-		//}
-		//ただ加算しただけでは計算されない。
-		//var rmkin = parseInt(objData[i]['rmkin']);
-
-		//if((objData[i]['partition']==1)&&(objData[i]['fee']==1)){
-		//	rmkin = rmkin * 1.5;
-		//}
+		if((objData[i]['commercially']==1)&&(objData[i]['fee']==1)){
+			rmkin = rmkin * 1.5;
+			objData[i]['rmkin'] = rmkin;
+		}
+		
 		total = parseInt(total) + parseInt(rmkin) + parseInt(objData[i]['hzkin']);
 
 		td6.html( "\\" + rmkin.toLocaleString() );
@@ -121,12 +141,28 @@ jQuery(function () {
 		td11.html( "<input type='hidden' name='timekb" + i + "' id='timekb" + i  + "' value='" + objData[i]['timekb'] + "'>" ); //時間帯
 		td12.html( "<input type='hidden' name='stjkn" + i + "' id='stjkn" + i + "' value='" + objData[i]['jkn1'] +"'><input type='hidden' class='form-control' name='edjkn" + i + "' id='edjkn" + i + "' value='"+ objData[i]['jkn2'] + "'>" );
 		td13.html( "<input type='hidden' name='ninzu" + i + "' id='ninzu" + i + "' value='" + objData[i]['ninzu'] +"'");
-		td14.html( "<input type='hidden' name='rmkin" + i + "' id='rmkin" + i + "' value='" + rmkin + "'");
-		td15.html( "<input type='hidden' name='hzkin" + i + "' id='hzkin" + i + "' value='" + objData[i]['hzkin'] + "'");
+		td14.html( "<input type='hidden' name='rmkin" + i + "' id='rmkin" + i + "' value='" + parseInt( objData[i]['rmkin'] ) + "'");
+		td15.html( "<input type='hidden' name='hzkin" + i + "' id='hzkin" + i + "' value='" + parseInt( objData[i]['hzkin'] ) + "'");
 		td16.html( "<input type='hidden' name='piano" + i + "' id='piano" + i + "' value='" + objData[i]['piano'] + "'");
 		td17.html( "<input type='hidden' name='partition" + i + "' id='partition" + i + "' value='" + objData[i]['partition'] + "'");
-	td18.html( "<input type='hidden' name='partition" + i + "' id='partition" + i + "' value='" + objData[i]['partition'] + "'");
-	td19.html( "<input type='hidden' name='partition" + i + "' id='partition" + i + "' value='" + objData[i]['partition'] + "'");
+		td18.html( "<input type='hidden' name='yobi" + i + "' id='yobi" + i + "' value='" + yobi + "'");//曜日
+		td19.html( "<input type='hidden' name='yobikb" + i + "' id='yobikb" + i + "' value='" + yobikb + "'");//曜日区分
+		td20.html( "<input type='hidden' name='rmnm" + i + "' id='rmnm" + i + "' value='" + objData[i]['rmnm'] + "'");//施設名
+		td21.html( "<input type='hidden' name='hstjkn" + i + "' id='hstjkn" + i + "' value='" + hstjkn + "'");
+		td22.html( "<input type='hidden' name='hedjkn" + i + "' id='hedjkn" + i + "' value='" + hedjkn + "'");
+		//td23.html( "<input type='hidden' name='partition" + i + "' id='partition" + i + "' value='" + objData[i]['partition'] + "'");
+		//td24.html( "<input type='hidden' name='partition" + i + "' id='partition" + i + "' value='" + objData[i]['partition'] + "'");
+		//td25.html( "<input type='hidden' name='partition" + i + "' id='partition" + i + "' value='" + objData[i]['partition'] + "'");
+	
+//（空室マーク）usedt:使用日、rmcd:施設コード、timekb:時間帯
+//（請求データ）usedt:使用日、yobi:曜日、yobikb:曜日区分、rmcd:施設コード、rmnm:施設名、
+//stjkn：開始時間、edjkn：終了時間、hstjkn本番開始時間、hedjkn:本番終了時間、piano：ピアノ区分、rmkin：施設使用料金額、hzkin：付属設備使用料金額
+
+
+
+
+alert("mei");
+
 
 
 	}

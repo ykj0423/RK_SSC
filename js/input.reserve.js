@@ -199,8 +199,6 @@ jQuery(function () {
 				//本番時間
 				if($('#hstjkn_h' + i ).length){
 					
-					
-					
 					var jkn1 = objData[i]['jkn1'];
 					jkn1 = jkn1.replace( ":" , "" ) ;
 					var jkn2 = objData[i]['jkn2'];
