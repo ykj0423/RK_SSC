@@ -25,6 +25,7 @@ class Seikyu extends ModelBase {
 
     //受付№、受付日、顧客コード、明細リスト
     function seikyu( $ukeno, $ukedt, $kyacd, $list ) {
+echo "seikyu_start";
 
         /* テーブル */
         $headerTB = "dt_wbseikyu";
@@ -76,12 +77,12 @@ class Seikyu extends ModelBase {
             $kyakb =  $row['kyakb'];    //1:一般 2:中小企業 99:その他(ct_kyaku)
             $kounoukb = $row['kounoukb']; //後納区分
             $login = $row['wloginid'];    //ログイン
-            //echo $row['dannm'].", ".$row['dannm2']."<br />";
+//            echo $row['dannm'].", ".$row['dannm2']."<br />";
         }
  
         /* 請求書明細 */
         $gyo_num = 0;
-        
+echo "foreach";      
         foreach ($list as $gyo => $rec) {
             
             $gyo_num++;
@@ -171,7 +172,16 @@ class Seikyu extends ModelBase {
                 $stjkn, $edjkn, $hbstjkn, $hbedjkn, $zgrt, $tnk, $kin, $login, parent::getUdate(), parent::getUtime() ); 
 
                 $stmt = sqlsrv_query( $this->conn, $sql, $params );
-
+if( $stmt === false ) {
+    if( ($errors = sqlsrv_errors() ) != null) {
+        foreach( $errors as $error ) {
+            echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+            echo "code: ".$error[ 'code']."<br />";
+            echo "message: ".mb_convert_encoding( $error[ 'message'] ,  "UTF-8" )."<br />";
+            print_r($params);
+        }
+    }
+}
                 if( $stmt === false) {
                     $tran = false;
                     break;//exit for
@@ -180,6 +190,8 @@ class Seikyu extends ModelBase {
             }
 
         }
+
+echo "請求書ヘッダー";      
         
         /* 請求書ヘッダー */
         //insert
@@ -194,16 +206,26 @@ class Seikyu extends ModelBase {
         }
         
         $sql = $sql." VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+echo $sql;
+        $params = array( $ukeno, $ukeno, $ukedt, $seiurl, '', 0, 0, $ukedt, $nen,　$kyacd, $dannm, $dannm2, $daihyo, $renraku, $seikin, $paylmtdt, $login, parent::getUdate(), parent::getUtime() );
+print_r($params);
 
-        $params = array( $ukeno, $ukeno, 0, $seiurl, '', 0, 0, $ukedt, $nen,$kyacd, $dannm, $dannm2, $daihyo, $renraku, $seikin, $paylmtdt, $login, parent::getUdate(), parent::getUtime() );
-
-       $stmt = sqlsrv_query( $this->conn, $sql, $params );
+        $stmt = sqlsrv_query( $this->conn, $sql, $params );
 
         if( $stmt === false) {
             $tran = false;
             //break;//exit for
         }
-
+if( $stmt === false ) {
+    if( ($errors = sqlsrv_errors() ) != null) {
+        foreach( $errors as $error ) {
+            echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+            echo "code: ".$error[ 'code']."<br />";
+            echo "message: ".mb_convert_encoding( $error[ 'message'] ,  "UTF-8" )."<br />";
+            print_r($params);
+        }
+    }
+}
         /* If both queries were successful, commit the transaction. */
         /* Otherwise, rollback the transaction. */
         //parent::begin_transaction( $this->conn , $tran );
