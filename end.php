@@ -229,36 +229,53 @@ for ($i = 0; $i < $meisai_count; $i++) {
 }//end_for
 
 /* 請求データ作成 */
+include("model/Seikyu.php");
+//echo "test1";
+$Seikyu = new Seikyu();
+//echo "test1";
+//$ukeno = 700;
+$ukedt = date('Ymd');//20151214;
+//$kyacd = 1; 
+
+$list = array();
+
+for ($i = 0 ; $i < $meisai_count; $i++) {
+	$list[] = array(
+		'gyo' => $_POST[ 'gyo'.$i ], 'usedt' => $_POST[ 'usedt'.$i ], 'yobi' => '月', 'yobikb' => $_POST[ 'yobikb'.$i ],
+		'rmcd' => $_POST[ 'rmcd'.$i ], 'rmnmr' => '会議室８０１', 'stjkn' => $_POST[ 'stjkn'.$i ], 'edjkn' => $_POST[ 'edjkn'.$i ], 
+		'hbstjkn' => $_POST[ 'hbstjkn'.$i ], 'hbedjkn' => $_POST[ 'hbedjkn'.$i ], 'piano' => $_POST[ 'piano'.$i ],
+		'rmkin'=> $_POST[ 'rmkin'.$i ], 'hzkin'=>$_POST[ 'hzkin'.$i ]);
+}
+
+//$list[] = array('gyo' => 1, 'usedt' => '20151213', 'yobi' => '月', 'yobikb' => 1,'rmcd' => '801', 'rmnmr' => '会議室８０１', 'stjkn' => 900, 'edjkn' => 1200 , 
+//	'hbstjkn' => 900 , 'hbedjkn' => 1200, 'piano'=>1 ,'rmkin'=> 16000 , 'hzkin'=>6500);
+//echo "test2";
+//print_r($list);
+$Seikyu->seikyu( $ukeno, $ukedt, $kyacd, $list );
+
 //echo("sei_list_before");
-$sei_list = array();
+//$sei_list = array();
 
 //for ($i = 0 ; $i < $meisai_count; $i++) {
 	
-	$i = 0;
+//	$i = 0;
 	//略称を取得する必要がある
-	$rmnm = "";//mb_convert_encoding( $_POST[ 'rmnm'.$i ], "SJIS","UTF-8");
-$sei_list[] = array('gyo' => 1, 'usedt' => '20151213', 'yobi' => '月', 'yobikb' => 1,'rmcd' => '801', 'rmnmr' => '会議室８０１', 'stjkn' => 900, 'edjkn' => 1200 , 
-	'hbstjkn' => 900 , 'hbedjkn' => 1200, 'piano'=>1 ,'rmkin'=> 16000 , 'hzkin'=>6500);	
-/*	$sei_list[] = array(
+//	$rmnm = "";//mb_convert_encoding( $_POST[ 'rmnm'.$i ], "SJIS","UTF-8");
+//$sei_list[] = array('gyo' => 1, 'usedt' => '20151213', 'yobi' => '月', 'yobikb' => 1,'rmcd' => '801', 'rmnmr' => '会議室８０１', 'stjkn' => 900, 'edjkn' => 1200 , 
+//	'hbstjkn' => 900 , 'hbedjkn' => 1200, 'piano'=>1 ,'rmkin'=> 16000 , 'hzkin'=>6500);	
+/*$sei_list[] = array(
 		'gyo' => $_POST[ 'gyo'.$i ], 'usedt' => $_POST[ 'usedt'.$i ], 'yobi' => '月', 'yobikb' => $_POST[ 'yobikb'.$i ],
 		'rmcd' => $_POST[ 'rmcd'.$i ], 'rmnmr' => '会議室８０１', 'stjkn' => $_POST[ 'stjkn'.$i ], 'edjkn' => $_POST[ 'edjkn'.$i ], 
 		'hbstjkn' => $_POST[ 'hbstjkn'.$i ], 'hbedjkn' => $_POST[ 'hbedjkn'.$i ], 'piano' => $_POST[ 'piano'.$i ],
 		'rmkin'=> $_POST[ 'rmkin'.$i ], 'hzkin'=>$_POST[ 'hzkin'.$i ]);
 */	
 //}
-//echo("sei_list");
-print_r($sei_list);
-$Seikyu = new Seikyu();
-$ukeno = 9990;
-$ukedt = 20151214;
-$kyacd = 1; 
-//$Seikyu->seikyu( $ukeno, $ukedt, $kyacd, $sei_list );
-$Seikyu->seikyu( $ukeno, $ukedt, $kyacd, $sei_list );
+
 echo("sei_list_after");
 
-if(!$ret){
-	die("セイキュウエラー");
-}
+//if(!$ret){
+//	die("セイキュウエラー");
+//}
 
 //クエリー結果の開放
 sqlsrv_free_stmt($result);

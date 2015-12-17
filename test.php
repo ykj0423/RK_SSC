@@ -14,7 +14,7 @@ echo "test1";
 $Seikyu = new Seikyu();
 echo "test1";
 
-$ukeno = 8888;
+$ukeno =771;
 $ukedt = 20151214;
 $kyacd = 1; 
 
@@ -39,6 +39,8 @@ echo "test1";
 
 $list[] = array('gyo' => 1, 'usedt' => '20151213', 'yobi' => '月', 'yobikb' => 1,'rmcd' => '801', 'rmnmr' => '会議室８０１', 'stjkn' => 900, 'edjkn' => 1200 , 
 	'hbstjkn' => 900 , 'hbedjkn' => 1200, 'piano'=>1 ,'rmkin'=> 16000 , 'hzkin'=>6500);
+$list[] = array('gyo' => 2, 'usedt' => '20151213', 'yobi' => '月', 'yobikb' => 1,'rmcd' => '802', 'rmnmr' => '会議室８０２', 'stjkn' => 900, 'edjkn' => 1200 , 
+      'hbstjkn' => 900 , 'hbedjkn' => 1200, 'piano'=>1 ,'rmkin'=> 16000 , 'hzkin'=>6500);
 echo "test2";
 print_r($list);
 $Seikyu->seikyu( $ukeno, $ukedt, $kyacd, $list );
