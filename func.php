@@ -135,4 +135,76 @@ function format_tel( $param1, $param2, $param3, $delimiter )
 
     return false;
 }
+
+function format_zipcd( $param1, $param2, $delimiter )
+{
+
+    if( !empty($param1) && !empty($param2) ){
+        
+        if( is_numeric($param1) && is_numeric($param2) ){
+            return $param1.$delimiter.$param2;
+        }
+    
+    }
+
+    return false;
+}
+function judge_tyusyo( $shinon, $gyscd, $ninzu )
+{
+
+	//製造業、建設業、運輸業、漁業林業、鉱業、電気・ガス・熱供給・水道業、通信業、金融・保険業、不動産業・物品賃貸業、教育・学習支援業、医療・福祉
+	if( $gyscd == 4 ){
+		
+		if( ( $shinon <= 30000 ) || ( $ninzu <= 300 ) ){
+				return true;
+		}
+		
+		return false;
+	}
+
+	//卸売業
+	if( $gyscd == 3 ){
+	
+		if( ( $shinon <= 10000 ) || ( $ninzu <= 100 ) ){
+			return true;
+		}
+
+		return false;
+	}
+
+	//サービス業
+	if( $gyscd == 2 ){
+	
+		if( ( $shinon <= 5000 ) || ( $ninzu <= 100 ) ){
+			return true;
+		}
+
+		return false;
+	}
+
+	//小売業
+	if( $gyscd == 2 ){
+	
+		if( ( $shinon <= 5000 ) || ( $ninzu <= 50 ) ){
+			return true;
+		}
+
+		return false;
+	}
+
+	
+	return false;
+}
+
+//DB登録のためSJISにコンバート
+ function convert_to_SJIS( $str )
+ {
+
+    if( isset( $str ) && !empty( $str ) ){
+        return mb_convert_encoding($str, "SJIS", "UTF-8");
+    }else{
+        return "";
+    }
+
+}
 ?>

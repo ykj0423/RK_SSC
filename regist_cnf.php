@@ -59,7 +59,13 @@ print_r($_POST);
       </tr>
       <tr>
         <th>利用者名（カナ）</th>
-        <td><?php echo mb_convert_kana($_POST['dannmk'],k);//echo mb_convert_kana($Kyaku->put_data('dannmk'),k); ?></td>
+        <td>
+        <?php
+          $dannmk = mb_convert_kana($_POST['dannmk'],'k');
+          //echo mb_convert_kana($Kyaku->put_data('dannmk'),k);
+          echo $dannmk;
+        ?>
+      </td>
       </tr>
       <tr>
         <th>代表者名</th>
@@ -71,11 +77,21 @@ print_r($_POST);
       </tr>
       <tr>
         <th >連絡者TEL</th>
-        <td><?php echo format_tel( $_POST['tel2_1'], $_POST['tel2_2'], $_POST['tel2_3'], "-" ); ?></td>
+        <td>
+        <?php 
+          $tel2 = format_tel( $_POST['tel2_1'], $_POST['tel2_2'], $_POST['tel2_3'], "-" );
+          echo $tel2;
+        ?>
+        </td>
       </tr>
       <tr>
         <th>FAX</th>
-        <td><?php echo format_tel( $_POST['fax_1'], $_POST['fax_2'], $_POST['fax_3'], "-" ); ?></td>
+        <td>
+        <?php 
+          $fax =  format_tel( $_POST['fax_1'], $_POST['fax_2'], $_POST['fax_3'], "-" );
+          echo $fax;
+        ?>
+        </td>
       </tr>
       <tr>
         <th>メールアドレス</th>
@@ -85,7 +101,13 @@ print_r($_POST);
         <th>住所</th>
         <td>
           〒651-0086<br>
-          <?php echo $_POST['adr1'];//$Kyaku->put_data('adr1'); ?>
+          <?php 
+            $zipcd = format_zipcd( $_POST['zipcd_1'],  $_POST['zipcd_2'], "-" );
+            echo $zipcd;
+            echo "<br>";
+            echo $_POST['adr1'];
+            //$Kyaku->put_data('adr1'); 
+          ?>
         </td>
       </tr>
       <tr>
@@ -99,7 +121,6 @@ print_r($_POST);
           if(!empty($code)){
             
             $sql = "SELECT name FROM mm_gyous where code =".$code;
-            echo $sql."<br>";
             $stmt = sqlsrv_query( $conn, $sql );
           
             if( $stmt === false) {
@@ -107,9 +128,6 @@ print_r($_POST);
             }
 
             while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
-                //$gyous_name = $row['name'];
-               // $gyous_name = mb_convert_encoding($gyous_name, "UTF-8","SJIS");
-                //echo "gyous_name=".$gyous_name;
               echo mb_convert_encoding($row['name'], "UTF-8","SJIS");
             }
 
@@ -120,15 +138,28 @@ print_r($_POST);
       </tr>
       <tr>
         <th>資本金または元入金</th>
-        <td><?php //echo $Kyaku->put_data('sihon'); ?>万円</td>
+        <td><?php echo $_POST['sihon'];//echo $Kyaku->put_data('sihon'); ?>万円</td>
       </tr>
       <tr>
         <th>従業員数</th>
-        <td><?php //echo $Kyaku->put_data('jygsu'); ?>名</td>
+        <td><?php echo $_POST['jygsu'];//echo $Kyaku->put_data('jygsu'); ?>名</td>
       </tr>
     </table>
-
-    <?php  //$_SESSION['Kyaku'] = serialize( $Kyaku );?>
+<?php 
+echo "<input type='text' name='dannm' id='dannm' value=\"".$_POST[ 'dannm' ]."\">";
+echo "<input type='text' name='dannmk' id='dannmk' value=\"".$dannmk."\">";
+echo "<input type='text' name='daihyo' id='daihyo' value=\"".$_POST[ 'daihyo' ]."\">";
+echo "<input type='text' name='renraku' id='renraku' value=\"".$_POST[ 'renraku' ]."\">";
+echo "<input type='text' name='tel2' id='tel2' value=\"".$tel2."\">";
+echo "<input type='text' name='fax' id='fax' value=\"".$fax."\">";
+echo "<input type='text' name='mail' id='mail' value=\"".$_POST[ 'mail' ]."\">";
+echo "<input type='text' name='zipcd' id='zipcd' value=\"".$zipcd."\">";
+echo "<input type='text' name='adr1' id='adr1' value=\"".$_POST[ 'adr1' ]."\">";
+echo "<input type='text' name='gyscd' id='gyscd' value=\"".$_POST[ 'gyscd' ]."\">";
+echo "<input type='text' name='sihon' id='sihon' value=\"".$_POST[ 'sihon' ]."\">";
+echo "<input type='text' name='jygsu' id='jygsu' value=\"".$_POST[ 'jygsu' ]."\">";
+//$_SESSION['Kyaku'] = serialize( $Kyaku );
+?>
     <div style="text-align:center">
       <a class="btn btn-default btn-lg mb20" href="regist.php" role="button"><< 修正する</a>
       <a class="btn btn-primary btn-lg mb20" href="regist_end.php" role="button">送信する　>></a>

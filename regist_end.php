@@ -6,6 +6,8 @@ $errmsg = "";
 $pageTitle = "新規利用者登録[完了]";
 include('include/header.php');
 include('model/Kyaku.php');
+require_once( "func.php" );
+
 /**
  * ReserveKeeperWeb予約システム
  *
@@ -27,14 +29,211 @@ if( isset( $_POST['submit'] ) && !empty( $_POST['submit'] ) ){
 }
 
 //利用者情報デシリアライズ
-$Kyaku = unserialize( $_SESSION['Kyaku'] );
+//$Kyaku = unserialize( $_SESSION['Kyaku'] );
 //DB再接続
-$Kyaku->connectDb();
+//$Kyaku->connectDb();
 //顧客登録
-$Kyaku->add_kyaku();
+//$Kyaku->add_kyaku();
+
+
+$ini = parse_ini_file('config.ini');        
+$serverName = $ini['SERVER_NAME'];
+$connectionInfo = array( "Database"=>$ini['DBNAME'], "UID"=>$ini['UID'], "PWD"=>$ini['PWD'] );
+$conn = sqlsrv_connect( $serverName, $connectionInfo);
+
+if( $conn === false ) {           
+    die( print_r( sqlsrv_errors(), true));
+}
+
+/* 団体名 */
+$dannm　= $_POST['dannm'];
+$dannm2　= "";
+$dannmk = $_POST['dannmk'];
+
+/* 代表者名 */
+$daihyo　= $_POST['daihyo'];
+
+/* 連絡者名 */
+$renraku　= $_POST['renraku'];
+
+/* 電話番号 */
+$tel1　= "";
+$tel2　= $_POST['tel2'];
+
+/* FAX番号 */
+$fax　= $_POST['fax'];
+
+/* URL */
+$url　= "";
+
+/* メールアドレス */
+$mail　= $_POST['mail'];
+
+/* 郵便番号 */
+$zipcd = $_POST['zipcd'];
+
+/* 住所 */
+$ad1 = $_POST['ad1'];
+$ad2 = "";
+
+/* 業種コード */
+$gyscd = $_POST['gyscd'];
+
+/* 資本金 */
+$shinon = $_POST['shinon'];
+
+/* 業種コード */
+$jygsu　= $_POST['jygsu']
+
+/* 中小企業判断（１） */
+$kyakb = 1;　//一般
+
+if( judge_tyusyo ( $shinon　, $gyscd, $jygsu　) ){
+    $kyakb = 2;　//中小企業
+}
+
+/* 中小企業判断（２） */
+$sql = "select tyusyonm from mt_tyusyo where setkb = 1";
+
+$stmt = sqlsrv_query( $conn, $sql );
+
+if( $stmt === false) {
+    return false;
+}
+
+while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_NUMERIC ) ) {
+    
+    $tyusyonm = trim( $row[0] );
+
+    if( strpos( $dannm , $tyusyonm ) !== false){
+        //文字列が含まれている場合
+        $kyakb = 2;　//中小企業
+        break;
+    }
+
+}
+
+$sql = "select tyusyonm from mt_tyusyo where setkb = 2 AND tyusyonm = '".$dannm."'";
+
+$stmt = sqlsrv_query( $conn, $sql );
+
+if( $stmt === false) {
+    return false;
+}
+
+while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_NUMERIC ) ) {
+    
+    if( trim( $row[0] ) == trim( $dannm ))｛
+
+        //文字列が一致する場合
+        $kyakb = 2;　//中小企業
+        break;
+    
+    }
+
+}
+
+
+/* 後納ドメイン判断 */
+$sql = "select domain,kyakb,kounoukb from mt_tyusyo";
+
+$stmt = sqlsrv_query( $conn, $sql );
+
+if( $stmt === false) {
+    return false;
+}
+
+while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_NUMERIC ) ) {
+
+    if( strpos( $mail, $row[0] ) !== false　){    
+  
+        //文字列が含まれる場合
+        $kyakb = $row[1];　//1:一般　2:中小企業 99:その他
+        $kounoukb = $row[2];　//1:後納
+        break;
+    
+    }
+
+}
+
+
+/* 顧客コード採番 */
+$kyaku_cd = 100000;
+
+$sql = "select max(kyacd) from mt_kyaku where kyacd >= ".$kyaku_cd;
+
+$stmt = sqlsrv_query( $conn, $sql );
+
+if( $stmt === false) {
+    return false;
+}
+
+while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_NUMERIC ) ) {
+    $kyaku_cd = intval( $row[0] ) + 1;
+}
+
+/* WEBログインID */
+$wloginid = (string)$kyaku_cd;
+
+/* WEBパスワード */
+$wpwd = (string)hash('adler32', $kyaku_cd );
+
+/* WEB利用者区分 */
+$wuserkb = 1;
+
+/* 登録完了メール送信フラグ */
+$sndflg = 0;
+
+/* 備考 */
+$biko = "";
+
+/* コンピュータ名 */
+$login = $wloginid;
+
+/* WEB最終ログイン日付 */
+$wlastlogindt = 0;
+
+/* WEB利用開始日 */
+$wsdate = date('Ymd');
+
+/* 更新日付 */
+$udate = date('Ymd');
+$wudate = date('Ymd');
+
+/* WEB更新時間 */
+$utime = date('Hs');
+$wutime = date('Hs');
+
+echo convert_to_SJIS($str);
+
+/* 顧客マスタ登録 */
+$sql = "　INSERT INTO mt_kyaku(kyacd,dannm,dannm2,dannmk,daihyo,renraku,tel1,tel2,fax,url,mail,zipcd,adr1,adr2,
+    gyscd,sihon,jygsu,kyakb,wuserkb,kounoukb,wloginid,wpwd,sndflg,biko,login,udate,utime,wlastlogindt,wsdate,wudate,wutime)";
+$sql .= " VALUES　(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+  
+$test = array( $kyacd, $dannm, $dannm2, $dannmk, $daihyo, $renraku, $tel1, $tel2, $fax, $url, $mail, $zipcd, $adr1, $adr2,
+    $gyscd, $sihon, $jygsu, $kyakb, $wuserkb, $kounoukb, $wloginid, $wpwd, $sndflg, $biko, $login, $udate, $utime, $wlastlogindt, $wsdate, $wudate, $wutime);
+print_r($test);
+
+$params = array( 
+    $kyacd, convert_to_SJIS( $dannm ), convert_to_SJIS( $dannm2 ), convert_to_SJIS( $dannmk ) , convert_to_SJIS( $daihyo ) , convert_to_SJIS( $renraku ), 
+    $tel1, $tel2, $fax, $url, $mail, $zipcd, convert_to_SJIS( $adr1 ), convert_to_SJIS( $adr2 ),
+    $gyscd, $sihon, $jygsu, $kyakb, $wuserkb, $kounoukb, $wloginid, $wpwd, $sndflg, $biko, $login, $udate, $utime, $wlastlogindt, $wsdate, $wudate, $wutime);
+
+        
+$stmt = sqlsrv_query( $this->conn, $sql, $params);
+
+if( $stmt === false) {
+    echo "false:".$sql."<br>";
+    print_r($params);
+    print_r( sqlsrv_errors()) ;
+    return false;
+}
 
 //エラーメッセージ
 include('include/err.php');
+
+
 ?>
 <p class="bg-head text-right">神戸市産業振興センター</p>
     <h1><span class="midashi">|</span>利用者登録[完了]</h1>
