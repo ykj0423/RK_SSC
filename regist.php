@@ -18,9 +18,12 @@ include('model/Kyaku.php');
  * @license    G&G Co.ltd.
  * @version    0.1
 **/
+echo "test";
 if( isset( $_POST['submit'] ) && !empty( $_POST['submit'] ) ){
         
     /* TODO　入力チェック */
+    $errmsg = false;
+    /*----*/
     if ( !$errmsg ) {
 
         //利用者クラス
@@ -39,6 +42,12 @@ if( isset( $_POST['submit'] ) && !empty( $_POST['submit'] ) ){
         $Kyaku->push_data( $_POST, 'zipcd_1', true, false　);        
         $Kyaku->push_data( $_POST, 'adr1', true, false　);
         $Kyaku->push_data( $_POST, 'gyscd', true, false　);
+        $Kyaku->push_data( $_POST, 'gysnm', true, false　);
+        
+        $gysnm = $Kyaku->get_gyous_name($_POST['gyscd']);
+        $Kyaku->push_data_val( 'gysnm', $gysnm　);
+        
+echo "test";
         $Kyaku->push_data( $_POST, 'sihon', true, false　);
         $Kyaku->push_data( $_POST, 'jygsu', true, false　);
 
@@ -61,7 +70,7 @@ include('include/err.php');
         <a href="loginqa.html#regist"   class="btn alert-danger" target="window_name"  onClick="disp('loginqa.html#regist')"><li class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">&nbsp;入力にあたってのご注意はこちら>></li></a> 
       </div>
   </div>
-  <form role="form" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+  <form role="form" method="POST" action="regist_cnf.php">
     <div class="form-group">
       <table id="regist" align="center" class="table table-bordered table-condensed  form-inline f120" >
           <th >利用者名<span class="red">(必須)</span></th>
@@ -131,6 +140,7 @@ include('include/err.php');
           <th >業種<span class="red">(必須)</span></th>
           <td>
             <!-- TODO DBから取得　-->
+            <?php $sql = "SELECT code,name FROM mm_gyous order by code"; ?>
             <label class="mr10"><input name="gyscd" type="radio" value="4">製造・建設・運輸・その他</label>
             <label class="mr10"><input name="gyscd" type="radio" value="1">小売業</label>
             <label class="mr10"><input name="gyscd" type="radio" value="2">サービス業</label>

@@ -57,6 +57,28 @@ class Kyaku extends ModelBase {
         return 1;//暫定    
     }
     
+    //電話番号
+    public function get_tel1() {
+        return $this->data['tel1_1']."-".$this->data['tel1_2']."-".$this->data['tel1_3'];
+    }
+
+    //電話番号
+    public function get_tel2() {
+        return $this->data['tel2_1']."-".$this->data['tel2_2']."-".$this->data['tel2_3'];
+    }
+
+    //FAX番号
+    public function get_fax() {
+        return $this->data['fax_1']."-".$this->data['fax_2']."-".$this->data['fax_3'];
+    }
+
+
+    public function push_data_val($key_name,$val) {
+
+        $this->data[ $key_name ] = $val;
+
+    }
+
     public function push_data( $source_array, $key_name, $require , $beZero　) {
         //見直しが必要かもしれない
         
@@ -96,6 +118,7 @@ class Kyaku extends ModelBase {
 
     }
 
+
     /*--------------------
     // ログイン処理
     ---------------------*/
@@ -122,7 +145,34 @@ class Kyaku extends ModelBase {
         }
 
     }
-    
+ 
+
+    /*--------------------
+    // メールアドレス取得処理
+    ---------------------*/
+    public function get_gyous_name( $code ) {
+        
+        $gyous_name = "";
+ echo "test1";       
+        $sql = "SELECT name FROM mm_gyous where code =".$code;
+echo $sql;
+        $stmt = sqlsrv_query( $this->conn, $sql );
+        
+        if( $stmt === false) {
+            echo "false:".$sql."<br>";
+            print_r( sqlsrv_errors()) ;
+            //return false;//TODO
+        }
+
+        while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+            $gyous_name = $row['name'];
+            echo "gyous_name=".$gyous_name;
+        }
+
+        return $gyous_name;
+
+    }
+
     /*--------------------
     // メールアドレス取得処理
     ---------------------*/
@@ -135,6 +185,8 @@ class Kyaku extends ModelBase {
         $stmt = sqlsrv_query( $this->conn, $sql );
         
         if( $stmt === false) {
+            echo "false:".$sql."<br>";
+            print_r( sqlsrv_errors()) ;
             return false;//TODO
         }
 
@@ -191,22 +243,25 @@ class Kyaku extends ModelBase {
         $this->wloginid = (string)$kyaku_cd;
         $this->wpwd = (string)hash('adler32', $kyaku_cd );
         
-        $sql = "insert into mt_kyaku ( kyacd, dannm, dannm2, dannmk, daihyo, renraku, tel1, tel2,
-            fax, url, mail, zipcd, adr1, adr2, gyscd, sihon, jygsu, kyakb, biko, login, udate, utime, wloginid, wpwd )";
-        $sql .= " values  ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,? )";
+        $sql = "insert into mt_kyaku ( kyacd, dannm, dannm2, dannmk, daihyo, renraku, tel1, tel2,fax, 
+            url, mail, zipcd, adr1, adr2, gyscd, sihon, jygsu, kyakb, biko, login, udate, utime, wloginid, wpwd, kounoukb )";
+        $sql .= " values  ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,? ,? )";
         
-        $params = array( $kyaku_cd, parent::convertToSJIS( $this->data['dannm'] ),
-            "''",parent::convertToSJIS( $this->data['dannmk'] ), parent::convertToSJIS( $this->data['daihyo'] ), 
-            parent::convertToSJIS( $this->data['renraku'] ), "", $this->data['tel2'], $this->data['fax'], "", $this->data['mail'], $this->data['zipcd'],
-            parent::convertToSJIS( $this->data['adr1'] ), parent::convertToSJIS( $this->data['adr2'] ), parent::convertToZero( $this->data['gyscd'] ), parent::convertToZero( $this->data['sihon'] ),parent::convertToZero( $this->data['jygsu'] ), 
-            parent::convertToZero( $this->data['kyakb'] ),"", $this->data['login'], parent::getUdate(),parent::getUtime(),$this->wloginid,$this->wpwd);
+        $params = array( $kyaku_cd, parent::convertToSJIS( $this->data['dannm'] ),"",parent::convertToSJIS( mb_convert_kana( $this->data['dannmk'] , k )),
+                 parent::convertToSJIS( $this->data['daihyo'] ), parent::convertToSJIS( $this->data['renraku'] ), "", $this->get_tel2(), $this->get_fax(),
+                  "", $this->data['mail'], $this->data['zipcd'],
+            parent::convertToSJIS( $this->data['adr1'] ), parent::convertToSJIS( $this->data['adr2'] ), 0,0,0,1,
+            parent::convertToZero( $this->data['gyscd'] ), parent::convertToZero( $this->data['sihon'] ),
+            parent::convertToZero( $this->data['jygsu'] ), 
+            parent::convertToZero( $this->data['kyakb'] ),"", $this->data['login'], 
+            parent::getUdate(),parent::getUtime(), $this->wloginid, $this->wpwd,0 );
         
         $stmt = sqlsrv_query( $this->conn, $sql, $params);
 
         if( $stmt === false) {
             echo "false:".$sql."<br>";
             print_r($params);
-            print_r( sqlsrv_errors(), true) ;
+            print_r( sqlsrv_errors()) ;
             return false;
         }
 

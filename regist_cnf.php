@@ -22,10 +22,10 @@ include('model/Kyaku.php');
 
 if( isset( $_POST['submit'] ) && !empty( $_POST['submit'] ) ){
 
-    if ( !$errmsg ) {
+    /*if ( !$errmsg ) {
         header( 'location: regist_end.php' );
         exit();
-    }
+    }*/
 
 }
 
@@ -33,6 +33,7 @@ $Kyaku = unserialize( $_SESSION['Kyaku'] );
 
 //エラーメッセージ
 include('include/err.php');
+print_r($_POST);
 ?>
 
     <p>入力内容をご確認いただき、問題がなければ「送信する」ボタンを押してください。</p>
@@ -43,7 +44,7 @@ include('include/err.php');
       </tr>
       <tr>
         <th>利用者名（カナ）</th>
-        <td><?php echo  $Kyaku->put_data('dannmk'); ?></td>
+        <td><?php echo mb_convert_kana($Kyaku->put_data('dannmk'),k); ?></td>
       </tr>
       <tr>
         <th>代表者名</th>
@@ -74,7 +75,12 @@ include('include/err.php');
       </tr>
       <tr>
         <th>業種</th>
-        <td>サービス業</td>
+        <td><?php
+        $code = $Kyaku->put_data('gyscd');
+        echo "code= ".$code;
+        $gysnm = $Kyaku->put_data('gysnm');
+        echo "name= ".$gysnm; 
+        ?></td>
       </tr>
       <tr>
         <th>資本金または元入金</th>
@@ -88,7 +94,7 @@ include('include/err.php');
 
     <?php  //$_SESSION['Kyaku'] = serialize( $Kyaku );?>
     <div style="text-align:center">
-      <a class="btn btn-default btn-lg mb20" href="regist.html" role="button"><< 修正する</a>
+      <a class="btn btn-default btn-lg mb20" href="regist.php" role="button"><< 修正する</a>
       <a class="btn btn-primary btn-lg mb20" href="regist_end.php" role="button">送信する　>></a>
     </div>
  </div>
