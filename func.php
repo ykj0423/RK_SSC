@@ -120,5 +120,19 @@ function format_jkn( $param , $delimiter )
 	$val = str_pad( $param, 4, "0", STR_PAD_LEFT );
 	$val = intval( substr( $val, 0, 2 ) ) .  $delimiter . substr( $val , 2, 2 );
 	return $val;
-}	
+}
+
+function format_tel( $param1, $param2, $param3, $delimiter )
+{
+
+    if( !empty($param1) && !empty($param2) && !empty($param3) ){
+        
+        if( is_numeric($param1) && is_numeric($param2) && is_numeric($param3) ){
+            return $param1.$delimiter.$param2.$delimiter.$param3;
+        }
+    
+    }
+
+    return false;
+}
 ?>
