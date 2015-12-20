@@ -125,36 +125,45 @@ if( isset( $_POST[ 'yobi' ] )  && ( count( $_POST[ 'yobi' ] ) > 0 ) ){
 <?php
 /* 施設分類の表示 */
 if( isset( $_POST[ 'bunrui' ] ) && (count( $_POST[ 'bunrui' ] ) > 0) ){
-    //配列代入
-    $bunrui = &$_POST[ 'bunrui' ];
+
+  //配列代入
+  $bunrui = &$_POST[ 'bunrui' ];
    
 }else{
-    //デフォルトではcheck_on
-    $bunrui = array();
+
+  //デフォルトではcheck_on
+  $bunrui = array();
+  
+  if(is_array($rmcls)){
     for ($i = 0; $i < ( count( $rmcls['data'] ) ) ; $i++ ) {
-        array_push( $bunrui , $rmcls['data'][$i]['key'] );
+      array_push( $bunrui , $rmcls['data'][$i]['key'] );
     }
+  }
+
 }
 
-for ($i = 0; $i < ( count( $rmcls['data'] ) ) ; $i++ ) {
-    if( ( array_key_exists( $i, $rmcls['data']) ) && in_array ( $rmcls['data'][$i]['key'] , $bunrui )){
-        echo "<label class=\"checkbox-inline\" for=\"bunrui". $i ."\"><input type=\"checkbox\" name=\"bunrui[]\" id=\"bunrui".$i."\" value=\"". $rmcls['data'][$i]['key'] ."\" checked>". $rmcls['data'][$i]['value'] . "</label>";
-    } else {
-        echo "<label class=\"checkbox-inline\" for=\"bunrui". $i ."\"><input type=\"checkbox\" name=\"bunrui[]\" id=\"bunrui".$i."\" value=\"". $rmcls['data'][$i]['key'] ."\">". $rmcls['data'][$i]['value'] . "</label>";
-    }
-}
+if(is_array($rmcls)){
 
+  for ($i = 0; $i < ( count( $rmcls['data'] ) ) ; $i++ ) {
+      if( ( array_key_exists( $i, $rmcls['data']) ) && in_array ( $rmcls['data'][$i]['key'] , $bunrui )){
+          echo "<label class=\"checkbox-inline\" for=\"bunrui". $i ."\"><input type=\"checkbox\" name=\"bunrui[]\" id=\"bunrui".$i."\" value=\"". $rmcls['data'][$i]['key'] ."\" checked>". $rmcls['data'][$i]['value'] . "</label>";
+      } else {
+          echo "<label class=\"checkbox-inline\" for=\"bunrui". $i ."\"><input type=\"checkbox\" name=\"bunrui[]\" id=\"bunrui".$i."\" value=\"". $rmcls['data'][$i]['key'] ."\">". $rmcls['data'][$i]['value'] . "</label>";
+      }
+  }
+
+}
 ?>
       </td>
           </tr>
           <tr>
-            <th>使用年月</th>
+            <!--th>使用年月</th>
             <td>
               <div id="cal" class="btn-group" data-toggle="buttons">
                 
               <?php
                 
-                for ($i = 0; $i < 13; $i++) {
+                /*for ($i = 0; $i < 13; $i++) {
                   
                   if($cal_month > 12){
                     $cal_month = 1;
@@ -179,12 +188,12 @@ for ($i = 0; $i < ( count( $rmcls['data'] ) ) ; $i++ ) {
 
                   $cal_month++;  
 
-                }
-              
+                }*/
+                
               ?>
               </div>
             </td>
-          </tr>
+          </tr-->
           <tr>
             <th class="pt12">曜日</th>
             <td>
@@ -288,7 +297,7 @@ for ($i = 0; $i < ( count( $room ) ) ; $i++ ) {
 	$rmnm = mb_convert_encoding($room[ $i ][ 'rmnmw' ], "utf8", "SJIS");//施設名称
   $teiin = ltrim( $room[ $i ][ 'capacity' ], '0' );	//定員
   $weblink = $room[ $i ][ 'weblink' ];   			//施設情報
-  $tnk = $room[ $i ][ 'tnk' ];
+  //$tnk = $room[ $i ][ 'tnk' ];
   $asatnk = $room[ $i ][ 'asatnk' ];
   $hirutnk = $room[ $i ][ 'hirutnk' ];
   $yorutnk = $room[ $i ][ 'yorutnk' ];

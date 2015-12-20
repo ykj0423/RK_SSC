@@ -122,6 +122,27 @@ function format_jkn( $param , $delimiter )
 	return $val;
 }
 
+function format_db_jkn( $h , $m )
+{
+	
+	$val = 0;
+
+	if(is_numeric($h)){
+
+		$val = intval( $h ) * 100;
+
+	}
+	
+	if(is_numeric($m)){
+
+		$val = intval( $val ) + intval( $m );
+
+	}
+
+	return $val;
+
+}
+
 function format_tel( $param1, $param2, $param3, $delimiter )
 {
 

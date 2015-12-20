@@ -126,7 +126,7 @@ class Kyaku extends ModelBase {
         
         $get_pwd="";
 
-        $sql = "SELECT * FROM mt_kyaku WHERE wloginid = '". $wloginid."'";
+        $sql = "SELECT * FROM mt_kyaku WHERE wloginid = '". $wloginid."' AND wuserkb = 1";
 
         $stmt = sqlsrv_query( $this->conn, $sql );
         

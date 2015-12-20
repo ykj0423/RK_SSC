@@ -59,6 +59,7 @@ class Reserve extends ModelBase {
                 $has_rows = sqlsrv_has_rows ( $stmt );
                 
                 if ( $has_rows ){
+                    echo $sql;
                     $tran =  false;
                 }
         
@@ -72,6 +73,7 @@ class Reserve extends ModelBase {
             $has_rows = sqlsrv_has_rows ( $stmt );
             
             if ( $has_rows ){
+                echo $sql;
                 $tran =  false;
             }
 
@@ -132,6 +134,7 @@ class Reserve extends ModelBase {
             
                 if( $stmt === false) {
                     $tran = false;
+                    echo $sql;
                     break;//exit for
                 }
             
@@ -178,6 +181,7 @@ class Reserve extends ModelBase {
             
                 if( $stmt === false) {
                     $tran = false;
+                    echo $sql;
                     break;//exit for
                 }
 

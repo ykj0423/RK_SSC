@@ -20,7 +20,7 @@
 <![endif]-->
 <script>
 jQuery(function () {
-	   alert();
+
     //HTMLを初期化  
     $("table.rsv_input tbody.list").html("");
 
@@ -51,7 +51,7 @@ jQuery(function () {
 		var td20 = $("<div></div>");
 		var td21 = $("<div></div>");
 		var td22 = $("<div></div>");
-		//var td23 = $("<div></div>");
+		var td23 = $("<div></div>");
 		//var td24 = $("<div></div>");
 		//var td25 = $("<div></div>");
 		/* 日付のフォーマット もう少しスマートな方法がないか検討*/
@@ -68,7 +68,7 @@ jQuery(function () {
 		var gyo = i + 1;
 
 		$("#list").append(tr);
-		tr.append( td1 ).append( td2 ).append( td3 ).append( td4 ).append( td5 ).append( td6 ).append( td7 ).append( td8 ).append( td9 ).append( td10 ).append( td11 ).append( td12 ).append( td13 ).append( td14 ).append( td15 ).append( td16 ).append( td17 ).append( td18 ).append( td19 ).append( td20 ).append( td21 ).append( td22 );//.append( td23 ).append( td24 ).append( td25 );
+		tr.append( td1 ).append( td2 ).append( td3 ).append( td4 ).append( td5 ).append( td6 ).append( td7 ).append( td8 ).append( td9 ).append( td10 ).append( td11 ).append( td12 ).append( td13 ).append( td14 ).append( td15 ).append( td16 ).append( td17 ).append( td18 ).append( td19 ).append( td20 ).append( td21 ).append( td22 ).append( td23 );//.append( td24 ).append( td25 );
 		td1.html( useyyyy + "/" + usemm + "/" +  usedd + " ("+ yobi + ")<br>" + objData[i]['rmnm'] );
 		td2.html( objData[i]['jkn1']  + "～" + objData[i]['jkn2']  );
 
@@ -120,12 +120,18 @@ jQuery(function () {
 		
 		var rmkin;
 		var hzkin;
+		var comlkb;
+
 		rmkin = parseInt( objData[i]['rmkin'] );
 		hzkin = parseInt( objData[i]['hzkin'] );
+		comlkb = 0;
 		
 		if((objData[i]['commercially']==1)&&(objData[i]['fee']==1)){
+
 			rmkin = rmkin * 1.5;
+			comlkb = 1
 			objData[i]['rmkin'] = rmkin;
+
 		}
 		
 		total = parseInt(total) + parseInt(rmkin) + parseInt(objData[i]['hzkin']);
@@ -151,12 +157,13 @@ jQuery(function () {
 		td20.html( "<input type='hidden' name='rmnm" + i + "' id='rmnm" + i + "' value='" + objData[i]['rmnm'] + "'>");//施設名
 		td21.html( "hstjkn<input type='text' name='hbstjkn" + i + "' id='hbstjkn" + i + "' value='" + hstjkn + "'>");
 		td22.html( "hedjkn<input type='text' name='hbedjkn" + i + "' id='hbedjkn" + i + "' value='" + hedjkn + "'>");
+		td23.html( "hedjkn<input type='text' name='comlkb" + i + "' id='comlkb" + i + "' value='" + comlkb + "'>");
 	
 //（空室マーク）usedt:使用日、rmcd:施設コード、timekb:時間帯
 //（請求データ）usedt:使用日、yobi:曜日、yobikb:曜日区分、rmcd:施設コード、rmnm:施設名、
 //stjkn：開始時間、edjkn：終了時間、hstjkn本番開始時間、hedjkn:本番終了時間、piano：ピアノ区分、rmkin：施設使用料金額、hzkin：付属設備使用料金額
 
-alert("mei");
+//alert("mei");
 
 	}
 	
@@ -210,7 +217,7 @@ alert("mei");
 //echo "<br>GET";
 //print_r($_GET);
 
-include("navi.php"); 
+//include("navi.php"); 
 require_once( "func.php" );
 require_once( "model/db.php" );
 include("model/Kyaku.php"); 
@@ -238,11 +245,23 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 	<!--form name="confirm_form" id="confirm_form" role="form" action="end.php"　method="post"-->
 	<form class="form-horizontal" name="confirm_form" id="confirm_form" role="form" method="post">
 		<?php 
+			
 			echo "<input type='hidden' name='kaigi' id='kaigi' value=\"".$_POST[ 'kaigi' ]."\">";
 			echo "<input type='hidden' name='riyokb' id='riyokb' value=\"".$_POST[ 'riyokb' ]."\">";
-			echo "<input type='hidden' name='naiyo' id='riyokb' value=\"".$_POST[ 'naiyo' ]."\">";
+			
+			$str_naiyo = "<input type='hidden' name='naiyo' id='riyokb' value=\"";
+
+			if(isset($_POST[ 'naiyo' ])){
+				$str_naiyo .= $_POST[ 'naiyo' ];	
+			}
+			
+			$str_naiyo .= "\">";
+			//echo $str;
+
+			//echo "<input type='hidden' name='naiyo' id='riyokb' value=\"".$_POST[ 'naiyo' ]."\">";
 			echo "<input type='hidden' name='sekinin' id='riyokb' value=\"".$_POST[ 'sekinin' ]."\">";
 		?>
+
 		<table id ="rsv_input" class="table table-bordered table-condensed  form-inline">
 		    <tbody>
 		        <tr><th colspan="8">お申込み内容</th></tr>

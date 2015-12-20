@@ -662,14 +662,14 @@ class DB
 		$ret = array();
 		
 		$sql = "select code , name from mm_riyo"; 
-		
-		if (func_num_args() > 0)
-		{
-			$sql = $sql." where  code = ".func_get_arg(0);;
-		}
+		//if (func_num_args() > 0)
+		//{
+		//	$sql = $sql." where  code = ".func_get_arg(0);;
+		//}
 		
 		$sql = $sql." order by code";
-
+    echo $sql;
+    
 		$result = sqlsrv_query( $this->con, $sql );
 
 		if( $result === false ) {

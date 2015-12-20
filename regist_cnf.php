@@ -40,14 +40,11 @@ if( $conn === false ) {
     die( print_r( sqlsrv_errors(), true));
 }
 
-
 //$Kyaku = unserialize( $_SESSION['Kyaku'] );
 
 //エラーメッセージ
 include('include/err.php');
 print_r($_POST);
-
-
 
 ?>
 

@@ -11,7 +11,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta NAME="ROBOTS" CONTENT="NOINDEX,NOFOLLOW,NOARCHIVE">
-<title>予約申込み[入力]　 | <?php echo $_SESSION['webrk']['sysname']; ?></title>
+<title>予約申込み[入力]　 | <?php //echo $_SESSION['webrk']['sysname']; ?></title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/custom.css" rel="stylesheet">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -29,10 +29,19 @@ include("model/Kyaku.php");
 require_once( "func.php" );
 require_once( "model/db.php" );
 
+$ini = parse_ini_file('config.ini');        
+$serverName = $ini['SERVER_NAME'];
+$connectionInfo = array( "Database"=>$ini['DBNAME'], "UID"=>$ini['UID'], "PWD"=>$ini['PWD'] );
+$conn = sqlsrv_connect( $serverName, $connectionInfo);
+
+if( $conn === false ) {           
+    die( print_r( sqlsrv_errors(), true));
+}
+
 /* データベース接続 */
-$db = new DB;
-$conErr = $db->connect();
-if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
+//$db = new DB;
+//$conErr = $db->connect();
+//if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 
 //別途validationを実装
 class input_validation
@@ -132,7 +141,13 @@ $Kyaku->get_user_info( $_SESSION['wloginid'] );
   	<tr>
   		<th colspan="2" width="20%">行事名<span class="text-danger">（必須)</span></th>
   		<td colspan="5" width="70%">
-  			<input type="text"  class="form-control" name="kaigi" id="kaigi" value="<?php echo $_POST[ 'kaigi' ]; ?>" style="width:70%">
+  			<input type="text"  class="form-control" name="kaigi" id="kaigi" 
+  			value="<?php 
+  					if( isset($_POST['kaigi']) ){
+  						echo $_POST['kaigi']; 	
+  					}
+  				?>" 
+  			style="width:70%">
   			<br>こちらの内容が案内板に表示されます。<span class="note">（例：人材育成セミナー、ピアノ発表会、幹部会議…)</span>
   		</td>
   	</tr>
@@ -142,21 +157,53 @@ $Kyaku->get_user_info( $_SESSION['wloginid'] );
   		<select  class="form-control" name="riyokb" id="riyokb">
 		<option value="">(選択してください)</option>
 	<?php 
-	//利用目的をマスタから読み込む
-	$riyo = $db->get_mm_riyo();
 
+		/* 利用目的 */
+		$sql = "select code , name from mm_riyo order by code";
+    
+		$result = sqlsrv_query( $conn, $sql );
+
+		if( $result === false ) {
+			 //echo $sql;
+			 die( print_r( sqlsrv_errors(), true));
+		}
+
+		while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_NUMERIC) ) {
+			
+			$riyonm =  mb_convert_encoding( $row[1], "UTF-8", "SJIS" );	
+			
+			if( isset($_POST['riyokb']) ){
+
+				if ( $_POST[ 'riyokb' ] == $row[0] ){
+					echo "<option value=\"".$row[0]."\" selected>".$riyonm."</option>";
+				}else{
+					echo "<option value=\"".$row[0]."\">".$riyonm."</option>";
+				}
+	
+			}else{
+
+				echo "<option value=\"".$row[0]."\">".$riyonm."</option>";
+			}
+		}
+
+
+	/*$riyo = $db->get_mm_riyo();
 	for ($i = 0; $i < ( count( $riyo ) ) ; $i++ ) {
 	
 		$riyocd = $riyo[ $i ][ 'code' ];   			//施設コード
 		$riyonm = mb_convert_encoding($riyo[ $i ][ 'name' ], "utf8", "SJIS");//施設名称
+  		
+  		if( isset($_POST['riyokb']) ){
 
-		if ( $_POST[ 'riyokb' ] == $riyocd ){
-			echo "<option value=\"".$riyocd."\" selected>".$riyonm."</option>";
-		}else{
-			echo "<option value=\"".$riyocd."\">".$riyonm."</option>";
+			if ( $_POST[ 'riyokb' ] == $riyocd ){
+				echo "<option value=\"".$riyocd."\" selected>".$riyonm."</option>";
+			}else{
+				echo "<option value=\"".$riyocd."\">".$riyonm."</option>";
+			}
+	
 		}
 	
-	}
+	}*/
 	
 	?>
   		</select>
@@ -165,13 +212,26 @@ $Kyaku->get_user_info( $_SESSION['wloginid'] );
 	<tr>
 		<th colspan="2" width="20%">内容</th>
 		<td colspan="5" width="70%">
-			<input type="text" maxlength="10" class="form-control" name="naiyo" id="naiyo" value="<?php echo $_POST[ 'naiyo' ]; ?>" style="width:20%"><br>利用目的が「その他」の場合、具体的なご利用内容をご入力ください。<span class="note">（例：詩吟、カラオケ…)</span>
+			<input type="text" maxlength="10" class="form-control" name="naiyo" id="naiyo" 
+				value="<?php 
+					if( isset($_POST['naiyo']) ){
+						echo $_POST['naiyo'];
+					}
+					?>" 
+				style="width:20%">
+			<br>利用目的が「その他」の場合、具体的なご利用内容をご入力ください。<span class="note">（例：詩吟、カラオケ…)</span>
 		</td>
 	</tr>
   	<tr>
   		<th colspan="2">利用当日の管理責任者名<span class="text-danger">（必須)</span></th>
   		<td colspan="5">
-  			<input type="text" class="form-control" name="sekinin"  id="sekinin" value="<?php echo $_POST[ 'sekinin' ]; ?>" style="width:70%">
+  			<input type="text" class="form-control" name="sekinin"  id="sekinin" 
+  				value="<?php 
+				if( isset($_POST['naiyo']) ){
+  					echo $_POST[ 'naiyo' ];
+  				}
+  				?>" 
+  				style="width:70%">
   		</td>
     </tr>
     </tbody>

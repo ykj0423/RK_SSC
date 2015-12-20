@@ -211,9 +211,9 @@ jQuery(function () {
 			var y = dt.getFullYear();
 			var m = dt.getMonth() + 1;
 			var d = dt.getDate();
-			if (m == 1) {
-			  y = y + 1;
-			}
+			//if (m == 1) {
+			//  y = y + 1;
+			//}
 			if (m < 10) {
 			  m = '0' + m;
 			}
@@ -226,8 +226,12 @@ jQuery(function () {
         	//var dt = new Date();
 			dt = new Date();
 			y = dt.getFullYear();
-			m = dt.getMonth() + 2;
+			m = dt.getMonth() + 2;//1月は0->12月は11
 			d = dt.getDate();
+
+			if (m > 12) {
+				m = 1;
+			}
 			if (m == 1) {
 			  y = y + 1;
 			}

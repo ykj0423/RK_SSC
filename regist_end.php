@@ -133,7 +133,6 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_NUMERIC ) ) {
 
 }
 
-
 /* 後納ドメイン判断 */
 $sql = "select domain,kyakb,kounoukb from mt_tyusyo";
 
@@ -155,7 +154,6 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_NUMERIC ) ) {
     }
 
 }
-
 
 /* 顧客コード採番 */
 $kyaku_cd = 100000;
