@@ -563,8 +563,8 @@ class DB
             }
 
         }catch (Exception $e)  {
-                $ret['sqlErrCD'] =  99999;
-                $ret['sqlErrMsg'] =  $e->getMessage();
+            $ret['sqlErrCD'] =  99999;
+            $ret['sqlErrMsg'] =  $e->getMessage();
         }
 
         return $ret;
@@ -580,22 +580,24 @@ class DB
     ----------------------------------------------------------*/
     public function select_rsvlist( $kyakcd )
     {
-        try{
-            $kyakcd = 1;//テスト暫定
+
             $ret = array();
-            //$ret['sqlErrCD'] =  0;
-            //$ret['sqlErrMsg'] = '';
+           
+            $kyakcd=1;
             
-            $sql = " select dt_roomrmei.* , dt_roomr.kaigi , mt_room.rmnm from dt_roomrmei  left outer join dt_roomr";
-            $sql .= " on  dt_roomrmei.ukeno =  dt_roomr.ukeno";
-            $sql .= " left outer join mt_room on dt_roomrmei.rmcd =  mt_room.rmcd ";
+            $sql = " select dt_roomrmei.* , dt_roomr.kaigi, dt_roomr.ukedt, dt_roomr.paylmtdt, dt_roomr.kounoukb, ";
+            $sql .= " dt_wbseikyu.seino, dt_wbseikyu.seiurl, dt_wbseikyu.seifile, dt_wbseikyu.seideal, dt_wbseikyu.seifbd, ";
+            $sql .= " mt_room.rmnm from dt_roomrmei ";
+            $sql .= " left outer join dt_roomr on dt_roomrmei.ukeno = dt_roomr.ukeno ";
+            $sql .= " left outer join dt_wbseikyu on dt_roomrmei.ukeno = dt_wbseikyu.ukeno ";
+            $sql .= " left outer join mt_room on dt_roomrmei.rmcd = mt_room.rmcd ";
             $sql .= " WHERE dt_roomr.kyacd = ".$kyakcd;
 			$sql .= " order by dt_roomrmei.ukeno , dt_roomrmei.gyo ";
 
 			$result = sqlsrv_query( $this->con, $sql );
             $i = 0;
 
-            //$row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+            $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
             while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 
                 //$ukeno  =  $row[0];
@@ -610,11 +612,7 @@ class DB
                 $i++;
             }
 
-        }catch (Exception $e)  {
-            //$ret['sqlErrCD'] =  99999;
-            //$ret['sqlErrMsg'] =  $e->getMessage();
-        }
-
+       
         return $ret;
 
     }

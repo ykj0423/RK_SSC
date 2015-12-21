@@ -228,4 +228,13 @@ function judge_tyusyo( $shinon, $gyscd, $ninzu )
     }
 
 }
+
+function format_ymd( $date ){
+	if($date==0){
+		return "";
+	}else{
+		return substr( $date, 0, 4 )."/".substr( $date, 4, 2 )."/".substr( $date, 6, 2 );
+	}
+}
+
 ?>
