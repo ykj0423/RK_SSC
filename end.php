@@ -70,7 +70,7 @@ if( $conn === false ) {
 /* --------------------*/
 /* RK顧客データ          */
 /* --------------------*/
-$kyacd = 1;//テスト暫定
+$kyacd = $_SESSION['kyacd'];
 $sql = "SELECT * FROM mt_kyaku WHERE kyacd = ".$kyacd;
 $stmt = sqlsrv_query( $conn, $sql );
 

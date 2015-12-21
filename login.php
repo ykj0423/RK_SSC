@@ -27,6 +27,15 @@ include('model/Kyaku.php');
 **/
 $_SESSION['wloginid'] ="";
 
+$ini = parse_ini_file('config.ini');        
+$serverName = $ini['SERVER_NAME'];
+$connectionInfo = array( "Database"=>$ini['DBNAME'], "UID"=>$ini['UID'], "PWD"=>$ini['PWD'] );
+$conn = sqlsrv_connect( $serverName, $connectionInfo);
+
+if( $conn === false ) {           
+    die( print_r( sqlsrv_errors(), true));
+}
+
 if( isset( $_POST['submit'] ) && !empty( $_POST['submit'] ) ){
 
     if (empty($_POST['wloginid'])){
@@ -38,20 +47,51 @@ if( isset( $_POST['submit'] ) && !empty( $_POST['submit'] ) ){
     //ログインIDとパスワードのチェック
     $Kyaku = new Kyaku();
 
-    $login = $Kyaku->login( $_POST['wloginid'], $_POST['wpwd'] );
+    $ret = $Kyaku->login( $_POST['wloginid'], $_POST['wpwd'] );
 
-    if(!$login){
+    if(!$ret){
         $errmsg = "ログインIDもしくはパスワードが違います。";
     }
 
     if ( !$errmsg ) {
+
         $_SESSION['wloginid'] = $_POST['wloginid'];
         //オブジェクトのシリアル化
         unset( $_SESSION['Kyaku'] );
         $_SESSION['Kyaku'] = serialize( $Kyaku );
+        
+        /* 顧客コード、団体名、後納区分、顧客区分 */
+        $kyacd = "";
+        $dannm = "";
+        $kyakb = "";
+        $kounoukb = "";
+
+        if( !empty( $_POST['wloginid'] ) ){
+
+        $sql = "SELECT * FROM mt_kyaku where wloginid =".$_POST['wloginid'];
+        $stmt = sqlsrv_query( $conn, $sql );
+
+            if( $stmt === false) {
+                print_r( sqlsrv_errors()) ;
+            }
+
+            while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+                $kyacd =$row['kyacd'];
+                $dannm =$row['dannm'];
+                $kyakb =$row['kyakb'];
+                $kounoukb =$row['kounoukb'];
+            }
+
+        }
+        
+        $_SESSION['kyacd'] = $kyacd;
+        $_SESSION['dannm'] = $dannm;
+        $_SESSION['kyakb'] = $kyakb;
+        $_SESSION['kounoukb'] = $kounoukb;
 
         header( 'location: hitudoku.php' );
         exit();
+
     }
 
 }

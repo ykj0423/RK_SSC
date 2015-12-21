@@ -583,8 +583,6 @@ class DB
 
             $ret = array();
            
-            $kyakcd=1;
-            
             $sql = " select dt_roomrmei.* , dt_roomr.kaigi, dt_roomr.ukedt, dt_roomr.paylmtdt, dt_roomr.kounoukb, ";
             $sql .= " dt_wbseikyu.seino, dt_wbseikyu.seiurl, dt_wbseikyu.seifile, dt_wbseikyu.seideal, dt_wbseikyu.seifbd, ";
             $sql .= " mt_room.rmnm from dt_roomrmei ";

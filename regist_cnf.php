@@ -44,7 +44,7 @@ if( $conn === false ) {
 
 //エラーメッセージ
 include('include/err.php');
-print_r($_POST);
+//print_r($_POST);
 
 ?>
 

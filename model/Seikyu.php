@@ -56,9 +56,7 @@ class Seikyu extends ModelBase {
             $seiurl = trim($row['fldsei']);
         }    
       
-        //請求書ファイル名
-        $seifile = "S".$ukeno.".pdf"; //空文字
-        
+                
         //請求書自動発行処理
         $seideal = 0; //ZERO
         
@@ -75,7 +73,7 @@ class Seikyu extends ModelBase {
         //請求金額
         $seikin = 0;
         
-                /* 顧客データ */
+        /* 顧客データ */
         $sql = "SELECT * FROM mt_kyaku WHERE kyacd = ".$kyacd;
 
         $stmt = sqlsrv_query( $this->conn, $sql );
@@ -106,6 +104,16 @@ class Seikyu extends ModelBase {
         if( $kyakb == 99 ){//内部であればセットしない
             $paylmtdt = 0;
         }
+
+        if( $kounoukb ==　1){//後納であればセットしない
+            //料金通知書
+            $seifile = "T".$ukeno.".pdf";
+        
+        }else{
+            //請求書ファイル名
+            $seifile = "S".$ukeno.".pdf";
+        }
+
         /* 請求書明細 */
         $gyo_num = 0;
  
@@ -167,7 +175,7 @@ class Seikyu extends ModelBase {
             }
 
             //付属備品（グランドピアノ
-            if( $rec['piano'] == 1 ){
+            if( $rec['pianokb'] == 1 ){
 
                 $gyo_num++;
                 $usedt = $rec['usedt']; //使用日

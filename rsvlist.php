@@ -82,18 +82,13 @@ require_once('func.php');
       
 <tbody>
 <?php 
-
-define("KARIYOHAKU", "仮予約");
-define("YOHAKU", "予約完了");
-define("TORIKESHI", "予約取消");
-
 require_once("model/db.php");
 
 $db = new DB;
 $conErr = $db->connect();
 if (!empty($conErr)) { echo $conErr; die();}
 
-$rsvlist = $db->select_rsvlist($_SESSION['wloginid']);//客コード
+$rsvlist = $db->select_rsvlist($_SESSION['kyakcd']);//客コード
 
 for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
   
@@ -120,8 +115,11 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
     echo "<td>".$rsvlist[$i]['ninzu']."人</td>";//人数
     echo "<td>「".mb_convert_encoding($rsvlist[$i]['kaigi'], "utf8", "SJIS")."」</td>";//行事内容
     //納付期限
-    echo "<td>".format_ymd( $rsvlist[$i]['paylmtdt'] )."</td>";
-    
+    if($rsvlist[$i]['kounoukb'] == 1){
+      echo "<td></td>";
+    }else{
+      echo "<td><span class='status2'".format_ymd( $rsvlist[$i]['paylmtdt'] )."</span></td>";
+    }
     //ドキュメント
     echo "<td>";
 
