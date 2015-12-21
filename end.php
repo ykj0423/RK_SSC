@@ -113,12 +113,6 @@ if( sqlsrv_fetch( $stmt ) === false) {
 
 $webukeno = (int)sqlsrv_get_field( $stmt, 0) + 1 ;//nullの場合を考慮し、キャストする
 
-//$financial_year = str_pad((int)get_financial_year() , 8, "0", STR_PAD_RIGHT);
-//$webukeno =  $financial_year  +  $max_webukeno + 1;
-/*$max_webukeno = (int)sqlsrv_get_field( $stmt, 0);//nullの場合を考慮し、キャストする
-$financial_year = str_pad((int)get_financial_year() , 8, "0", STR_PAD_RIGHT);
-$webukeno =  $financial_year  +  $max_webukeno + 1;
-*/
 /* --------------------*/
 /*  RK受付№取得処理  */
 /* --------------------*/
