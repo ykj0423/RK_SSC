@@ -52,7 +52,7 @@ jQuery(function () {
 		var td21 = $("<div></div>");
 		var td22 = $("<div></div>");
 		var td23 = $("<div></div>");
-		//var td24 = $("<div></div>");
+		var td24 = $("<div></div>");
 		//var td25 = $("<div></div>");
 		/* 日付のフォーマット もう少しスマートな方法がないか検討*/
 		/* 前の画面とまったく同じ処理を書いているので整理*/
@@ -68,7 +68,7 @@ jQuery(function () {
 		var gyo = i + 1;
 
 		$("#list").append(tr);
-		tr.append( td1 ).append( td2 ).append( td3 ).append( td4 ).append( td5 ).append( td6 ).append( td7 ).append( td8 ).append( td9 ).append( td10 ).append( td11 ).append( td12 ).append( td13 ).append( td14 ).append( td15 ).append( td16 ).append( td17 ).append( td18 ).append( td19 ).append( td20 ).append( td21 ).append( td22 ).append( td23 );//.append( td24 ).append( td25 );
+		tr.append( td1 ).append( td2 ).append( td3 ).append( td4 ).append( td5 ).append( td6 ).append( td7 ).append( td8 ).append( td9 ).append( td10 ).append( td11 ).append( td12 ).append( td13 ).append( td14 ).append( td15 ).append( td16 ).append( td17 ).append( td18 ).append( td19 ).append( td20 ).append( td21 ).append( td22 ).append( td23 ).append( td24 );//.append( td25 );
 		td1.html( useyyyy + "/" + usemm + "/" +  usedd + " ("+ yobi + ")<br>" + objData[i]['rmnm'] );
 		td2.html( objData[i]['jkn1']  + "～" + objData[i]['jkn2']  );
 
@@ -158,6 +158,7 @@ jQuery(function () {
 		td21.html( "hstjkn<input type='text' name='hbstjkn" + i + "' id='hbstjkn" + i + "' value='" + hstjkn + "'>");
 		td22.html( "hedjkn<input type='text' name='hbedjkn" + i + "' id='hbedjkn" + i + "' value='" + hedjkn + "'>");
 		td23.html( "hedjkn<input type='text' name='comlkb" + i + "' id='comlkb" + i + "' value='" + comlkb + "'>");
+		td23.html( "biko<input type='text' name='biko" + i + "' id='biko" + i + "' value=''>");
 	
 //（空室マーク）usedt:使用日、rmcd:施設コード、timekb:時間帯
 //（請求データ）usedt:使用日、yobi:曜日、yobikb:曜日区分、rmcd:施設コード、rmnm:施設名、

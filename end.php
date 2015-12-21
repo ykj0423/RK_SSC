@@ -84,6 +84,8 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 	$tel1 =  $row['tel1'];
 	$tel2 =  $row['tel2'];
 	$fax =  $row['fax'];
+	$url =  $row['url'];
+	$mail =  $row['mail'];	 
 	$zipcd =  $row['zipcd'];
 	$adr1 =  $row['adr1'];
 	$adr2 =  $row['adr2'];
@@ -135,8 +137,8 @@ $max_ukeno = (int)sqlsrv_get_field( $stmt, 0);//nullの場合を考慮し、キ�
 $ukeno =  $max_ukeno + 1;
 
 /*----------------------------------------------------*/
-$login = "test";//$_SESSION['webrk']['user'];//暫定
-echo "test1";
+$login = 2345;//$_SESSION['webrk']['user'];//暫定
+
 
 //明細件数の取得
 $meisai_count = $_POST['meisai_count'];
@@ -210,10 +212,10 @@ if(isset($_POST['sekinin'])){
 }
 
 //顧客更新区分
-$kupdkb =　1;//1:更新する
+$kupdkb = 1;//1:更新する
 
 //予約種別区分
-$rsbkb =　1;//1:一般、2:業務予約、3:使用不可
+$rsbkb = 1;//1:一般、2:業務予約、3:使用不可
 
 //利用目的区分
 $riyokb = 0;
@@ -223,7 +225,14 @@ if(isset($_POST['riyokb'])){
 }
 
 //納付期限
+$nen = substr( $ukedt, 0, 4 );
+$m = substr( $ukedt, 4, 2 );
+if( $m < 10 ) { $m = '0'.$m; }
+$d = substr( $ukedt, 6, 4 );
+if( $d < 10 ) { $d = '0'.$d; }
+
 $date_ukedt = strtotime( $nen.'-'.$m.'-'.$d );
+
 $paylmtdt = date('Ymd', strtotime(' +9 days', $date_ukedt));
 
 if( $kounoukb ==1){//後納であればセットしない
@@ -259,9 +268,10 @@ $wrkkb = 1;
 $wloginid = $login;
 $udate = date( "Ymd" );
 $wudate = date( "Ymd" );
-$utime = $date( "His" );
-$wutime = $date( "His" );
+$utime = date( "His" );
+$wutime = date( "His" );
 
+$ukecd = 9999;
 
 $sql = "INSERT INTO dt_roomr (ukeno, ukedt, nen, krkb, krmemo,ukecd,ukehkb,kyacd,
 	dannm,dannm2,dannmk,daihyo,renraku,tel1,tel2,fax,url,mail,zipcd,adr1,adr2,gyscd,sihon,jygsu,kyakb,
@@ -269,7 +279,17 @@ $sql = "INSERT INTO dt_roomr (ukeno, ukedt, nen, krkb, krmemo,ukecd,ukehkb,kyacd
 	trmkin,thzkin,tkin,login,udate,utime,wrkkb,wloginid,wudate,wutime)";
 $sql .= " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-$params = array($ukeno, $ukedt, $nen, $krkb, $krmemo, $ukecd, $ukehkb, $kyacd,
+/*$dannm="";
+$dannm2="";
+ $dannmk="";
+  $daihyo="";
+  $renraku="";
+  $adr1="";
+   $adr2="";
+   $kaigi="";
+   $naiyo="";
+*/
+   $params = array($ukeno, $ukedt, $nen, $krkb, $krmemo, $ukecd, $ukehkb, $kyacd,
 	$dannm, $dannm2, $dannmk, $daihyo, $renraku, $tel1, $tel2, $fax, $url, $mail, $zipcd, $adr1, $adr2, $gyscd, $sihon, $jygsu, $kyakb,
 	$kounoukb, $holekb, $kaigi,$naiyo, $kbiko, $sekinin, $kupdkb, $rsbkb, $riyokb, $paylmtdt, $expkb, $expnocdt, $expdt,
 	$trmkin, $thzkin, $tkin, $login, $udate, $utime, $wrkkb, $wloginid, $wudate, $wutime);
@@ -283,13 +303,17 @@ $stmt = sqlsrv_query( $conn, $sql, $params);
 if( $stmt === false ) {
     if( ($errors = sqlsrv_errors() ) != null) {
         foreach( $errors as $error ) {
-            echo "dt_roomr<br>";
+            echo "dt_roomr<br>".$sql;
+            print_r($params);
+            echo "<br>";
 			echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
             echo "code: ".$error[ 'code']."<br />";
             echo "message: ".mb_convert_encoding( $error[ 'message'] ,  "UTF-8" )."<br />";
+            die();
         }
     }
 }
+
 echo("meisai_start");
 
 $gyo = 0;
@@ -323,14 +347,14 @@ for ($i = 0; $i < $meisai_count; $i++) {
 	$kyofbd = 0;
 
 	//使用日付
-	$usedt = $_POST[ 'usedt'.$i ]
+	$usedt = $_POST[ 'usedt'.$i ];
 
 	//曜日区分
-	$yobikbn = get_wday( $usedt );
+	$yobikb = get_wday( $usedt );
 	
 	//曜日
 	$weekday = array( "日", "月", "火", "水", "木", "金", "土" );//日本語曜日定義
-	$yobi = mb_convert_encoding( $weekday[ $yobikbn ], "SJIS","UTF-8");
+	$yobi = mb_convert_encoding( $weekday[ $yobikb ], "SJIS","UTF-8");
 	
 	//時間帯区分
 	$timekb = $_POST[ 'timekb'.$i ];
@@ -370,32 +394,32 @@ for ($i = 0; $i < $meisai_count; $i++) {
 	$jnedjkn = format_db_jkn( $jnedjkn_h ,  $jnedjkn_m );
 
 	//本番開始時間
-	$hstjkn_h = 0;
-	$hstjkn_m = 0;
+	$hbstjkn_h = 0;
+	$hbstjkn_m = 0;
 	
-	if(isset($_POST[ 'hstjkn_h'.$i ] )){
-		$hstjkn_h =  $_POST[ 'hstjkn_h'.$i ];
+	if(isset($_POST[ 'hbstjkn_h'.$i ] )){
+		$hbstjkn_h =  $_POST[ 'hbstjkn_h'.$i ];
 	}
 	
 	if(isset($_POST[ 'hstjkn_m'.$i ] )){
-		$hstjkn_m =  $_POST[ 'hstjkn_m'.$i ];
+		$hbstjkn_m =  $_POST[ 'hbstjkn_m'.$i ];
 	}
 
-	$hedjkn_h = format_db_jkn( $hstjkn_h ,  $hstjkn_m );
+	$hbstjkn = format_db_jkn( $hbstjkn_h ,  $hbstjkn_m );
 
 	//本番終了時間
-	$hedjkn_h = 0;
-	$hedjkn_m = 0;
+	$hbedjkn_h = 0;
+	$hbedjkn_m = 0;
 	
-	if(isset($_POST[ 'hedjkn_h'.$i ] )){
-		$hedjkn_h =  $_POST[ 'hedjkn_h'.$i ];
+	if(isset($_POST[ 'hbedjkn_h'.$i ] )){
+		$hedjkn_h =  $_POST[ 'hbedjkn_h'.$i ];
 	}
 	
 	if(isset($_POST[ 'hedjkn_m'.$i ] )){
-		$hedjkn_m =  $_POST[ 'hedjkn_m'.$i ];
+		$hbedjkn_m =  $_POST[ 'hbedjkn_m'.$i ];
 	}
 
-	$hedjkn = format_db_jkn( $hedjkn_h ,  $hedjkn_m );
+	$hbedjkn = format_db_jkn( $hbedjkn_h ,  $hbedjkn_m );
 
 	//撤去開始時間
 	$tkstjkn_h = 0;
@@ -412,18 +436,18 @@ for ($i = 0; $i < $meisai_count; $i++) {
 	$tkstjkn = format_db_jkn( $tkstjkn_h ,  $tkstjkn_m );
 
 	//撤去終了時間
-	$tkstjkn_h = 0;
-	$tkstjkn_m = 0;
+	$tkedjkn_h = 0;
+	$tkedjkn_m = 0;
 	
-	if(isset($_POST[ 'tkstjkn_h'.$i ] )){
-		$tkstjkn_h =  $_POST[ 'tkstjkn_h'.$i ];
+	if(isset($_POST[ 'tkedjkn_h'.$i ] )){
+		$tkedjkn_h =  $_POST[ 'tkedjkn_h'.$i ];
 	}
 	
-	if(isset($_POST[ 'tkstjkn_m'.$i ] )){
-		$tkstjkn_m =  $_POST[ 'tkstjkn_m'.$i ];
+	if(isset($_POST[ 'tkedjkn_m'.$i ] )){
+		$tkedjkn_m =  $_POST[ 'tkedjkn_m'.$i ];
 	}
 
-	$tkstjkn = format_db_jkn( $tkstjkn_h ,  $tkstjkn_m );
+	$tkedjkn = format_db_jkn( $tkstjkn_h ,  $tkstjkn_m );
 
 	//営利目的区分
 	$comlkb = 0;
@@ -473,17 +497,27 @@ for ($i = 0; $i < $meisai_count; $i++) {
 	$ratesb = 0;//未使用
 
 	//使用人数
-	$ninzu = $_POST[ 'ninzu'.$i ];
+	$ninzu = 0;
+
+	if( isset ( $_POST[ 'ninzu'.$i ] ) ){
+		$ninzu = $_POST[ 'ninzu'.$i ];
+	}
 
 	//施設単価
 	$rmtnk = 0;
 	$rmentnk = 0;
 
-	$sql = "SELECT tnk, entnk FROM mt_rmtnk　WHERE rmcd = ".$rmcd." AND kyakb = ".$kyacd." AND ratesb = 0 AND stjkn = ".$stjkn." AND edjkn = ".$edjkn;
+	$sql = "SELECT tnk, entnk FROM mt_rmtnk WHERE rmcd = ".$rmcd." AND kyakb = ".$kyacd." AND ratesb = 0 AND stjkn = ".$stjkn." AND edjkn = ".$edjkn;
         
-    $stmt = sqlsrv_query( $this->conn, $sql );
+    $stmt = sqlsrv_query( $conn, $sql );
+    
+    if( $stmt === false) {
+    	echo "mt_rmtnk";
+    	echo $sql;
+    	die( print_r( sqlsrv_errors(), true) );
+	}
 
-    while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+ 	while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 
         $rmtnk = $row['tnk'];		//通常単価
         $rmentnk = $row['entnk'];	//延長単価
@@ -491,16 +525,21 @@ for ($i = 0; $i < $meisai_count; $i++) {
     }  
 
     //通常金額
-    $rmtukin = $rmtnk
+    $rmtukin = $rmtnk;
 
     //延長金額
     $rmenkin = $rmentnk;
 
     //施設使用合計金額
-    $rmkin = (intval)$rmtukin + (intval)$rmenkin;
+    //$rmkin = intval( $rmtukin ) + intval( $rmenkin );
+    $rmkin =  $rmtukin  + $rmenkin;
 
 	//ピアノ区分
-	$pianokb = $_POST[ 'piano'.$i ];
+	$pianokb = 0;
+
+	if(isset($_POST[ 'pianokb'.$i ])){
+		$pianokb = $_POST[ 'pianokb'.$i ];
+	}
 
     //付属設備合計金額
     $hzkin = 0;
@@ -545,14 +584,16 @@ for ($i = 0; $i < $meisai_count; $i++) {
 	//間仕切り
 	$partkb = 0;
 
-	if( isset($_POST['partkb'])){
-		$partkb = $_POST['partkb'];
+	if( isset($_POST['partkb'.$i])){
+		$partkb = $_POST['partkb'.$i];
 	}
 
 	//備考
-	$biko = $_POST['biko'];
+	if( isset($_POST['biko'.$i])){
+		$biko = $_POST[ 'biko'.$i ];
+	}
 
-	if( isset($_POST['partkb'])){
+	if( isset($_POST['partkb'.$i])){
 
 		if( $partkb == 1 ){
 			$biko .= "間仕切り閉める";
@@ -596,6 +637,7 @@ for ($i = 0; $i < $meisai_count; $i++) {
 	$wudate = date( "Ymd" );
 	$utime = date( "His" );
 	$wutime = date( "His" );
+	$pgnm = "";
 
 	$sql = "INSERT INTO dt_roomrmei
 		(ukeno, gyo, rmcd, kyono, kyodt, shindt, kyourl, kyofile, kyofbd, usedt, yobi, yobikb,
@@ -610,7 +652,7 @@ for ($i = 0; $i < $meisai_count; $i++) {
 		$timekb, $stjkn, $edjkn, $jnstjkn, $jnedjkn, $hbstjkn, $hbedjkn, $tkstjkn, $tkedjkn,
 		$ratekb, $ratesb, $zgrt, $ninzu, $rmtnk, $rmentnk, $rmtukin, $rmenkin, $rmkin, $hzkin, $rmnykin, $hznykin, $synykin,
 		$candt, $cankb, $hkktdt, $hkdt, $hkkin, $kskbn, $biko, $tag1, $tag2, $tag3,
-		$wrsvkb, $rsvchgdt, $comlkb, $feekb, $pianokb, $partkb, $login, $udate, $utime, $ukedt, $wloginid, $wudate, $wutime,$pgnm );
+		$wrsvkb, $rsvchgdt, $comlkb, $feekb, $pianokb, $partkb, $login, $udate, $utime, $ukedt, $wloginid, $wudate, $wutime, $pgnm );
  
 	//	 VALUES  (15000016,1,11,0,0,20150820,".$yobi.", 3, 1, 900,  1200, 900, 1200 ,  1,0, 100, 0,  4800 , 0 , 4800 ,0 , 4800 ,  0,  4800, 0 ,0 , 0,  0, 0,0,0,0,N'',0,0,0,'webtest',".date('Ymd') .", ". date('His'). ")";
 	//受付番号 行番 施設コード 許可番号 許可日付 使用日付 使用日付曜日 使用曜日区分 時間帯区分 使用時間開始 使用時間終了 本番時間開始 本番時間終了
@@ -627,7 +669,7 @@ for ($i = 0; $i < $meisai_count; $i++) {
 	if( $stmt === false ) {
 		if( ($errors = sqlsrv_errors() ) != null) {
 			foreach( $errors as $error ) {
-				echo $sql;."<br />";
+				echo $sql."<br />";
 				print_r($params);
 				echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
 				echo "code: ".$error[ 'code']."<br />";
@@ -640,7 +682,7 @@ for ($i = 0; $i < $meisai_count; $i++) {
 	/* 付属設備 */
 	$hzgyo = 0;
 
-	if(	$piano ==1 ){
+	if(	$pianokb ==1 ){
 
 		//付属設備行番
 		$hzgyo++;

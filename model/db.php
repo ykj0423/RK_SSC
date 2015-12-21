@@ -343,6 +343,66 @@ class DB
 
 	}
 	
+
+    public function select_kscal( $usedt , $timekb )
+    {
+        
+        $sql = "select eigkb from ks_cal where stdt = ".$usedt;
+        
+        $result = sqlsrv_query( $this->con, $sql );
+
+        if( $result === false ) {
+            echo $sql;
+            die( print_r( sqlsrv_errors(), true));
+        }
+        
+        $ret = false;
+
+        while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_NUMERIC)) {
+
+            $eigkb = $row[0];
+        
+            if($eigkb==0){
+                
+                $ret = true; 
+            
+            }else{
+
+                //朝
+                if( $timekb == 1 ){
+                    //昼休、夜休はOK
+                    if( $eigkb ==2 || $eigkb == 3 ){
+                         $ret = true;
+                    }
+                
+                }
+
+                //昼
+                if( $timekb == 2 ){
+                    //朝休、夜休はOK
+                    if( $eigkb == 1 || $eigkb == 3 ){
+                         $ret = true;
+                    }
+                
+                }
+
+                //夜
+                if( $timekb == 3 ){
+                    //朝休、昼休はOK
+                    if( $eigkb == 1 || $eigkb == 2 ){
+                         $ret = true;
+                    }
+                
+                }
+
+            }
+
+        }
+     
+        return $ret;
+
+    }
+
 	
 	/*--------------------------------------------------------
     //  updateする。

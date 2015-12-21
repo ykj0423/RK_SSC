@@ -57,7 +57,7 @@ class Seikyu extends ModelBase {
         }    
       
         //請求書ファイル名
-        $seifile = "S".$ukeno."pdf"; //空文字
+        $seifile = "S".$ukeno.".pdf"; //空文字
         
         //請求書自動発行処理
         $seideal = 0; //ZERO
@@ -75,19 +75,7 @@ class Seikyu extends ModelBase {
         //請求金額
         $seikin = 0;
         
-        //納付期限
-        $date_ukedt = strtotime( $nen.'-'.$m.'-'.$d );
-        $paylmtdt = date('Ymd', strtotime(' +9 days', $date_ukedt));
-        
-        if( $kounoukb ==1){//後納であればセットしない
-            $paylmtdt = 0;
-        }
-
-        if( $kyakb == 99 ){//内部であればセットしない
-            $paylmtdt = 0;
-        }
-
-        /* 顧客データ */
+                /* 顧客データ */
         $sql = "SELECT * FROM mt_kyaku WHERE kyacd = ".$kyacd;
 
         $stmt = sqlsrv_query( $this->conn, $sql );
@@ -107,6 +95,17 @@ class Seikyu extends ModelBase {
             //echo $row['dannm'].", ".$row['dannm2']."<br />";
         }
  
+        //納付期限
+        $date_ukedt = strtotime( $nen.'-'.$m.'-'.$d );
+        $paylmtdt = date('Ymd', strtotime(' +9 days', $date_ukedt));
+        
+        if( $kounoukb ==1){//後納であればセットしない
+            $paylmtdt = 0;
+        }
+
+        if( $kyakb == 99 ){//内部であればセットしない
+            $paylmtdt = 0;
+        }
         /* 請求書明細 */
         $gyo_num = 0;
  
@@ -234,7 +233,7 @@ if( $stmt === false ) {
         
         $sql = $sql." VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 //echo $sql;
-        $params = array( $ukeno, $ukeno, 0, $seiurl, '', 0, 0, $ukedt, $nen,$kyacd, $dannm, $dannm2, $daihyo, $renraku, $seikin, $paylmtdt, $login, parent::getUdate(), parent::getUtime() );
+        $params = array( $ukeno, $ukeno, $seidt, $seiurl, $seifile, $seideal, $seifbd, $ukedt, $nen,$kyacd, $dannm, $dannm2, $daihyo, $renraku, $seikin, $paylmtdt, $login, parent::getUdate(), parent::getUtime() );
 
         $stmt = sqlsrv_query( $this->conn, $sql, $params );
 
