@@ -47,7 +47,7 @@ include('include/err.php');
 //print_r($_POST);
 
 ?>
-
+<form role="form" method="POST" action="regist_end.php">
     <p>入力内容をご確認いただき、問題がなければ「送信する」ボタンを押してください。</p>
       <table id="demo" align="center" class="table table-bordered table-condensed form-inline f120" >
       <tr>
@@ -158,9 +158,10 @@ echo "<input type='text' name='jygsu' id='jygsu' value=\"".$_POST[ 'jygsu' ]."\"
 //$_SESSION['Kyaku'] = serialize( $Kyaku );
 ?>
     <div style="text-align:center">
-      <a class="btn btn-default btn-lg mb20" href="regist.php" role="button"><< 修正する</a>
-      <a class="btn btn-primary btn-lg mb20" href="regist_end.php" role="button">送信する　>></a>
+      <a class="btn btn-default btn-lg mb20" href="regist.php" role="button"><< 修正する</a>      
+      <input type="submit" name="submit" id="submit" value="送信する" class="btn btn-primary btn-lg">        
     </div>
- </div>
+    </div><!--form-group-->
+  </form>
 </body>
 </html>

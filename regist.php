@@ -46,8 +46,6 @@ if( isset( $_POST['submit'] ) && !empty( $_POST['submit'] ) ){
         
         $gysnm = $Kyaku->get_gyous_name($_POST['gyscd']);
         $Kyaku->push_data_val( 'gysnm', $gysnm　);
-        
-echo "test";
         $Kyaku->push_data( $_POST, 'sihon', true, false　);
         $Kyaku->push_data( $_POST, 'jygsu', true, false　);
 

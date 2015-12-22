@@ -724,7 +724,7 @@ class DB
 		//}
 		
 		$sql = $sql." order by code";
-    echo $sql;
+    //echo $sql;
     
 		$result = sqlsrv_query( $this->con, $sql );
 

@@ -88,7 +88,7 @@ $db = new DB;
 $conErr = $db->connect();
 if (!empty($conErr)) { echo $conErr; die();}
 
-$rsvlist = $db->select_rsvlist($_SESSION['kyakcd']);//客コード
+$rsvlist = $db->select_rsvlist($_SESSION['kyacd']);//客コード
 
 for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
   

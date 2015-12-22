@@ -80,6 +80,9 @@ jQuery(function () {
 		var hjkn_dsp = objData[i]['hstjkn_h'] + "：" + objData[i]['hstjkn_m'] + "～" + objData[i]['hedjkn_h'] + "：" + objData[i]['hedjkn_m'];
 		//var jjkn = parseInt( objData[i]['jstjkn_h'] ) * 100 +  parseInt( objData[i]['jstjkn_m'];
 		td3.html( jjkn_dsp + "<br>" + hjkn_dsp );
+
+		td3.html( objData[i]['jkn1']  + "～" + objData[i]['jkn2']  );
+
 		var jjkn;
 		jjkn = 0;
 		var hstjkn;
@@ -146,8 +149,8 @@ jQuery(function () {
 		//var edjkn = 1200;
 		var stjkn = objData[i]['jkn1'].replace( ':','' );
 		var edjkn = objData[i]['jkn2'].replace( ':','' );
-		td12.html( "<input type='hidden' name='stjkn" + i + "' id='stjkn" + i + "' value='" + stjkn +"'><input type='text' name='edjkn" + i + "' id='edjkn" + i + "' value='"+ edjkn + "'>" );
-		td13.html( "<input type='hidden' name='ninzu" + i + "' id='ninzu" + i + "' value='" + objData[i]['ninzu'] +"'");
+		td12.html( "<input type='hidden' name='stjkn" + i + "' id='stjkn" + i + "' value='" + stjkn +"'><input type='hidden' name='edjkn" + i + "' id='edjkn" + i + "' value='"+ edjkn + "'>" );
+		td13.html( "<input type='text' name='ninzu" + i + "' id='ninzu" + i + "' value='" + objData[i]['ninzu'] +"'");
 		td14.html( "<input type='hidden' name='rmkin" + i + "' id='rmkin" + i + "' value='" + parseInt( objData[i]['rmkin'] ) + "'>");
 		td15.html( "<input type='hidden' name='hzkin" + i + "' id='hzkin" + i + "' value='" + parseInt( objData[i]['hzkin'] ) + "'>");
 		td16.html( "<input type='hidden' name='piano" + i + "' id='piano" + i + "' value='" + objData[i]['piano'] + "'>");
@@ -160,13 +163,13 @@ jQuery(function () {
 		td23.html( "<input type='hidden' name='comlkb" + i + "' id='comlkb" + i + "' value='" + comlkb + "'>");
 		td23.html( "<input type='hidden' name='biko" + i + "' id='biko" + i + "' value=''>");
 	
-//（空室マーク）usedt:使用日、rmcd:施設コード、timekb:時間帯
-//（請求データ）usedt:使用日、yobi:曜日、yobikb:曜日区分、rmcd:施設コード、rmnm:施設名、
-//stjkn：開始時間、edjkn：終了時間、hstjkn本番開始時間、hedjkn:本番終了時間、piano：ピアノ区分、rmkin：施設使用料金額、hzkin：付属設備使用料金額
-
-//alert("mei");
+	//（空室マーク）usedt:使用日、rmcd:施設コード、timekb:時間帯
+	//（請求データ）usedt:使用日、yobi:曜日、yobikb:曜日区分、rmcd:施設コード、rmnm:施設名、
+	//stjkn：開始時間、edjkn：終了時間、hstjkn本番開始時間、hedjkn:本番終了時間、piano：ピアノ区分、rmkin：施設使用料金額、hzkin：付属設備使用料金額
 
 	}
+	
+	$('#confirm_form').append($('<input>',{type:'hidden',name:'meisai_count',value:objData.length}));
 	
 	$("#total").html("\\" + total.toLocaleString());
 

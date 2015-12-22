@@ -11,22 +11,22 @@ jQuery(function () {
             lang: 'ja',
             //startDate: new Date(),
             //defaultDate: new Date(),
-            onShow: function (ct) {
-                this.setOptions({
-                    maxDate: jQuery('#date_timepicker_end').val() ? jQuery('#date_timepicker_end').val() : false
-                })
-            },
+            //onShow: function (ct) {
+            //    this.setOptions({
+            //        maxDate: jQuery('#date_timepicker_end').val() ? jQuery('#date_timepicker_end').val() : false
+            //    })
+            //},
             timepicker: false
         });
 		//初期値は？
 		jQuery('#date_timepicker_end').datetimepicker({
             format: 'Y/m/d',
             lang: 'ja',
-            onShow: function (ct) {
-                this.setOptions({
-                    minDate: jQuery('#date_timepicker_start').val() ? jQuery('#date_timepicker_start').val() : false
-                })
-            },
+            //onShow: function (ct) {
+            //    this.setOptions({
+            //        minDate: jQuery('#date_timepicker_start').val() ? jQuery('#date_timepicker_start').val() : false
+            //    })
+            //},
             timepicker: false
         });
 

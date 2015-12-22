@@ -59,7 +59,7 @@ class Reserve extends ModelBase {
                 $has_rows = sqlsrv_has_rows ( $stmt );
                 
                 if ( $has_rows ){
-                    echo $sql;
+                    //echo $sql;
                     $tran =  false;
                 }
         
@@ -73,7 +73,7 @@ class Reserve extends ModelBase {
             $has_rows = sqlsrv_has_rows ( $stmt );
             
             if ( $has_rows ){
-                echo $sql;
+                //echo $sql;
                 $tran =  false;
             }
 
@@ -197,11 +197,11 @@ class Reserve extends ModelBase {
         if( $tran ) {
              sqlsrv_commit( $this->conn );
              return true;
-             echo "Transaction committed.<br />";
+             //echo "Transaction committed.<br />";
         } else {
              sqlsrv_rollback( $this->conn );
              return false;
-             echo "Transaction rolled back.<br />";
+             //echo "Transaction rolled back.<br />";
         }
     
     }

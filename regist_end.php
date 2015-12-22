@@ -22,9 +22,9 @@ require_once( "func.php" );
 **/
 if( isset( $_POST['submit'] ) && !empty( $_POST['submit'] ) ){
         
-    $_SESSION['next_page'] = $_POST['next_page'];
-    header( 'location: hitudoku.php' );
-    exit();
+    //$_SESSION['next_page'] = $_POST['next_page'];
+    //header( 'location: hitudoku.php' );
+    //exit();
 
 }
 
@@ -46,52 +46,52 @@ if( $conn === false ) {
 }
 
 /* 団体名 */
-$dannm　= $_POST['dannm'];
-$dannm2　= "";
+$dannm = $_POST['dannm'];
+$dannm2 = "";
 $dannmk = $_POST['dannmk'];
 
 /* 代表者名 */
-$daihyo　= $_POST['daihyo'];
+$daihyo = $_POST['daihyo'];
 
 /* 連絡者名 */
-$renraku　= $_POST['renraku'];
+$renraku = $_POST['renraku'];
 
 /* 電話番号 */
-$tel1　= "";
-$tel2　= $_POST['tel2'];
+$tel1 = "";
+$tel2 = $_POST['tel2'];
 
 /* FAX番号 */
-$fax　= $_POST['fax'];
+$fax = $_POST['fax'];
 
 /* URL */
-$url　= "";
+$url = "";
 
 /* メールアドレス */
-$mail　= $_POST['mail'];
+$mail = $_POST['mail'];
 
 /* 郵便番号 */
 $zipcd = $_POST['zipcd'];
 
 /* 住所 */
-$ad1 = $_POST['ad1'];
+$adr1 = $_POST['adr1'];
 $ad2 = "";
 
 /* 業種コード */
 $gyscd = $_POST['gyscd'];
 
 /* 資本金 */
-$shinon = $_POST['shinon'];
+$sihon = $_POST['sihon'];
 
 /* 業種コード */
-$jygsu　= $_POST['jygsu']
-
+$jygsu= $_POST['jygsu'];
+//echo "中小企業判断（１）";
 /* 中小企業判断（１） */
-$kyakb = 1;　//一般
+$kyakb = 1;//一般
 
-if( judge_tyusyo ( $shinon　, $gyscd, $jygsu　) ){
-    $kyakb = 2;　//中小企業
+if( judge_tyusyo ( $sihon, $gyscd, $jygsu) ){
+    $kyakb = 2;//中小企業
 }
-
+//echo "中小企業判断（２）";
 /* 中小企業判断（２） */
 $sql = "select tyusyonm from mt_tyusyo where setkb = 1";
 
@@ -107,7 +107,7 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_NUMERIC ) ) {
 
     if( strpos( $dannm , $tyusyonm ) !== false){
         //文字列が含まれている場合
-        $kyakb = 2;　//中小企業
+        $kyakb = 2;//中小企業
         break;
     }
 
@@ -122,19 +122,17 @@ if( $stmt === false) {
 }
 
 while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_NUMERIC ) ) {
-    
-    if( trim( $row[0] ) == trim( $dannm ))｛
-
+    if( trim( $row[0] ) == trim( $dannm )){
         //文字列が一致する場合
-        $kyakb = 2;　//中小企業
+        $kyakb = 2;//中小企業
         break;
-    
     }
-
 }
-
+//echo "後納ドメイン判断";
 /* 後納ドメイン判断 */
-$sql = "select domain,kyakb,kounoukb from mt_tyusyo";
+$kounoukb = 0;
+
+$sql = "select domain,kyakb,kounoukb from mt_domain";
 
 $stmt = sqlsrv_query( $conn, $sql );
 
@@ -144,22 +142,23 @@ if( $stmt === false) {
 
 while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_NUMERIC ) ) {
 
-    if( strpos( $mail, $row[0] ) !== false　){    
+    if( strpos( $mail, $row[0] ) !== false){    
   
         //文字列が含まれる場合
-        $kyakb = $row[1];　//1:一般　2:中小企業 99:その他
-        $kounoukb = $row[2];　//1:後納
+        $kyakb = $row[1];//1:一般2:中小企業 99:その他
+        $kounoukb = $row[2];//1:後納
         break;
     
     }
 
 }
 
+//echo "顧客コード採番";
 /* 顧客コード採番 */
-$kyaku_cd = 100000;
+$kyacd = 100000;
 
-$sql = "select max(kyacd) from mt_kyaku where kyacd >= ".$kyaku_cd;
-
+$sql = "select max(kyacd) from mt_kyaku where kyacd >= ".$kyacd;
+echo "test".$sql."  ";
 $stmt = sqlsrv_query( $conn, $sql );
 
 if( $stmt === false) {
@@ -167,14 +166,21 @@ if( $stmt === false) {
 }
 
 while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_NUMERIC ) ) {
-    $kyaku_cd = intval( $row[0] ) + 1;
-}
+
+    if(!is_null($row[0])){
+        $kyacd = intval( $row[0] ) +1; 
+    }
+ 
+ }
+
+echo " kyacd =".$kyacd."  ";
+$adr2="";
 
 /* WEBログインID */
-$wloginid = (string)$kyaku_cd;
+$wloginid = (string)$kyacd;
 
 /* WEBパスワード */
-$wpwd = (string)hash('adler32', $kyaku_cd );
+$wpwd = (string)hash('adler32', $kyacd );
 
 /* WEB利用者区分 */
 $wuserkb = 1;
@@ -202,16 +208,16 @@ $wudate = date('Ymd');
 $utime = date('Hs');
 $wutime = date('Hs');
 
-echo convert_to_SJIS($str);
+//echo convert_to_SJIS($str);
 
 /* 顧客マスタ登録 */
-$sql = "　INSERT INTO mt_kyaku(kyacd,dannm,dannm2,dannmk,daihyo,renraku,tel1,tel2,fax,url,mail,zipcd,adr1,adr2,
+$sql = "INSERT INTO mt_kyaku(kyacd,dannm,dannm2,dannmk,daihyo,renraku,tel1,tel2,fax,url,mail,zipcd,adr1,adr2,
     gyscd,sihon,jygsu,kyakb,wuserkb,kounoukb,wloginid,wpwd,sndflg,biko,login,udate,utime,wlastlogindt,wsdate,wudate,wutime)";
-$sql .= " VALUES　(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+$sql .= " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
   
 $test = array( $kyacd, $dannm, $dannm2, $dannmk, $daihyo, $renraku, $tel1, $tel2, $fax, $url, $mail, $zipcd, $adr1, $adr2,
     $gyscd, $sihon, $jygsu, $kyakb, $wuserkb, $kounoukb, $wloginid, $wpwd, $sndflg, $biko, $login, $udate, $utime, $wlastlogindt, $wsdate, $wudate, $wutime);
-print_r($test);
+//print_r($test);
 
 $params = array( 
     $kyacd, convert_to_SJIS( $dannm ), convert_to_SJIS( $dannm2 ), convert_to_SJIS( $dannmk ) , convert_to_SJIS( $daihyo ) , convert_to_SJIS( $renraku ), 
@@ -219,11 +225,15 @@ $params = array(
     $gyscd, $sihon, $jygsu, $kyakb, $wuserkb, $kounoukb, $wloginid, $wpwd, $sndflg, $biko, $login, $udate, $utime, $wlastlogindt, $wsdate, $wudate, $wutime);
 
         
-$stmt = sqlsrv_query( $this->conn, $sql, $params);
+$stmt = sqlsrv_query( $conn, $sql, $params);
+
+//echo "顧客マスタ登録"."<br>";
+//echo $sql."<br>";
+//print_r($params);
 
 if( $stmt === false) {
-    echo "false:".$sql."<br>";
-    print_r($params);
+    //echo "false:".$sql."<br>";
+    //print_r($params);
     print_r( sqlsrv_errors()) ;
     return false;
 }
@@ -239,13 +249,13 @@ include('include/err.php');
     <div class="f120 mb20">
     ご登録が完了いたしました。<br><br>
     下記がお客様のログインIDとパスワードになります。ログインの際、必要となります。 <br>
-	<span class="status2">※この画面を印刷するなどしてログインIDとパスワードを保管してください。</span>
+    <span class="status2">※この画面を印刷するなどしてログインIDとパスワードを保管してください。</span>
     <br><div class="alert alert-info" role="alert" style="width:50%">
-          <h3>ログインID は　 <?php echo $Kyaku->get_wloginid(); ?>です。</h3>
-          <h3>パスワード は　 <?php echo $Kyaku->get_wpwd(); ?>です。</h3>
+          <h3>ログインID は　 <?php echo $wloginid; ?>です。</h3>
+          <h3>パスワード は　 <?php echo $wpwd; ?>です。</h3>
       </div>
-	<br>
-	<span class="text-danger">※ご注意ください※</span><br>
+    <br>
+    <span class="text-danger">※ご注意ください※</span><br>
     ◎ご登録いただいたメールアドレスあてにログインID、パスワードが記載された「利用者登録完了メール」が送付されます。<br>
     もし「利用者登録完了メール」が届かない場合は、メールアドレスの入力間違い、迷惑メールの拒否設定が考えられます。<br>
     　○メールアドレスの入力間違いの場合：<br>
@@ -253,7 +263,7 @@ include('include/err.php');
     　　誤りがあれば正しいアドレスに変更し、再登録を行ってください。<br>
     　○迷惑メールの設定について：<br>　　設定をご確認のうえ、@kobe-ipc.or.jpドメインの受信許可をしてください。<br>
     　　設定方法はご契約会社により異なります。<br><br>
-	◎今後、施設の使用をお申し込みの際は、予約受付やお支払に関するメールが送付されますので、メールアドレスをよくご確認ください。<br>
+    ◎今後、施設の使用をお申し込みの際は、予約受付やお支払に関するメールが送付されますので、メールアドレスをよくご確認ください。<br>
     ◎セキュリティを確保する為、初回ログイン後にパスワードの変更をおすすめします。<br>
     <a href="http://localhost/rk_ssc/mailtpl/member.txt"><small>受付メールサンプル</small></a><br>
     <!-- もし「利用者登録完了メール」が届かなかった場合、メールアドレスの記載ミス等が考えられますので、<br>
@@ -261,23 +271,23 @@ include('include/err.php');
       ＊＊ お問合せ窓口  TEL:078-360-3200 （お問い合わせ時間：9:00～17:00）＊＊-->
     <br>ご不明な点は下記窓口までお問い合わせださい。<br>
     <div class="alert alert-success" role="alert">
-	<h4>＊＊ お問い合わせ窓口＊＊</h4><h3>TEL:078-360-3200 お問い合わせ時間：9:00～17:00</h3> ※登録状況を確認するにあたり、「ログインID」をお知らせください。
-	</div>
+    <h4>＊＊ お問い合わせ窓口＊＊</h4><h3>TEL:078-360-3200 お問い合わせ時間：9:00～17:00</h3> ※登録状況を確認するにあたり、「ログインID」をお知らせください。
+    </div>
     </div>    
-	<div class="alert alert-info" role="alert" >
-		<p class="lead">ご利用開始はこちらから>></p>
-		<!--a class="btn btn-primary btn-lg" href="login.php" role="button">空き状況・予約申込　>></a-->
+    <div class="alert alert-info" role="alert" >
+        <p class="lead">ご利用開始はこちらから>></p>
+        <!--a class="btn btn-primary btn-lg" href="login.php" role="button">空き状況・予約申込　>></a-->
         <form role="form" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
             <input type="submit" name="submit" id="submit" value="空き状況・予約申込　" class="btn btn-primary btn-lg">
             <input type="hidden" name="next_page" value="search.php" class="btn btn-primary btn-lg">
         </form>
-		<!--a class="btn btn-primary btn-lg" href="login.html" role="button">予約照会　>></a-->
-		<form role="form" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+        <!--a class="btn btn-primary btn-lg" href="login.html" role="button">予約照会　>></a-->
+        <form role="form" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
             <!--a class="btn btn-primary btn-lg" href="login.php" role="button">利用者情報変更　>></a-->
             <input type="submit" name="submit" id="submit" value="利用者情報変更　" class="btn btn-primary btn-lg">
             <input type="hidden" name="next_page" value="member_top.php" class="btn btn-primary btn-lg">
         </form>
-	</div>
+    </div>
     </form>
         <a href="http://localhost/rk_ssc/mailtpl/member.txt"  target="_blank" onClick="disp('lhttp://localhost/rk_ssc/mailtpl/member.txt')">
             <li class="glyphicon glyphicon-question-sign" aria-hidden="true">受付メールサンプル</li>

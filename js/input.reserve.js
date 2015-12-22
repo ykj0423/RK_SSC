@@ -78,7 +78,7 @@ jQuery(function () {
 			if( ( objData[i]['rmcd'] == "201" ) || ( objData[i]['rmcd'] == "301" ) ){
 				td4.html( jjkn + hjkn + tjkn );	
 			}else{				
-				td4.html( hjkn );	
+				td4.html( objData[i]['jkn1'] + "～" + objData[i]['jkn2'] );
 			}
 			
 			td5.html( "<input type='text' class='form-control' name='ninzu" + i + "' id='ninzu" + i + "' value='" + objData[i]['ninzu'] + "' style='width:50px'>人" );

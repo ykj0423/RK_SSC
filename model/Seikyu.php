@@ -44,19 +44,6 @@ class Seikyu extends ModelBase {
         //請求書発行日
         $seidt = 0;//ZERO
 
-        //請求書ダウンロードURL
-        $seiurl = "";
-        
-        /* システム管理データ */
-        $sql = "SELECT fldsei FROM mt_system";
-        
-        $stmt = sqlsrv_query( $this->conn, $sql );
-
-        while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
-            $seiurl = trim($row['fldsei']);
-        }    
-      
-                
         //請求書自動発行処理
         $seideal = 0; //ZERO
         
@@ -92,7 +79,25 @@ class Seikyu extends ModelBase {
             $login = $row['wloginid'];                                      //ログイン
             //echo $row['dannm'].", ".$row['dannm2']."<br />";
         }
- 
+        
+        //請求書ダウンロードURL
+        $seiurl = "";
+        
+        /* システム管理データ */
+        $sql = "SELECT azrfldsei, azrfldtuchi FROM mt_system";
+        
+        $stmt = sqlsrv_query( $this->conn, $sql );
+
+        while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+            
+            if( $kounoukb ==1 ){//後納
+                $seiurl = trim($row['azrfldtuchi']);
+            }else{
+                $seiurl = trim($row['azrfldsei']);
+            } 
+
+        } 
+
         //納付期限
         $date_ukedt = strtotime( $nen.'-'.$m.'-'.$d );
         $paylmtdt = date('Ymd', strtotime(' +9 days', $date_ukedt));
@@ -105,7 +110,7 @@ class Seikyu extends ModelBase {
             $paylmtdt = 0;
         }
 
-        if( $kounoukb ==　1){//後納であればセットしない
+        if( $kounoukb ==1){//後納であればセットしない
             //料金通知書
             $seifile = "T".$ukeno.".pdf";
         
@@ -125,7 +130,8 @@ class Seikyu extends ModelBase {
             $yobikb = $rec['yobikb'];                                   //使用曜日区分
             $hzkb = 0;                                                  //付属設備区分
             $rmcd = $rec['rmcd'];                                       //施設コード
-            $rmnmr = mb_convert_encoding($rec['rmnmr'], "SJIS", "utf8");//施設名称
+            $rmnmr = $rec['rmnmr'];//施設名称
+            //$rmnmr = mb_convert_encoding($rec['rmnmr'], "SJIS", "utf8");//施設名称
             $hzcd = 0;                                                  //付属設備コード
             $hznmr = "";                                                //付属設備名称
             $stjkn = $rec['stjkn'];                                     //使用開始時間
@@ -135,22 +141,21 @@ class Seikyu extends ModelBase {
 
             $zgrt = 0;
 
-            /*$zgr = 100;
+            $zgr = 100;
 
-            $comlkb = $rec['comlkb'];//営利目的区分
+            //$comlkb = $rec['comlkb'];//営利目的区分
 
-            if( $comlkb == 1 ){
-                $zgr = $zgr * 1.5;
-            }
+            //if( $comlkb == 1 ){
+            //    $zgr = $zgr * 1.5;
+            //}
 
-            $jnbkb = $rec['jnbkb'];//準備撤去区分
+            /*$jnbkb = $rec['jnbkb'];//準備撤去区分
 
             if( $jnbkb == 1 ){
                 $zgr = $zgr * 0.5;
-            }
-            */
-
-            $tnk = 0;//$rec['tnk'];
+            }*/
+            
+            $tnk = $rec['tnk'];
             $kin = $rec['rmkin'];
             $seikin = intval( $seikin ) + intval( $kin );
             
@@ -190,7 +195,7 @@ class Seikyu extends ModelBase {
                 $edjkn = 0;//使用終了時間
                 $hbstjkn = 0;//本番開始時間
                 $hbedjkn = 0;//本番終了時間
-                $tnk = 0;//単価;
+                $tnk = 0;//$rec['tnk'];//単価;
                 $kin = $rec['hzkin'];       //設備金額
 
                 /*後納の場合、料金通知テーブルに書き込む*/
