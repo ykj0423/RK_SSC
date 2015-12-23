@@ -3,7 +3,7 @@
 
 $errmsg = "";
 //header
-$pageTitle = "新規利用者登録[入力]";
+$pageTitle = "利用者登録[入力]";
 include('include/header.php');
 include('model/Kyaku.php');
 /**
@@ -18,7 +18,6 @@ include('model/Kyaku.php');
  * @license    G&G Co.ltd.
  * @version    0.1
 **/
-echo "test";
 if( isset( $_POST['submit'] ) && !empty( $_POST['submit'] ) ){
         
     /* TODO　入力チェック */
@@ -61,17 +60,22 @@ if( isset( $_POST['submit'] ) && !empty( $_POST['submit'] ) ){
 //エラーメッセージ
 include('include/err.php');
 ?>
+</head>
+<body class="container">
+<p class="bg-head text-right"><?php echo $_SESSION['centername']; ?></p>
+<h1><span class="midashi">|</span><?php echo $pageTitle; ?></h1>
+
+
   <div class="row mb10">
     <p class="f120 col-xs-8">必要事項をご入力のうえ、「確認画面へ」ボタンを押してください。<br>登録完了後、本システムのログインに必要な情報をメールでお送りいたします。</p>
       <div class="col-xs-4">
         <a href="help.html#regist"  class="btn alert-info" target="window_name"  onClick="disp('help.html#regist')"><li class="glyphicon glyphicon-question-sign" aria-hidden="true">&nbsp;この画面の操作方法についてはこちら>></li></a> 
-        <a href="loginqa.html#regist"   class="btn alert-danger" target="window_name"  onClick="disp('loginqa.html#regist')"><li class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">&nbsp;入力にあたってのご注意はこちら>></li></a> 
       </div>
   </div>
   <form role="form" method="POST" action="regist_cnf.php">
     <div class="form-group">
-      <table id="regist" align="center" class="table table-bordered table-condensed  form-inline f120" >
-          <th >利用者名<span class="red">(必須)</span></th>
+      <table id="regist" align="center" class="table table-bordered table-condensed form-inline f120">
+          <th>利用者名<span class="red">(必須)</span><br>所属部課までご入力ください</th>
           <td>
               <input type="text" class="long" maxlength="20" name="dannm" value="">
              <!--全角20文字-->
@@ -81,7 +85,7 @@ include('include/err.php');
         <tr>
           <th >利用者名（カナ）<span class="red">(必須)</span></th>
           <td><input type="text" name="dannmk" class="long" value="" maxlength="20"><br>
-              <span class="ml10 note">（例：コウベシサンギョウシンコウザイダン ソウムブ シセツカンリカ）</span><!--カナ20文字--></td>
+              <span class="ml10 note">（例：ｺｳﾍﾞｼｻﾝｷﾞｮｳｼﾝｺｳｻﾞｲﾀﾞﾝ ｿｳﾑﾌﾞ ｼｾﾂｶﾝﾘｶ）</span><!--カナ20文字--></td>
         </tr>
         <tr>
           <th >代表者名<span class="red">(必須)</span></th>

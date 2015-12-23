@@ -9,7 +9,7 @@ $next_page = "";
 $errmsg = "";
 
 //header
-$pageTitle = "トップページ";
+$pageTitle = "トップメニュー";
 include('include/header.php');
 ?>
 </head>
@@ -61,7 +61,7 @@ include('include/err.php')
 <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <div class="alert alert-info" role="alert">
 	<p class="lead">ご利用登録されている方はこちら</p>
-  <input type="submit" class="btn btn-primary btn-lg" name="search" role="button" value="空き状況・予約申込み　>>">
+  <input type="submit" class="btn btn-primary btn-lg" name="search" role="button" value="空き状況・使用申込　>>">
   <input type="submit" class="btn btn-primary btn-lg" name="rsvlist" role="button" value="予約照会　>>">
   <input type="submit" class="btn btn-primary btn-lg" name="member" role="button" value="利用者情報変更　>>">
 </div>
@@ -74,11 +74,18 @@ include('include/err.php')
   <input type="submit" class="btn btn-success btn-lg" name="pre_search" role="button" value="空き状況　>>">
 </div>
 </div>
-<div class="panel panel-default">
-  <div class="panel-heading">,
-    <h3 class="panel-title">お知らせ</h3>
+<h5>&nbsp;&nbsp;※使用許可のお取消は、受付までお問い合わせください。<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;また、<a href="torikesi.pdf" target="_blank"><img src="icon_btn_pdf.png" alt=""><u>「神戸市産業振興センター使用許可取消申出書」</u></a>を受付までご提出ください。
+</h5>
+<br>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">お知らせ</h3>
+    </div>
+    <div class="panel-body">
+      2016/01/03  定期メンテナンスのお知らせ
+    </div>
   </div>
-  <div class="panel-body">
 </form>
 <?php
 //TODO　InformationClassを作成する
