@@ -8,12 +8,13 @@ include('include/header.php');
 ?>
 </head>
 <body class="container">
-<p class="bg-head text-right"><?php echo $_SESSION['centername']; ?></p>
+<?php include('include/menu.php');
+?>
 <h1><span class="midashi">|</span><?php echo $pageTitle; ?><?php echo "<small>".$_SESSION['sysname']."</small>" ?></h1>
 <?php
 
 //メニュー
-include('include/menu.php');
+
 require_once('func.php');
 /**
  * ReserveKeeperWeb予約システム
@@ -29,41 +30,28 @@ require_once('func.php');
 **/
 
 ?>
-    <div class="row mb20">
-		<div class="col-xs-7">
-      		<h4>お申し込みをされたご予約の一覧です</h4>
-      		<h4 class="status2">＊＊ 必ずお読みください＊＊</h4>
-			<div class="alert alert-info" role="alert">
-			<p class="h5">※ご予約のお取り消しは、お問い合わせ窓口までお問合せください。</p>
-			<br><p class="h5">※施設使用料は、前もって納付期限までにお支払いください。<br><!--納付期限をすぎてもご入金いただけない場合、お申し込みが失効されます。-->納付期限をすぎてもお支払いいただけない場合、お申し込みは取り消されます。</p>
-			<br><p class="h5">※ご入金確認後、使用許可を行い、「使用許可書」を発行いたします。<br>お手数ですが、「使用許可書」を下記画面からダウンロード後、印刷のうえ、必ずご利用当日にご持参ください。
-			<br><br>ダウンロードや印刷ができない場合は、下記、お問い合わせ窓口までお問い合わせください。<br>なお、安全性の為、ダウンロードできるのは一度のみとしております。ご注意ください。</p>		
-			</div>
-		</div>
-		<div class="col-xs-5">
-			<br>【状態の説明】<br>
-          <span class="status1"></span><br>
-          <span class="status3">仮予約：</span>予約申し込みを受け付けました。所定の使用料をお支払いください。ご入金確認後、「使用許可書」を発行いたします。<br>
-          <span class="status1">予約：</span>使用が許可されました。「使用許可書」が発行されています。印刷して当日にお持ちください。<br>
-          <span class="status2">予約不可：</span>時間差で他のお申し込みが受け付けられたため、予約できませんでした。悪しからずご了承ください。<br>
-          <span class="status5">失効：</span>納付期限を超過したため、窓口で仮予約を取り消しました。<br>
-          <span class="status5">取消：</span>お客様のお申し出により予約を取り消しました。<br>
-          </p>
-       </div>
+  <div class="row mb20">
+ <div class="col-xs-7">
+<!--      <h4>お申込みされたご予約の一覧です</h4>-->
+      <h4 class="status2">＊＊ 必ずお読みください＊＊</h4>
+      <div class="alert alert-info" role="alert">
+        <p class="h5">※使用許可のお取消は、受付までお問い合わせください。<br>&nbsp;&nbsp;&nbsp;&nbsp;また、<a href="torikesi.pdf" target="blank"><img src="icon_btn_pdf.png" alt=""><u>「神戸市産業振興センター使用許可取消申出書」</u></a>を受付までご提出ください。</p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+        <p class="h5">※使用料は、納付期限までにお支払いください。<br>&nbsp;&nbsp;&nbsp;&nbsp;納付期限を過ぎてもご入金いただけない場合、お申込みは自動的に失効いたします。</p><br>
+        <p class="h5">※ご入金確認後、使用許可を行い「神戸市産業振興センター使用許可書」を発行いたします。<br>&nbsp;&nbsp;&nbsp;&nbsp;下記画面よりダウンロードの上、印刷し、必ずご使用当日にご持参ください。
+          <br><br>ダウンロードや印刷ができない場合は、受付までお問い合わせください。<br>なお、安全性確保の為、ダウンロードできるのは一度のみとしておりますのでご注意ください。
+        </p>    
       </div>
-	<div class="alert alert-success" role="alert">
-	<h4>＊＊ お問い合わせ窓口＊＊</h4><h3>TEL:078-360-3200 お問い合わせ時間：9:00～17:00</h3> ※予約状況を確認するにあたり、「お問い合わせ番号」をお知らせください。
-	</div>
-	<!--div class="row mb10 text-left">
-	</div-->
-    <!--div class="col-xs-5">
-		<select  class="form-control" name="mokuteki">
-		<option value="0">現在の予約</option>
-		<option value="1">2015年度の予約</option>
-		</select>
-	</div-->
+    </div>
+    <div class="col-xs-5"><br>【状態の説明】<br>
+      <span class="status1"></span><br>
+      <span class="status3">仮予約：</span>使用申込を受け付けました。所定の使用料をお支払いください。ご入金確認後、「神戸市産業振興センター使用許可書」を発行いたします。<br><br>
+      <span class="status1">予約：</span>「神戸市産業振興センター使用許可書」が発行されています。印刷して当日お持ちください。<br><br>
+      <span class="status2">予約不可：</span>他のお申込みが受け付けられたため、あるいは既存の予約を含め、7日を超える連続使用となるため予約できませんでした。悪しからずご了承ください。<br><br>
+      <span class="status5">失効：</span>納付期限を超過したため、センターで仮予約を取り消しました。<br><br>
+      <span class="status5">取消：</span>お客様のお申し出により予約を取り消しました。<br>
+    </div>
+  </div>
 	<div class="row mb10 text-right">
-	
 	<a href="help.html#rsvlist"  class="btn alert-info" target="window_name"  onClick="disp('help.html#rsvlist')"><li class="glyphicon glyphicon-question-sign" aria-hidden="true">&nbsp;この画面の操作方法についてはこちら>></li></a> 
 	</div>
     <table id ="rsv_input" class="table table-bordered table-condensed form-inline" >

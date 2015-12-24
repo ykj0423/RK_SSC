@@ -14,6 +14,7 @@
               echo "<a href=".$ini['RATE_LINK']." target=\"_blank\">料金表</a>";
             ?>
             </li>
+            <li><a href="hitudoku2.html" target="_blank">ご使用にあたってのご注意</a></li>
             <li><a href="help.html" target="_blank">システムガイド</a></li>
          </ul>
          <form class="navbar-form pull-right">

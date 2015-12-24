@@ -166,7 +166,7 @@ class Reserve extends ModelBase {
                     //update
                     $sql = "UPDATE ks_jkntai SET ukeno=(?), gyo=(?),login=(?), udate=(?), utime=(?)";
                     $sql = $sql." WHERE usedt=(?) AND rmcd=(?) AND jikan=(?) AND timekb=(?)";
-                    $params = array( $ukeno, $gyo, $login, parent::getUdate(), parent::getUtime() );
+                    $params = array( $ukeno, $gyo, $login, parent::getUdate(), parent::getUtime() , $usedt, $rmcd, $jkn, $timekb );
 
                 }else{
             
@@ -182,6 +182,7 @@ class Reserve extends ModelBase {
                 if( $stmt === false) {
                     $tran = false;
                     echo $sql;
+                    print_r($params);
                     break;//exit for
                 }
 

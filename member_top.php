@@ -3,20 +3,17 @@
 
 $errmsg = "";
 //header
-$pageTitle =  "利用者情報変更";
+$pageTitle =  "利用者情報の変更について";
 include('include/header.php');
 ?>
 </head>
 <body class="container">
-<p class="bg-head text-right"><?php echo $_SESSION['centername']; ?></p>
 <?php 
 //メニュー
 include('include/menu.php');
 ?>
-<h1><span class="midashi">|</span><?php echo $pageTitle; ?><?php echo "<small>".$_SESSION['sysname']."</small>" ?></h1>
+<h1><span class="midashi">|</span><?php echo $pageTitle; ?></h1>
 <?php
-
-
 /**
  * ReserveKeeperWeb予約システム
  *

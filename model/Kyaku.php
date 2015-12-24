@@ -399,8 +399,8 @@ echo $sql;
 
 		$sql = "update web_mkyaku set pwd='".$passnew."' where kyacd = ".$kyacd;
 		$params = array($pass);
-		echo $sql;
-		print_r($params);
+		//echo $sql;
+		//print_r($params);
 		sqlsrv_query( $conn, $sql );//, $params);
 
 		if( $stmt === false ) {

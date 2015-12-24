@@ -35,7 +35,7 @@ if( isset( $_POST['submit'] ) && !empty( $_POST['submit'] ) ){
 //顧客登録
 //$Kyaku->add_kyaku();
 
-
+echo "test";
 $ini = parse_ini_file('config.ini');        
 $serverName = $ini['SERVER_NAME'];
 $connectionInfo = array( "Database"=>$ini['DBNAME'], "UID"=>$ini['UID'], "PWD"=>$ini['PWD'] );
@@ -44,7 +44,7 @@ $conn = sqlsrv_connect( $serverName, $connectionInfo);
 if( $conn === false ) {           
     die( print_r( sqlsrv_errors(), true));
 }
-
+echo "test";
 /* 団体名 */
 $dannm = $_POST['dannm'];
 $dannm2 = "";
@@ -91,44 +91,53 @@ $kyakb = 1;//一般
 if( judge_tyusyo ( $sihon, $gyscd, $jygsu) ){
     $kyakb = 2;//中小企業
 }
-//echo "中小企業判断（２）";
+echo "中小企業判断（２）";
 /* 中小企業判断（２） */
 $sql = "select tyusyonm from mt_tyusyo where setkb = 1";
 
 $stmt = sqlsrv_query( $conn, $sql );
 
 if( $stmt === false) {
+    echo $sql;
     return false;
-}
+}else{
 
-while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_NUMERIC ) ) {
-    
-    $tyusyonm = trim( $row[0] );
+    while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_NUMERIC ) ) {
+        
+        $tyusyonm = trim( $row[0] );
 
-    if( strpos( $dannm , $tyusyonm ) !== false){
-        //文字列が含まれている場合
-        $kyakb = 2;//中小企業
-        break;
+        if( strpos( $dannm , $tyusyonm ) !== false){
+            //文字列が含まれている場合
+            $kyakb = 2;//中小企業
+            break;
+        }
+
     }
 
 }
+
 
 $sql = "select tyusyonm from mt_tyusyo where setkb = 2 AND tyusyonm = '".$dannm."'";
 
 $stmt = sqlsrv_query( $conn, $sql );
 
 if( $stmt === false) {
-    return false;
+    //echo $sql;
+    //return false;
+}else{
+
+
+    while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_NUMERIC ) ) {
+        if( trim( $row[0] ) == trim( $dannm )){
+            //文字列が一致する場合
+            $kyakb = 2;//中小企業
+            break;
+        }
+    }
+
 }
 
-while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_NUMERIC ) ) {
-    if( trim( $row[0] ) == trim( $dannm )){
-        //文字列が一致する場合
-        $kyakb = 2;//中小企業
-        break;
-    }
-}
-//echo "後納ドメイン判断";
+echo "後納ドメイン判断";
 /* 後納ドメイン判断 */
 $kounoukb = 0;
 

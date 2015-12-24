@@ -655,10 +655,9 @@ class DB
 	{
 	
 		$ret = array();
-
 		//施設コード、WEB名称、定員、WEBリンク
 		//$sql = "select rmcd, rmnmw, capacity, weblink from mt_room"; 
-		$sql = "select mt_room.rmcd, mt_room.rmnmw, mt_room.capacity, mt_room.oyakokb, mt_room.weblink, "; 
+		$sql = "select mt_room.rmcd, mt_room.rmnmw, mt_room.capacity, mt_room.oyakokb, mt_room.sumrmcd, mt_room.weblink, "; 
         $sql = $sql." asa.tnk as asatnk, hiru.tnk as hirutnk , yoru.tnk as yorutnk from mt_room "; 
         $sql = $sql." left outer join mt_rmtnk as asa on mt_room.rmcd = asa.rmcd "; 
         $sql = $sql." left outer join mt_rmtnk as hiru on mt_room.rmcd = hiru.rmcd ";

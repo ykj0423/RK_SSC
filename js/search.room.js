@@ -260,6 +260,7 @@ jQuery(function () {
             var jkn2 = $("#" + datastr).attr('data-jkn2');		//時間（至）
             var tnk = $("#" + datastr).attr('data-tnk');		//時間（至）
             var oyakokb = $("#" + datastr).attr('data-oyakokb');//親子区分　1:単独 2:親 3:子(ct_oyako)
+			var sumrmcd = $("#" + datastr).attr('data-sumrmcd');//集約施設
             var src = $("#" + imgstr).attr('src');
 			/*var jstjkn_h = null;
             var jstjkn_m = null;
@@ -309,7 +310,9 @@ jQuery(function () {
 					fee: '',
 					piano: '',
 					partition: '',
-					oyakokb : oyakokb,
+					oyakokb: oyakokb,
+					sumrmcd: sumrmcd,
+					disp: 1,
 					rmkin: 0,
 					hzkin: 0,
                     value: 1

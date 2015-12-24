@@ -2,13 +2,13 @@
 @session_start();
 //echo $_SESSION['next_page'];
 //header
-$pageTitle = "お申し込みにあたってのご注意";
+$pageTitle = "ご使用にあたってのご注意";
 include('include/header.php');
 ?>
 </head>
 <body class="container">
 <p class="bg-head text-right"><?php echo $_SESSION['centername']; ?></p>
-<h1><span class="midashi">|</span><?php echo $pageTitle; ?><?php echo "<small>".$_SESSION['sysname']."</small>" ?></h1>
+<h1><span class="midashi">|</span><?php echo $pageTitle; ?></h1>
 <?php
 
 if( isset( $_POST['submit'] ) ){
@@ -30,7 +30,11 @@ if( isset( $_POST['submit'] ) ){
 
 /* お申し込みにあたってのご注意 */
 include('include/notice.txt');
-?>  
+?>   
+<div style="text-align:center">
+    <img src="img/img_02.gif" width="864">
+    <br><br><br>
+</div>
     <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
         <div style="text-align:center">
             <!--a class="btn btn-primary btn-lg mb20" href="search.html" role="button">次へ進む　>></a-->

@@ -126,9 +126,7 @@ include('include/err.php');
                 </div>
             </div>
         </form>
-        <a href="loginqa.html#login"  target="_blank" onClick="disp('loginqa.html#login')">
-            <li class="glyphicon glyphicon-question-sign" aria-hidden="true">ログインでお困りの方はこちら</li>
-        </a> 
+    <a href="help.html#loginqa" target="_blank"><li class="glyphicon glyphicon-question-sign" aria-hidden="true">ログインでお困りの方はこちら</li></a> 
     </div>
 <script type="text/javascript">
 <!--
