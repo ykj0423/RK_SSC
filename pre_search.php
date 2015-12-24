@@ -176,8 +176,16 @@ echo "<table id =\"rsv\" class=\"table table-bordered table-condensed\">";
 echo "<tr class=\"head\">";
 echo "<th colspan=\"2\" rowspan=\"3\" width=\"300\">施設名</th>";
 
+
+$today = date( "Y/m/d" );
+$rsv_sttdt = date( "Y/m/d", strtotime( "".$today." +15 day" ) );       //会議室申込開始日
+$rsv_enddt = date( "Y/m/d", strtotime( "".$today." +365 day" ) );      //申込期限日
+
+$span_stt="";
+$span_end ="";
 //対象日を取得
-$date_array = get_date_array( $sttdt , $enddt ,  $yobi ) ;
+$date_array = get_date_array( $sttdt , $enddt ,  $yobi , $today, $rsv_enddt ) ;
+
 
 /* 対象日の表示 */
 include('date.php');
@@ -197,11 +205,12 @@ for ($i = 0; $i < ( count( $room ) ) ; $i++ ) {
 	$rmcd = $room[ $i ][ 'rmcd' ];   			//施設コード
 	$rmnm = mb_convert_encoding($room[ $i ][ 'rmnmw' ], "utf8", "SJIS");//施設名称
     $teiin = ltrim( $room[ $i ][ 'capacity' ], '0' );	//定員
-
+    $weblink = $room[ $i ][ 'weblink' ];            //施設情報
 	echo "<tr class=\"dgray\">";
     //施設情報
  	echo "<th rowspan=\"3\"><span class=\"f150\">".$rmnm."</span><br>[定員]".$teiin;
- 	echo "<a href=\"".$weblink."\" target=\"_blank\" class=\"btn btn-primary btn-xs\" role=\"button\">施設情報</a></th>";
+ 	
+    echo "<a href=\"".$weblink."\" target=\"_blank\" class=\"btn btn-primary btn-xs\" role=\"button\">施設情報</a></th>";
 
     //カレンダー
     //本当は一気に取りたい

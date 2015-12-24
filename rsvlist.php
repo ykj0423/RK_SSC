@@ -91,7 +91,8 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
     }
     
     $rsvdt = date( "Y/m/d", strtotime( substr( $rsvlist[$i]['usedt'], 0, 4 )."-".substr( $rsvlist[$i]['usedt'], 4, 2 )."-".substr( $rsvlist[$i]['usedt'], 6, 2 )) );      //申込終了日
-    echo "<td><span class=\"green\">".$rsvlist[$i]['ukeno']."-".$rsvlist[$i]['gyo']."</span><br>";
+    echo "<td><span class=\"green\">".$rsvlist[$i]['ukeno']."</span><br>";
+    //echo "<td><span class=\"green\">".$rsvlist[$i]['ukeno']."-".$rsvlist[$i]['gyo']."</span><br>";
     echo format_ymd( $rsvlist[$i]['ukedt'] )."</td>";
     /* hidden */
     echo "<input type='hidden' name='ukeno".$i."' id='ukeno".$i."'  value=\"".$rsvlist[$i]['ukeno']."\">";//受付№
@@ -106,7 +107,7 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
     if($rsvlist[$i]['kounoukb'] == 1){
       echo "<td></td>";
     }else{
-      echo "<td><span class='status2'".format_ymd( $rsvlist[$i]['paylmtdt'] )."</span></td>";
+      echo "<td>".$rsvlist[$i]['paylmtdt']."</td>";
     }
     //ドキュメント
     echo "<td>";
@@ -133,8 +134,13 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
         $doc_name ="請求書";
       }
 
-      if( $rsvlist[$i]['seifbd'] == 0) {          
+      if( $rsvlist[$i]['seifbd'] == 0) {
+      //echo $rsvlist[$i]['seiurl'];
+      //echo "<br>";
+//echo $rsvlist[$i]['seifile'];
+
         echo "<a href=\"".$rsvlist[$i]['seiurl'].$rsvlist[$i]['seifile']."\" class=\"btn-icon\"><img src=\"icon_btn_pdf.png\" alt=\"".$doc_name."\">".$doc_name."ダウンロード</a>";
+        //echo "<a href=\"".$rsvlist[$i]['seiurl'].$rsvlist[$i]['seifile']."\" class=\"btn-icon\"><img src=\"icon_btn_pdf.png\" alt=\"".$doc_name."\">".$doc_name."ダウンロード</a>";
       }else{
         echo $doc_name."番号：".$rsvlist[$i]['seino'];
       }
