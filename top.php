@@ -32,7 +32,7 @@ include('include/header.php');
 **/
 $next_page = "";
 $errmsg = "";
-echo "a";
+
 if (!empty($_POST['pre_search'])){
     //空き状況検索
     $next_page = 'pre_search.php';

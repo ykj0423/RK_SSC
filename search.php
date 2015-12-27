@@ -437,8 +437,8 @@ for ($i = 0; $i < ( count( $room ) ) ; $i++ ) {
         
       echo "</table>";
       echo "<p class=\"text-right\">";
-      echo "<input type='submit' class=\"btn btn-default mr48p prev\" href=\"#\" role=\"button\" value=\"<<前へ\"></a>";
-      echo "<input type='submit' class=\"btn btn-default mr20\ next\" href=\"#\" role=\"button\" value=\"次へ>>\"></a>";
+      echo "<input type='submit' class=\"btn btn-default mr48p prev\" href=\"#\" role=\"button\" value=\"<<前へ\">";
+      echo "<input type='submit' class=\"btn btn-default mr20\ next\" href=\"#\" role=\"button\" value=\"次へ>>\">";
       echo "</p>";
       echo "<table  class=\"table table-bordered table-condensed rsv\">";
 	    echo "<tr class=\"head\">";

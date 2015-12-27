@@ -595,9 +595,9 @@ jQuery(function () {
 				objData[i]['rmkin'] = objData[i]['tnk'];
 				objData[i]['hzkin'] = 0;//objData[i]['tnk'];
 
-alert("a7");
+//alert("a7");
 			}
-alert("a8");			
+//alert("a8");			
 			localStorage.removeItem('sentaku');
 			//alert('removeitem');
 			localStorage.setItem('sentaku', JSON.stringify(objData));
