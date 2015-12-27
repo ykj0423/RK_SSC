@@ -25,15 +25,15 @@ class ModelBase
     public function end_transaction( $conn, $tran ){
 
         if( $tran ) {
-            echo "commit";
+            //echo "commit";
              sqlsrv_commit( $conn );
              return true;
-             echo "Transaction committed.<br />";
+             //echo "Transaction committed.<br />";
         } else {
-            echo "rollbk";
+            //echo "rollbk";
              sqlsrv_rollback( $conn );
              return false;
-             echo "Transaction rolled back.<br />";
+            // echo "Transaction rolled back.<br />";
         }
 
     }

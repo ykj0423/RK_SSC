@@ -4,6 +4,7 @@ require_once('model/Kyaku.php');
 $errmsg = "";
 //header
 $pageTitle =  "メールアドレス変更";
+include('session_check.php');
 include('include/header.php');
 ?>
 </head>
@@ -55,6 +56,7 @@ if( empty( $_POST['regist'] ) ){
         if( $Kyaku->change_mail_adress( $_SESSION['wloginid'] , $_POST['mail'] ) ){
             $infomsg = "メールアドレスの変更が完了致しました。";
             $mail_adress = $_POST['mail'];
+            die("メールアドレスの変更が完了致しました。");
         }
     }
 }
@@ -77,12 +79,12 @@ include('include/err.php');
         <tr><th>新しいメールアドレス</th>
         <td>
             <input type="text" name="mail" style="width:60%" value=""><br>
-            <span class="text-danger">※ご注意ください※</span><br>
+            <span class="text-danger">※ご注意ください※</span><!--br>
                 ※「テスト送信」ボタンを押しすと、テストメールが送信されます。<br>メールが正しく届くかどうかを事前に確認するためにご利用ください。<br>
                 もし「テストメール」が届かない場合は、メールアドレスの入力間違い、迷惑メールの拒否設定が考えられます。<br>
 
                 ◎変更完了後、ご入力いただいたメールアドレスあてに「確認メール」が送付されます。<br>
-                もし「確認メール」が届かない場合は、メールアドレスの入力間違い、迷惑メールの拒否設定が考えられます。<br>
+                もし「確認メール」が届かない場合は、メールアドレスの入力間違い、迷惑メールの拒否設定が考えられます。<br-->
                 　○メールアドレスの入力間違いの場合：<br>
                 　　再度、この画面でメールアドレスを変更してください。<br>
                 　○迷惑メールの設定について：<br>　　設定をご確認のうえ、@kobe-ipc.or.jpドメインの受信許可をしてください。<br>

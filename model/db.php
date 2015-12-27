@@ -593,21 +593,14 @@ class DB
 			$sql .= " order by dt_roomrmei.ukeno , dt_roomrmei.gyo ";
 
 			$result = sqlsrv_query( $this->con, $sql );
+
             $i = 0;
 
-            $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
             while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 
-                //$ukeno  =  $row[0];
-                //$value  = $row[1];
-
-                //if (!is_numeric($value)) { 
-                        //数値化できないものはutf8に変換して値を返す
-                //        $value = 0;
-                //}
-                    
                 $ret[$i] = $row;                    
                 $i++;
+
             }
 
        
@@ -657,11 +650,11 @@ class DB
 		$ret = array();
 		//施設コード、WEB名称、定員、WEBリンク
 		//$sql = "select rmcd, rmnmw, capacity, weblink from mt_room"; 
-		$sql = "select mt_room.rmcd, mt_room.rmnmw, mt_room.capacity, mt_room.oyakokb, mt_room.sumrmcd, mt_room.weblink, "; 
-        $sql = $sql." asa.tnk as asatnk, hiru.tnk as hirutnk , yoru.tnk as yorutnk from mt_room "; 
-        $sql = $sql." left outer join mt_rmtnk as asa on mt_room.rmcd = asa.rmcd "; 
-        $sql = $sql." left outer join mt_rmtnk as hiru on mt_room.rmcd = hiru.rmcd ";
-        $sql = $sql." left outer join mt_rmtnk as yoru on mt_room.rmcd = yoru.rmcd "; 
+		$sql = "SELECT mt_room.rmcd, mt_room.rmnmw, mt_room.capacity, mt_room.oyakokb, mt_room.sumrmcd, mt_room.weblink2 AS weblink, "; 
+        $sql = $sql." asa.tnk AS asatnk, hiru.tnk AS hirutnk , yoru.tnk AS yorutnk FROM mt_room "; 
+        $sql = $sql." LEFT OUTER JOIN mt_rmtnk as asa on mt_room.rmcd = asa.rmcd "; 
+        $sql = $sql." LEFT OUTER JOIN mt_rmtnk as hiru on mt_room.rmcd = hiru.rmcd ";
+        $sql = $sql." LEFT OUTER JOIN mt_rmtnk as yoru on mt_room.rmcd = yoru.rmcd "; 
         
 		//if ( !empty ( $bldkb ) ){
 		//	$sql = $sql." where";

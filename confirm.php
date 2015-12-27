@@ -22,7 +22,8 @@
 <![endif]-->
 </head>
 <body class="container">
-<?php 
+<?php
+include('session_check.php');
 //print_r($_POST);
 require_once( "func.php" );
 require_once( "model/db.php" );
@@ -54,7 +55,7 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 			
 			echo "<input type='hidden' name='kaigi' id='kaigi' value=\"".$_POST[ 'kaigi' ]."\">";
 			echo "<input type='hidden' name='riyokb' id='riyokb' value=\"".$_POST[ 'riyokb' ]."\">";
-			
+			//echo "<input type='hidden' name='sekinin' id='sekinin' value=\"".$_POST[ 'sekinin' ]."\">";
 			$str_naiyo = "<input type='hidden' name='naiyo' id='riyokb' value=\"";
 
 			if(isset($_POST[ 'naiyo' ])){
@@ -62,7 +63,7 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 			}
 			
 			$str_naiyo .= "\">";
-			echo "<input type='hidden' name='sekinin' id='riyokb' value=\"".$_POST[ 'sekinin' ]."\">";
+			echo "<input type='hidden' name='sekinin' id='sekinin' value=\"".$_POST[ 'sekinin' ]."\">";
 		?>
 		<table id ="rsv_input" class="table table-bordered table-condensed  form-inline">
 		    <tbody>
@@ -136,41 +137,102 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 					}
 
 					$total=0;
-
+					$holekb=0;
 	        		for( $i=0; $i < $_POST['meisai_count']; $i++){
 	        			
-	        			//施設単価
-						
+	        			//施設単価						
 						$kyakb = $_SESSION['kyakb'];
 
-						if( isset( $_POST['rmcd'.$i] ) && ( !empty( $_POST['rmcd'.$i] ) ) ){
-							
+						if( isset( $_POST['rmcd'.$i] ) && ( !empty( $_POST['rmcd'.$i] ) ) ){							
 							
 							$stjkn = 0;
 							$edjkn = 0;
 							$hstjkn = 0;
 							$hedjkn = 0;
 							$rmtnk = 0;
-							$rmentnk = 0;
-							
+							$rmentnk = 0;							
 							$rmcd = $_POST['rmcd'.$i];
 							$usedt = $_POST['usedt'.$i];
+							$rmnm = $_POST['rmnm'.$i];
+							//ホールを含むかどうか
+							if( $rmcd == 301){
+								$holekb = 1;
+							}
+
+							//親子施設の場合、コードが書き換えられているため、再度名称を取得
+							$sql = "SELECT rmnmw FROM mt_room WHERE rmcd = ".$rmcd;
+												        
+						    $stmt = sqlsrv_query( $conn, $sql );
+						    
+						    if( $stmt === false) {
+						    	//print_r( sqlsrv_errors(), true);
+							}
+
+						 	while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+						        $rmnm = mb_convert_encoding($row['rmnmw'], "UTF-8","SJIS");
+						    }
 							
-							echo "<td>".$usedt."<br>".$rmcd."</td>";
+							echo "<td>".format_ymd( $usedt )."<br>".$rmnm."</td>";
 							
 							$stjkn = $_POST['stjkn_h'.$i].$_POST['stjkn_m'.$i];
 							$edjkn = $_POST['edjkn_h'.$i].$_POST['edjkn_m'.$i];
-							$hstjkn = $_POST['hstjkn_h'.$i].$_POST['hstjkn_m'.$i];
-							$hedjkn = $_POST['hedjkn_h'.$i].$_POST['hedjkn_m'.$i];
+							
 							$timekb = $_POST['timekb'.$i];
 							$yobi = $_POST['yobi'.$i];
 							$yobikb = $_POST['yobikb'.$i];
-							$rmnm = $_POST['rmnm'.$i];
+							
 							$biko = $_POST['biko'.$i];
 							$zgrt = 100;
 
-							echo "<td>".$stjkn."～".$edjkn."</td>";
-							echo "<td>".$hstjkn."～".$hedjkn."</td>";
+							//使用開始、終了時間
+							echo "<td>".format_jkn( $stjkn , ":" )."～".format_jkn( $edjkn, ":" )."</td>";
+
+							//本番時間
+							$hstjkn = $_POST['hstjkn_h'.$i].$_POST['hstjkn_m'.$i];
+							$hedjkn = $_POST['hedjkn_h'.$i].$_POST['hedjkn_m'.$i];
+
+							if($rmcd==301){
+								
+								echo "<td>";
+								//準備時間
+								if( isset($_POST['jnstjkn_h'.$i]) && isset($_POST['jnstjkn_m'.$i]) && isset($_POST['jnedjkn_h'.$i]) && isset($_POST['jnedjkn_m'.$i]) ){
+									
+									echo "<input type='hidden' name='jnstjkn_h".$i."' jnstjkn_h".$i."' value='".$_POST['jnstjkn_h'.$i]."'>";
+									echo "<input type='hidden' name='jnstjkn_m".$i."' jnstjkn_m".$i."' value='".$_POST['jnstjkn_m'.$i]."'>";		
+									echo "<input type='hidden' name='jnedjkn_h".$i."' jnedjkn_h".$i."' value='".$_POST['jnedjkn_h'.$i]."'>";
+									echo "<input type='hidden' name='jnedjkn_m".$i."' jnedjkn_m".$i."' value='".$_POST['jnedjkn_m'.$i]."'>";
+									echo "準備・リハ：".$_POST['jnstjkn_h'.$i].":".$_POST['jnstjkn_m'.$i]."～".$_POST['jnedjkn_h'.$i].":".$_POST['jnedjkn_m'.$i]."<br>";
+								
+								}
+								
+								if( isset($_POST['hstjkn_h'.$i]) && isset($_POST['hstjkn_m'.$i]) && isset($_POST['hedjkn_h'.$i]) && isset($_POST['hedjkn_m'.$i]) ){
+									
+									echo "<input type='hidden' name='hstjkn_h".$i."' hstjkn_h".$i."' value='".$_POST['hstjkn_h'.$i]."'>";
+									echo "<input type='hidden' name='hstjkn_m".$i."' hstjkn_m".$i."' value='".$_POST['hstjkn_m'.$i]."'>";		
+									echo "<input type='hidden' name='hedjkn_h".$i."' hedjkn_h".$i."' value='".$_POST['hedjkn_h'.$i]."'>";
+									echo "<input type='hidden' name='hedjkn_m".$i."' hedjkn_m".$i."' value='".$_POST['hedjkn_m'.$i]."'>";
+									echo "本　　番：".$_POST['hstjkn_h'.$i].":".$_POST['hstjkn_m'.$i]."～".$_POST['hedjkn_h'.$i].":".$_POST['hedjkn_m'.$i]."<br>";
+								
+								}
+								
+								if( isset($_POST['tkstjkn_h'.$i]) && isset($_POST['tkstjkn_m'.$i]) && isset($_POST['tkedjkn_h'.$i]) && isset($_POST['tkedjkn_m'.$i]) ){
+
+									echo "<input type='hidden' name='tkstjkn_h".$i."' tkstjkn_h".$i."' value='".$_POST['tkstjkn_h'.$i]."'>";
+									echo "<input type='hidden' name='tkstjkn_m".$i."' tkstjkn_m".$i."' value='".$_POST['tkstjkn_m'.$i]."'>";		
+									echo "<input type='hidden' name='tkedjkn_h".$i."' tkedjkn_h".$i."' value='".$_POST['tkedjkn_h'.$i]."'>";
+									echo "<input type='hidden' name='tkedjkn_m".$i."' jnedjkn_m".$i."' value='".$_POST['tkedjkn_m'.$i]."'>";
+									echo "撤　　去：".$_POST['tkstjkn_h'.$i].":".$_POST['tkstjkn_m'.$i]."～".$_POST['tkedjkn_h'.$i].":".$_POST['tkedjkn_m'.$i]."<br>";
+
+								}
+								
+								echo "</td>";
+
+							}else{
+																
+								echo "<td>".format_jkn( $hstjkn , ":" )."～".format_jkn( $hedjkn, ":" )."</td>";
+
+							}
+
 							
 							$ninzu = $_POST['ninzu'.$i];
 							echo "<td>".$ninzu."人</td>";							
@@ -183,29 +245,101 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 								$comlkb = $_POST['comlkb'.$i];
 							}
 
+							$feekb = 0;
+
+							if(isset( $_POST['feekb'.$i] )){
+								$feekb = $_POST['feekb'.$i];
+							}
+
 							$partkb = 0;
 							
 							if(isset( $_POST['partkb'.$i] )){
 								$partkb = $_POST['partkb'.$i];
 							}
 
+							//ピアノ
+							$piano = 0;
+							
+							if(isset( $_POST['piano'.$i] )){
+							
+								$piano = $_POST['piano'.$i];
 
+								if( $piano == 1 ){
+									echo "グランドピアノの利用：する<br>";
+								}else{
+									echo "グランドピアノの利用：しない<br>";
+								}
+							
+							}
+							
+							//営利目的
 							if( $comlkb == 1 ){
 								echo "営利目的での利用：する<br>";
 							}else{
 								echo "営利目的での利用：しない<br>";
 							}
-							if( $partkb == 1 ){
-								echo "間仕切り：閉める<br>";
+							//入場料
+							if( $feekb == 1 ){
+								echo "入場料・受講料等の徴収：する<br>";
 							}else{
-								echo "間仕切り：開ける<br>";
+								echo "入場料・受講料等の徴収：しない<br>";
+							}
+							//間仕切り
+							if(isset( $_POST['partkb'.$i] )){
+								if( $partkb == 1 ){
+									echo "間仕切り：閉める<br>";
+								}else{
+									echo "間仕切り：開ける<br>";
+								}
 							}
 							
+							if(isset( $_POST['biko'.$i] )){
+								echo ( $_POST['biko'.$i] );
+							}
 							echo "</td>";
 							
-							$sql = "SELECT tnk, entnk FROM mt_rmtnk WHERE rmcd = ".$rmcd." AND kyakb = ".$kyakb." AND ratesb = 0 AND stjkn = ".$stjkn." AND edjkn = ".$edjkn;
-							$sql .= " AND hstjkn = ".$hstjkn." AND hedjkn = ".$hedjkn;
-												        
+							//営利目的割り増し
+						    if( $comlkb == 1 && $feekb == 1 ){
+						    	
+						    	$zgrt = 150;
+
+						    }
+						    //練習準備撤去割引
+						    if($hstjkn==0 && $hedjkn==0){
+
+						    	$zgrt = 50;
+
+						    }
+
+							if($holekb == 1){
+
+						    	if($hstjkn <= 1200){
+						    		$tnk_hstjkn = 900;
+						    	}elseif($hstjkn <= 1700){
+						    		$tnk_hstjkn = 1300;
+						    	}else{
+						    		$tnk_hstjkn = 1800;
+						    	}
+
+						    	if($hedjkn <= 1200){
+						    		$tnk_hedjkn = 1200;
+						    	}elseif($hedjkn <= 1700){
+						    		$tnk_hedjkn = 1700;
+						    	}else{
+						    		$tnk_hedjkn = 2100;
+						    	}
+
+								$sql = "SELECT tnk, entnk FROM mt_rmtnk WHERE rmcd = ".$rmcd." AND kyakb = ".$kyakb." AND ratesb = 0 AND stjkn = ".$stjkn." AND edjkn = ".$edjkn;
+								$sql .= " AND hstjkn = ".$tnk_hstjkn." AND hedjkn = ".$tnk_hedjkn;
+							}else{
+								
+								$sql = "SELECT tnk, entnk FROM mt_rmtnk WHERE rmcd = ".$rmcd." AND kyakb = ".$kyakb." AND ratesb = 0 AND stjkn = ".$stjkn." AND edjkn = ".$edjkn;
+								$sql .= " AND hstjkn = ".$stjkn." AND hedjkn = ".$edjkn;
+						    
+						    }
+					        
+echo $sql."<br>";
+echo "増減率".$zgrt."<br>";
 						    $stmt = sqlsrv_query( $conn, $sql );
 						    
 						    if( $stmt === false) {
@@ -220,19 +354,17 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 						        $rmentnk = $row['entnk'];	//延長単価
 
 						    }  
-
-						    //営利目的割り増し
-						    if( $comlkb == 1 ){
-						    	
-						    	$zgrt = 150;
-
-						    //練習準備撤去割引
-						    }else if($hstjkn==0 && $hedjkn==0){
-
-						    	$zgrt = 50;
-
-						    }
-						
+$go = true;
+if($holekb == 1){
+	if($kyakb!=99){
+		if(empty($rmtnk)){
+			$go = false;
+			echo "<span class=\"status2\">時間内訳を正しく入力してください<br></span>";
+			echo $sql;
+		}
+	}
+}
+						    		
 						    //通常金額
 						    $rmtukin = $rmtnk * $zgrt / 100;
 
@@ -243,7 +375,27 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 						    //$rmkin = intval( $rmtukin ) + intval( $rmenkin );
 						    $rmkin =  $rmtukin  + $rmenkin;
 
+						    //付属設備
 						    $hzkin = 0;
+							
+							//グランドピアノ
+							if($piano==1){
+							
+								$sql = "SELECT tnk FROM mt_hztnk WHERE hzcd = 1006 AND kyakb = ".$kyakb;
+								
+								$stmt = sqlsrv_query( $conn, $sql );
+													    
+							    if( $stmt === false) {
+							    	//echo "mt_rmtnk";
+							    	//echo $sql;
+							    	//print_r( sqlsrv_errors(), true);
+								}
+
+							 	while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+							        $hzkin = $row['tnk'];
+							    }  
+									
+							}
 
 							echo "<input type='hidden' name='rmtnk".$i."' id='rmtnk".$i."' value='".$rmtnk."'>";
 							echo "<input type='hidden' name='rmentnk".$i."' id='rmentnk".$i."' value='".$rmentnk."'>";
@@ -251,8 +403,8 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 							echo "<input type='hidden' name='rmenkin".$i."' id='rmenkin".$i."' value='".$rmenkin."'>";
 							echo "<input type='hidden' name='rmkin".$i."' id='rmkin".$i."' value='".$rmkin."'>";
 							echo "<input type='hidden' name='hzkin".$i."' id='hzkin".$i."' value='".$hzkin."'>";
-						    echo "<td>".$rmtukin."</td>";
-							echo "<td>".$rmentnk."</td>";
+						    echo "<td>\\".number_format($rmtukin)."</td>";
+							echo "<td>\\".number_format($hzkin)."</td>";
 							
 							$gyo = $i+1;
 
@@ -264,8 +416,8 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 							echo "<input type='hidden' name='edjkn".$i."' id='edjkn".$i."' value='".$edjkn."'>";
 							echo "<input type='hidden' name='ninzu".$i."' id='ninzu".$i."' value='".$ninzu."'>";
 							
-							//echo "<input type='hidden' name='piano".$i."' id='piano".$i."' value='".$piano."'>";
-							//echo "<input type='hidden' name='partition".$i."' id='partition".$i."' value='".$partition."'>";
+							echo "<input type='hidden' name='piano".$i."' id='piano".$i."' value='".$piano."'>";
+							echo "<input type='hidden' name='partkb".$i."' id='partkb".$i."' value='".$partkb."'>";
 							echo "<input type='hidden' name='yobi".$i."' id='yobi".$i."' value='".$yobi."'>";
 							echo "<input type='hidden' name='yobikb".$i."' id='yobikb".$i."' value='".$yobikb."'>";
 							echo "<input type='hidden' name='rmnm".$i."' id='rmnm".$i."' value='".$rmnm."'>";
@@ -273,8 +425,10 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 							echo "<input type='hidden' name='hbedjkn".$i."' id='hbedjkn".$i."' value='".$hedjkn."'>";
 							echo "<input type='hidden' name='comlkb".$i."' id='comlkb".$i."' value='".$comlkb."'>";
 							echo "<input type='hidden' name='biko".$i."' id='biko".$i."' value='".$biko."'>";
-
-							$total = $total + $rmkin;
+							
+							echo "</tr>";
+							
+							$total = $total + $rmkin + $hzkin;
 
 						}
 
@@ -288,7 +442,7 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 	          	<tr>
         		<td class="text-right  f120" colspan="6">使用料合計</th>
          		<td colspan="2" class="text-right f120">
-         			<div id="total">\<?php echo $total; ?>
+         			<div id="total">\<?php echo number_format($total); ?>
          			</div>
          		</th>
       			</tr>
@@ -296,11 +450,15 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 	        </table>
 	        
 	        <input type='hidden' name="meisai_count" value='<?php echo $_POST['meisai_count']; ?>'>
-	        <span class="red">ホールのご利用時の人件費は上記使用料に含まれません。別途ご請求させていただきます。<br>詳細は事前打合せで決定いたします。使用日の1か月前までに必ず事前打合せをお願いいたします。</span><br><br>
+	        <?php if($holekb == 1){ ?>
+	      		<span class="red">ホールのご利用時の人件費は上記使用料に含まれません。別途ご請求させていただきます。<br>詳細は事前打合せで決定いたします。使用日の1か月前までに必ず事前打合せをお願いいたします。</span><br><br>
+	        <?php } ?>
 			 <div class="form-group">
 			 	<div class="row mb20">
-					<input type='submit' class="btn btn-default btn-lg" role="button" name="submit_prev" id="submit_prev" value='修正する'>
+			 		<a class="btn btn-default btn-lg" href="javascript:history.back();"><<修正する</a>
+			 		<?php if($go){ ?>
 					<input type='submit' class="btn btn-primary btn-lg" role="button" name="submit_next" id="submit_next" value='送信する'>
+			 		<?php } ?>
 				</div>
 	        </div>
 	    </div>

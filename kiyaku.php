@@ -1,6 +1,6 @@
 <?php
 @session_start();
-
+print_r($_SESSION);
 $errmsg = "";
 //header
 $pageTitle =  "利用規約";
@@ -30,7 +30,7 @@ if ( !empty( $_POST ) ){
   if( $_POST['agree'] == 1 ){
       
       if( $_SESSION['next_page'] == 'regist.php'){
-            header( 'location: regist.php' );
+          header( 'location: regist.php' );
       }else{
           header( 'location: login.php' );
       }  
@@ -51,15 +51,15 @@ include('include/err.php');
 /* ご利用規約 */
 include('include/kiyaku.txt');
 ?>
-  <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-  <div style="text-align:center">
-    <label class="mr10 f120"><input name="agree" type="radio" checked value="0">同意しない</label>
-    <label class="mr10 f120"><input name="agree" id="agree" type="radio" value="1">同意する</label><br><br>
-    <a class="btn btn-default btn-lg mb20" href="top.php" role="button"><< 戻る</a>
-    <!-- input type="submit" value="次へ進む&gt;&gt;" class="btn btn-primary btn-lg mb20"/-->
-    <input type="submit" value="次へ進む＞＞" class="btn btn-primary btn-lg mb20"/>
-  </div>
-  </form>
+<form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+<div style="text-align:center">
+<label class="mr10 f120"><input name="agree" type="radio" checked value="0">同意しない</label>
+<label class="mr10 f120"><input name="agree" id="agree" type="radio" value="1">同意する</label><br><br>
+<a class="btn btn-default btn-lg mb20" href="top.php" role="button">&lt;&lt;戻る</a>
+<!-- input type="submit" value="次へ進む&gt;&gt;" class="btn btn-primary btn-lg mb20"/-->
+<input type="submit" value="次へ進む＞＞" class="btn btn-primary btn-lg mb20"/>
+</div>
+</form>
 </div>
 </body>
 </html>

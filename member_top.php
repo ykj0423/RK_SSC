@@ -4,6 +4,7 @@
 $errmsg = "";
 //header
 $pageTitle =  "利用者情報の変更について";
+include('session_check.php');
 include('include/header.php');
 ?>
 </head>

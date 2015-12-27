@@ -79,6 +79,11 @@ class Seikyu extends ModelBase {
             $login = $row['wloginid'];                                      //ログイン
             //echo $row['dannm'].", ".$row['dannm2']."<br />";
         }
+
+        //内部の場合
+         if( $kyakb==99 ){
+            return false;
+        }
         
         //請求書ダウンロードURL
         $seiurl = "";

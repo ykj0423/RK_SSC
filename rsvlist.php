@@ -77,13 +77,18 @@ $conErr = $db->connect();
 if (!empty($conErr)) { echo $conErr; die();}
 
 $rsvlist = $db->select_rsvlist($_SESSION['kyacd']);//客コード
-
+$cnt = count( $rsvlist );
+echo $cnt;
+$cnt=$cnt+1;
+echo $cnt;
+//$cnt = count( $rsvlist ) +1;
+//print_r($rsvlist);
 for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
   
     echo "<tr>";
-        
     //入金チェック（入金有無にかかわらず、予約は取り消しできる）
-    if( $db->select_nyukin_status( $rsvlist[ $i ][ 'ukeno' ] ) ) {
+    //if( $db->select_nyukin_status( $rsvlist[ $i ][ 'ukeno' ] ) ) {
+    if( $rsvlist[ $i ][ 'wrsvkb' ] ==2 ){
       echo "<td class=\"status6\">予約</td>";     
     //  echo "<div id=\"data-".$rmcd.$usedt."1\" data-usedt=\"".$usedt."\" data-yobi=".$k." data-timekb=\"1\" data-jkn1=\"9:00\" data-jkn2=\"12:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" />";
     }else{
@@ -103,12 +108,15 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
     echo "<td>使用時間：".format_jkn( $rsvlist[$i]['stjkn'] , ":" )."～".format_jkn( $rsvlist[$i]['edjkn'] , ":" )."<br/>";//使用時間
     echo "<td>".$rsvlist[$i]['ninzu']."人</td>";//人数
     echo "<td>「".mb_convert_encoding($rsvlist[$i]['kaigi'], "utf8", "SJIS")."」</td>";//行事内容
+    
     //納付期限
-    if($rsvlist[$i]['kounoukb'] == 1){
+    if( ($rsvlist[$i]['kounoukb'] == 0) && ($rsvlist[$i]['paylmtdt'] > 0) ){    
+      echo "<td>".$rsvlist[$i]['paylmtdt']."</td>";    
+    }else{    
       echo "<td></td>";
-    }else{
-      echo "<td>".$rsvlist[$i]['paylmtdt']."</td>";
     }
+    
+ 
     //ドキュメント
     echo "<td>";
 

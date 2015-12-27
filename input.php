@@ -23,7 +23,8 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
-<?php 
+<?php
+include('session_check.php');
 include("include/menu.php");
 include("model/Kyaku.php"); 
 require_once( "func.php" );
@@ -117,8 +118,8 @@ $Kyaku->get_user_info( $_SESSION['wloginid'] );
   	<br><br>
     </p>
     <div class="col-xs-4">
-      <a href="help.html#input"  class="btn alert-info" target="window_name"  onClick="disp('help.html#input')"><li class="glyphicon glyphicon-question-sign" aria-hidden="true">&nbsp;この画面の操作方法についてはこちら>></li></a> 
-      <a href="loginqa.html#input"   class="btn alert-danger" target="window_name"  onClick="disp('loginqa.html#input')"><li class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">&nbsp;予約申込にあたってのご注意はこちら>></li></a> 
+      <a href="help.html#input" class="btn alert-info" target="window_name"  onClick="disp('help.html#input')"><li class="glyphicon glyphicon-question-sign" aria-hidden="true">&nbsp;この画面の操作方法についてはこちら>></li></a> 
+      <a href="loginqa.html#input" class="btn alert-danger" target="window_name"  onClick="disp('loginqa.html#input')"><li class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">&nbsp;予約申込にあたってのご注意はこちら>></li></a> 
     </div>
   </div>
 <span class="status2">＊＊ この画面では、ご予約は確保されていません。ご希望の内容を送信後、受付結果をメールでお知らせいたします。＊＊</span><br><br>
@@ -141,20 +142,20 @@ $Kyaku->get_user_info( $_SESSION['wloginid'] );
   	<tr>
   		<th colspan="2" width="20%">行事名<span class="text-danger">（必須)</span></th>
   		<td colspan="5" width="70%">
-  			<input type="text"  class="form-control" name="kaigi" id="kaigi" 
+  			<input type="text" class="form-control" name="kaigi" id="kaigi" 
   			value="<?php 
   					if( isset($_POST['kaigi']) ){
   						echo $_POST['kaigi']; 	
   					}
   				?>" 
-  			style="width:70%">
+  			style="width:50%"  style="ime-mode: active;"  maxlength="20">
   			<br>こちらの内容が案内板に表示されます。<span class="note">（例：人材育成セミナー、ピアノ発表会、幹部会議…)</span>
   		</td>
   	</tr>
   	<tr>
 	<th colspan="2">利用目的<span class="text-danger">（必須)</span></th>
   		<td colspan="5">
-  		<select  class="form-control" name="riyokb" id="riyokb">
+  		<select class="form-control" name="riyokb" id="riyokb">
 		<option value="">(選択してください)</option>
 	<?php 
 
@@ -218,7 +219,7 @@ $Kyaku->get_user_info( $_SESSION['wloginid'] );
 						echo $_POST['naiyo'];
 					}
 					?>" 
-				style="width:20%">
+				style="width:50%" style="ime-mode: active;"  maxlength="20" >
 			<br>利用目的が「その他」の場合、具体的なご利用内容をご入力ください。<span class="note">（例：詩吟、カラオケ…)</span>
 		</td>
 	</tr>
@@ -231,7 +232,7 @@ $Kyaku->get_user_info( $_SESSION['wloginid'] );
   					echo $_POST[ 'naiyo' ];
   				}
   				?>" 
-  				style="width:70%">
+  				style="width:50%" style="ime-mode: active;"  maxlength="20">
   		</td>
     </tr>
     </tbody>
@@ -249,7 +250,7 @@ $Kyaku->get_user_info( $_SESSION['wloginid'] );
 		<tbody id="list">
         </tbody>
 	</table>
-	<a class="btn btn-default btn-lg" href="search.php" role="button"><<　戻る</a>
+	<a class="btn btn-default btn-lg" href="javascript:history.back();"><<　戻る</a>
 	<input type='submit' class="btn btn-primary btn-lg" role="button" name="submit_Click" id="submit_Click" value="確認画面へ&nbsp;>>">
 </form>
 </body>

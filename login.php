@@ -4,6 +4,7 @@
 $errmsg = "";
 //header
 $pageTitle =  "ログイン";
+//include('session_unset.php');
 include('include/header.php');
 ?>
 <script src="js/clear.storage.js"></script>
@@ -12,6 +13,7 @@ include('include/header.php');
 <p class="bg-head text-right"><?php echo $_SESSION['centername']; ?></p>
 <h1><span class="midashi">|</span><?php echo $pageTitle; ?><?php echo "<small>".$_SESSION['sysname']."</small>" ?></h1>
 <?php
+
 include('model/Kyaku.php');
 /**
  * ReserveKeeperWeb予約システム
@@ -25,8 +27,6 @@ include('model/Kyaku.php');
  * @license    G&G Co.ltd.
  * @version    0.1
 **/
-$_SESSION['wloginid'] ="";
-
 $ini = parse_ini_file('config.ini');        
 $serverName = $ini['SERVER_NAME'];
 $connectionInfo = array( "Database"=>$ini['DBNAME'], "UID"=>$ini['UID'], "PWD"=>$ini['PWD'] );

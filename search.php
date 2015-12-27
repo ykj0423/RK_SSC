@@ -28,6 +28,7 @@
 <body class="container">
 <?php
 //メニュー
+include('session_check.php');
 include('include/menu.php');
 require_once( "func.php" );
 require_once( "model/db.php" );
@@ -39,8 +40,7 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 
 /* 施設分類の取得 */
 $rmcls = $db->select_rmcls();
-?>
-<?php
+
 /* 検索日付（自至） */
 //検索開始日
                
@@ -231,8 +231,7 @@ if(is_array($rmcls)){
     </div><!-- col-xs-8 -->
     </form>
     <div class="col-xs-4">
-      <a href="help.html#akijoukyou"  class="btn alert-info" target="window_name"  onClick="disp('help.html#akijoukyou')"><li class="glyphicon glyphicon-question-sign" aria-hidden="true">&nbsp;この画面の操作方法についてはこちら>></li></a> <br>
-      <a href="loginqa.html#yoyakuaki"   class="btn alert-danger" target="window_name"  onClick="disp('loginqa.html#yoyakuaki')"><li class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">&nbsp;お申込にあたってのご注意はこちら>></li></a> 
+      <a href="help.html#akijoukyou"  class="btn alert-info" target="window_name" onClick="disp('help.html#akijoukyou')"><li class="glyphicon glyphicon-question-sign" aria-hidden="true">&nbsp;この画面の操作方法についてはこちら>></li></a> <br>
     </div>
   </div><!-- row_end -->
 	<!--検索結果-->
@@ -411,14 +410,14 @@ for ($i = 0; $i < ( count( $room ) ) ; $i++ ) {
     		
             echo "<td  class=\"can\"><a id=\"a-".$rmcd.$usedt."3\">";
             echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."3\"></a>";
-            echo "<div id=\"data-".$rmcd.$usedt."3\" data-usedt=\"".$usedt."\" data-timekb=\"3\" data-jkn1=\"17:30\" data-jkn2=\"21:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$yorutnk."\" data-oyakokb=\"".$oyakokb."\" data-sumrmcd=\"".$sumrmcd."\" />";
+            echo "<div id=\"data-".$rmcd.$usedt."3\" data-usedt=\"".$usedt."\" data-timekb=\"3\" data-jkn1=\"18:00\" data-jkn2=\"21:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$yorutnk."\" data-oyakokb=\"".$oyakokb."\" data-sumrmcd=\"".$sumrmcd."\" />";
             echo "</td>";	
             
           }elseif ( array_key_exists( $usedt, $night['data'] ) && ( $night['data'][$usedt] == 0 ) ) {
                 //echo "<td  class=\"can\"><a href=\"#\"><img src=\"icon/kara.jpg\"></a></td>";
             echo "<td  class=\"can\"><a id=\"a-".$rmcd.$usedt."3\">";
             echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."3\"></a>";
-            echo "<div id=\"data-".$rmcd.$usedt."3\" data-usedt=\"".$usedt."\" data-timekb=\"3\" data-jkn1=\"17:30\" data-jkn2=\"21:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$yorutnk."\" data-oyakokb=\"".$oyakokb."\" data-sumrmcd=\"".$sumrmcd."\" />";
+            echo "<div id=\"data-".$rmcd.$usedt."3\" data-usedt=\"".$usedt."\" data-timekb=\"3\" data-jkn1=\"18:00\" data-jkn2=\"21:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$yorutnk."\" data-oyakokb=\"".$oyakokb."\" data-sumrmcd=\"".$sumrmcd."\" />";
             echo "</td>";		
             
           }else{

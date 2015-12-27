@@ -15,9 +15,9 @@ class Reserve extends ModelBase {
 
         if( $this->conn === false ) {
              //TODO
-            echo "db-err";
+            //echo "db-err";
         }else{
-            echo "suc";
+            //echo "suc";
         }
                
     }
@@ -37,6 +37,9 @@ class Reserve extends ModelBase {
             $usedt = $rec['usedt'];
             $rmcd = $rec['rmcd'];
             $timekb = $rec['timekb'];
+
+                $stt = 0;
+                $end = 0;
         
             if( $timekb == 1 ){
                 $stt = 9;
@@ -45,10 +48,18 @@ class Reserve extends ModelBase {
                 $stt = 13;
                 $end = 16;    
             }else if( $timekb == 3 ) {
-                $stt = 17;
+                $stt = 18;
+                $end = 20;
+            }else if( $timekb == 4 ) {
+                $stt = 9;
+                $end = 16;
+            }else if( $timekb == 5 ) {
+                $stt = 13;
+                $end = 20;
+            }else if( $timekb == 6 ) {
+                $stt = 9;
                 $end = 20;
             }
-            
             /* 1 */
             /* 空室チェック （予約マーク）*/
             //満室：空室マークが０以外のレコードが存在、利用状況０以外のレコードが存在
@@ -79,6 +90,19 @@ class Reserve extends ModelBase {
 
             
             /* 空室チェック （予約マーク） 更新　*/
+            $rsignkb=3;//仮予約
+            
+            if($_SESSION['kyakb']==99){
+                
+                $rsignkb=5;//内部手続き済み
+
+            }else if($_SESSION['kounoukb']==1){
+
+                $rsignkb=4;//未収
+
+            }
+
+
             //レコードが存在しなければ挿入、存在すれば更新        
             for ( $jkn = $stt; $jkn <= $end;  $jkn++) { // 3時間分回す
 
@@ -99,7 +123,7 @@ class Reserve extends ModelBase {
                         if( $row['rsignkb'] != 0 ){
 
                             sqlsrv_rollback( $this->conn );
-                            echo "Transaction rolled back.<br />";
+                            //echo "Transaction rolled back.<br />";
                             //die( "unexpected error" ); //想定外、先取りされているなど
                             return false;
 
@@ -119,14 +143,16 @@ class Reserve extends ModelBase {
                     //update
                     $sql = "UPDATE ks_jknksi SET rsignkb=(?), rjyokb=(?),login=(?), udate=(?), utime=(?)";
                     $sql = $sql." WHERE usedt=(?) AND rmcd=(?) AND jikan=(?)";
-                    $params = array( 3, 2, $login, parent::getUdate(), parent::getUtime(), $usedt, $rmcd, $jkn );
+                    $params = array( $rsignkb, 2, $login, parent::getUdate(), parent::getUtime(), $usedt, $rmcd, $jkn ); //2:予約済
+
+
 
                 }else{
 
                     //insert
                     $sql = "INSERT INTO ks_jknksi ( usedt, jikan, rmcd, rsignkb, rjyokb ,login, udate, utime)";
                     $sql = $sql." VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-                    $params = array( $usedt, $jkn, $rmcd, 3, 2, $login, parent::getUdate(), parent::getUtime() );
+                    $params = array( $usedt, $jkn, $rmcd, $rsignkb, 2, $login, parent::getUdate(), parent::getUtime() );//2:予約済
 
                 }
 
@@ -136,6 +162,15 @@ class Reserve extends ModelBase {
                     $tran = false;
                     echo $sql;
                     break;//exit for
+                }
+
+                if( $rmcd == 1001 || $rmcd == 1002){
+                        
+                }
+                
+                if( $rmcd == 301){
+                    
+
                 }
             
             }//for

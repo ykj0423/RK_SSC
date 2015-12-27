@@ -68,7 +68,7 @@ div.noboder{border:none !important}
 .status6{color:#000080}/*—\–ñ*/
 
 div#srch{
- /* background:#eae1cf; */
+ background:#eae1cf;
  margin-bottom:30px;
 
 }
@@ -142,3 +142,16 @@ dd{margin:10px;}
 span.small {font-size: 100%; }
 span.green {color: #1EB35F; }
 
+ul.list{padding-left:5px}
+ul.list li{list-style-type:none;}
+.capture{border:1px solid;width:900px;margin-bottom:10px;}
+
+@media print {
+ a[href]:after {
+ content: "" !important;
+ }
+ 
+ abbr[title]:after {
+ content: "" !important;
+ }
+}

@@ -5,7 +5,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta NAME="ROBOTS" CONTENT="NOINDEX,NOFOLLOW,NOARCHIVE">
+<meta content="86400" http-equiv="Expires">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<?php
+$ini = parse_ini_file('config.ini');
+$_SESSION['sysname'] = $ini['SYSTEM_NAME'];
+$_SESSION['centername'] = $ini['CENTER_NAME'];
+?>
 <title><?php echo ($pageTitle." | ".$_SESSION['sysname']);?></title>
 <link href="css/bootstrap-glyphicons.css" rel="stylesheet">
 <link href="css/bootstrap.min.css" rel="stylesheet">

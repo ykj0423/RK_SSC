@@ -41,7 +41,8 @@
  </script>
 </head>
 <body class="container">
-<?php 
+<?php
+include('session_check.php');
 require_once( "func.php" );
 require_once( "model/db.php" );
 require_once("model/Reserve.php");
@@ -79,7 +80,7 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 
 	$dannm =  $row['dannm'];
 	$dannm2 =  $row['dannm2'];
-	$dannmk =  $row['dannmk'];
+	$dannmk = NULL;//     $row['dannmk'];
 	$daihyo =  $row['daihyo'];
 	$renraku =  $row['renraku'];
 	$tel1 =  $row['tel1'];
@@ -213,7 +214,7 @@ if($revflg){
 	$sekinin = "";
 
 	if(isset($_POST['sekinin'])){
-		 mb_convert_encoding( $_POST[ 'sekinin'] , "SJIS","UTF-8");
+		 $sekinin = mb_convert_encoding( $_POST[ 'sekinin'] , "SJIS","UTF-8");
 	}
 
 	//顧客更新区分
@@ -309,18 +310,24 @@ if($revflg){
 	//echo("meisai_start");
 
 	$gyo = 0;
-
 	$trmkin=0;
 	$thzkin=0;
 	$tkin = $tkin + $trmkin + $thzkin;
+	$holekb = 0;//ホール区分
 
 	for ($i = 0; $i < $meisai_count; $i++) {
+		
 		if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 		
 			$gyo++;
 
 			//施設コード
 			$rmcd = $_POST[ 'rmcd'.$i ];
+			
+			//ホールであればホール区分設定
+			if($rmcd==301){
+				$holekb = 1;
+			}
 
 			//許可番号
 			$kyono = 0;
@@ -366,12 +373,12 @@ if($revflg){
 			$jstjkn_h = 0;
 			$jstjkn_m = 0;
 			
-			if(isset($_POST[ 'jstjkn_h'.$i ] )){
-				$jstjkn_h =  $_POST[ 'jstjkn_h'.$i ];
+			if(isset($_POST[ 'jnstjkn_h'.$i ] )){
+				$jstjkn_h =  $_POST[ 'jnstjkn_h'.$i ];
 			}
 			
-			if(isset($_POST[ 'jstjkn_m'.$i ] )){
-				$jstjkn_m =  $_POST[ 'jstjkn_m'.$i ];
+			if(isset($_POST[ 'jnstjkn_m'.$i ] )){
+				$jstjkn_m =  $_POST[ 'jnstjkn_m'.$i ];
 			}
 
 			$jnstjkn = format_db_jkn( $jstjkn_h ,  $jstjkn_m );
@@ -511,9 +518,14 @@ if($revflg){
 			$rmenkin = $_POST[ 'rmenkin'.$i ] ;
 			$rmkin = $_POST[ 'rmkin'.$i ] ;
 			$hzkin = $_POST[ 'hzkin'.$i ] ;
-			$trmkin = $trmkin + $rmkin;
-			$thzkin = $thzkin + $hzkin;
+			$trmkin = $rmkin;
+			$thzkin = $hzkin;
+//echo " tkin=".$tkin."<br>";
 			$tkin = $tkin + $trmkin + $thzkin;
+
+//echo " trmkin=".$trmkin."<br>";
+//echo " thzkin=".$thzkin."<br>";
+//echo "tkin=".$tkin."<br>";
 
 
 			/*$sql = "SELECT tnk, entnk FROM mt_rmtnk WHERE rmcd = ".$rmcd." AND kyakb = ".$kyacd." AND ratesb = 0 AND stjkn = ".$stjkn." AND edjkn = ".$edjkn;
@@ -544,14 +556,13 @@ if($revflg){
 		    //$rmkin =  $rmtukin  + $rmenkin;
 
 			//ピアノ区分
-			$pianokb = 0;
-
+			$pianokb = $_POST[ 'piano'.$i ];
 			//if(isset($_POST[ 'pianokb'.$i ])){
 			//	$pianokb = $_POST[ 'pianokb'.$i ];
 			//}
 
 		    //付属設備合計金額
-		    $hzkin = 0;
+		    /*$hzkin = 0;
 
 		    if( $pianokb == 1 ){
 		    	
@@ -565,7 +576,7 @@ if($revflg){
 		    	
 		    	}
 			
-			}
+			}*/
 
 			//入金額・償還金
 			$rmnykin = 0;
@@ -605,11 +616,11 @@ if($revflg){
 			if( isset($_POST['partkb'.$i])){
 
 				if( $partkb == 1 ){
-					$biko .= "間仕切り閉める";
+					$biko .= "P閉める";
 				}
 
 				if( $partkb == 0 ){
-					$biko .= "間仕切り開ける"; 
+					$biko .= "P開ける"; 
 				}
 
 			}
@@ -632,6 +643,9 @@ if($revflg){
 
 				$wrsvkb = 3;//仮予約
 
+			}
+			if($kyakb==99){//内部
+				$wrsvkb = 2;//予約	
 			}
 
 			//予約変更日
@@ -676,9 +690,9 @@ if($revflg){
 			}
 
 			/* 付属設備 */
-			//$hzgyo = 0;
+			$hzgyo = 0;
 
-			/*if($pianokb ==1 ){
+			if($pianokb ==1 ){
 
 				//付属設備行番
 				$hzgyo++;
@@ -702,7 +716,7 @@ if($revflg){
 				$stkin = intval( $sttnk ) * intval( $stsu );
 
 				$sql = "INSERT INTO dt_huzor(ukeno, gyo, hzgyo, hzcd, hznmr, tanikb, stsu, sttnk, stkin, login, udate, utime, wudate, wutime)";
-				$sql .= " VALUES (?,　?,　?,　?,　?,　?,　?,　?,　?,　?,　?,　?,　?,　?)";
+				$sql .= " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 				$params = array($ukeno, $gyo, $hzgyo, $hzcd, $hznmr, $tanikb, $stsu, $sttnk, $stkin, $login, date( "Ymd" ) , date( "His" ), date( "Ymd" ) , date( "His" ));
 
@@ -721,7 +735,7 @@ if($revflg){
 					}
 				}
 
-			}*/
+			}
 
 
 
@@ -730,7 +744,6 @@ if($revflg){
 
 		}
 	}//end_for
-
 
 	$sql = "INSERT INTO dt_roomr (ukeno, ukedt, nen, krkb, krmemo,ukecd,ukehkb,kyacd,
 		dannm,dannm2,dannmk,daihyo,renraku,tel1,tel2,fax,url,mail,zipcd,adr1,adr2,gyscd,sihon,jygsu,kyakb,
@@ -759,8 +772,6 @@ if($revflg){
 	        }
 	    }
 	}
-
-
 
 }
 
@@ -817,7 +828,7 @@ if($revflg){//echo "test1";
 				'gyo' => $_POST[ 'gyo'.$i ], 'usedt' => $_POST[ 'usedt'.$i ], 'yobi' => '月', 'yobikb' => $_POST[ 'yobikb'.$i ],
 				'rmcd' => $_POST[ 'rmcd'.$i ], 'rmnmr' => $rmnmr, 'stjkn' => $_POST[ 'stjkn'.$i ], 'edjkn' => $_POST[ 'edjkn'.$i ], 
 				'hbstjkn' => $_POST[ 'hbstjkn'.$i ], 'hbedjkn' => $_POST[ 'hbedjkn'.$i ], 
-				'pianokb' => 0,'tnk' => $tnk, 
+				'pianokb' => $_POST[ 'piano'.$i ],'tnk' => $tnk, 
 				'rmkin'=> $_POST[ 'rmkin'.$i ], 'hzkin'=>$_POST[ 'hzkin'.$i ]);
 			
 
@@ -854,10 +865,12 @@ if($revflg){//echo "test1";
 	<li>受付は先着順となります。</li>
   	<li>お申し込みの受付状況は、<a href="rsvlist.php">予約照会画面</a>でもご覧いただけます。</li>
   	<br>
-<?php if($revflg){ ?>	
+<?php if( $revflg ){ ?>
 	<div class="alert alert-info" role="alert">
 	お問い合わせ番号：  <span style="font-size:1.2em"><?php echo $ukeno ?></span></div>
+<?php if( $holekb == 1 ){ ?>	
 	<p>・ハーバーホールのご使用については、必ずこちらの<a href="#">「ご利用案内」</a>をご確認ください。</p>
+<?php } ?>
 <?php } ?>	
 	<!--p>・展示場のご使用については、事前にこちらの<a href="#">「使用計画書」</a>をご提出ください。</p><br-->
 	<a class="btn btn-default btn-lg" href="top.php" role="button">トップページに戻る</a>

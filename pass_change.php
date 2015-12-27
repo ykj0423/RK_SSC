@@ -4,6 +4,7 @@
 $errmsg = "";
 //header
 $pageTitle =  "パスワードの変更";
+include('session_check.php');
 include('include/header.php');
 ?>
 </head>
@@ -31,7 +32,8 @@ include('include/menu.php');
 if (empty($_POST['regist'])){
     $infomsg = "システムを安全にお使いいただく為に、すぐに推測できる単語は使用しないでください。";
 }else{
-    $infomsg = "パスワードの変更が完了致しました。"; 
+    $infomsg = "パスワードの変更が完了致しました。";
+    die("パスワードの変更が完了致しました。");
 }
 ?>
 <p><?php echo $infomsg; ?></p><br>
