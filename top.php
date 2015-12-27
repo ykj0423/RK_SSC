@@ -1,12 +1,13 @@
 <?php
 @session_start();
 
-$ini = parse_ini_file('config.ini');
+include('session_unset.php');
+
+/*$ini = parse_ini_file('config.ini');
 
 $_SESSION['sysname'] = $ini['SYSTEM_NAME'];
 $_SESSION['centername'] = $ini['CENTER_NAME'];
-$next_page = "";
-$errmsg = "";
+*/
 
 //header
 $pageTitle = "トップメニュー";
@@ -29,7 +30,9 @@ include('include/header.php');
  * @license    G&G Co.ltd.
  * @version    0.1
 **/
-
+$next_page = "";
+$errmsg = "";
+echo "a";
 if (!empty($_POST['pre_search'])){
     //空き状況検索
     $next_page = 'pre_search.php';
@@ -40,15 +43,15 @@ if (!empty($_POST['pre_search'])){
 }else if (!empty($_POST['search'])){
     //空き状況・予約申込み　
     $_SESSION['next_page'] = 'search.php';
-    $next_page = (isset($_SESSION['loginid'])) ? 'search.php' : 'kiyaku.php';
+    $next_page = (isset($_SESSION['wloginid'])) ? 'search.php' : 'kiyaku.php';
 }else if (!empty($_POST['rsvlist'])){
     //予約照会
     $_SESSION['next_page'] = 'rsvlist.php';
-    $next_page = (isset($_SESSION['loginid'])) ? 'rsvlist.php' : 'kiyaku.php';
+    $next_page = (isset($_SESSION['wloginid'])) ? 'rsvlist.php' : 'kiyaku.php';
 }else if (!empty($_POST['member'])){
     //利用者情報変更
     $_SESSION['next_page'] = 'member_top.php';
-    $next_page = (isset($_SESSION['loginid'])) ? 'member_top.php' : 'kiyaku.php';
+    $next_page = (isset($_SESSION['wloginid'])) ? 'member_top.php' : 'kiyaku.php';
 }
 
 if (!empty($next_page)){

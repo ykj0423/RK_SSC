@@ -24,8 +24,9 @@
     $_SESSION['sysname'] = $ini['SYSTEM_NAME'];
     $_SESSION['centername'] = $ini['CENTER_NAME'];
 
-    $_SESSION['kyacd'] = "";
-    $_SESSION['dannm'] = "";
-    $_SESSION['kyakb'] = "";
-    $_SESSION['kounoukb'] = "";
+    unset($_SESSION['kyacd']);
+    unset($_SESSION['dannm']);
+    unset($_SESSION['kyakb']);
+    unset($_SESSION['kounoukb']);
+    unset($_SESSION['wloginid']);
 ?>
