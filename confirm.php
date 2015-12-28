@@ -338,8 +338,8 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 						    
 						    }
 					        
-echo $sql."<br>";
-echo "増減率".$zgrt."<br>";
+//echo $sql."<br>";
+//echo "増減率".$zgrt."<br>";
 						    $stmt = sqlsrv_query( $conn, $sql );
 						    
 						    if( $stmt === false) {

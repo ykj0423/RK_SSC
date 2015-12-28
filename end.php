@@ -27,7 +27,7 @@
     jQuery(function () {
 		
 		//ログアウト時、トップに戻る時のローカルストレージクリア
-		$(".logout").click(function(){
+		//$(".logout").click(function(){
 			
 			var strlist = JSON.parse(localStorage.getItem("sentaku"));
 			
@@ -36,7 +36,7 @@
 			}
 			
 			localStorage.setItem('sentaku', JSON.stringify(strlist));
-        });	
+        //});	
 	});
  </script>
 </head>
@@ -188,7 +188,7 @@ if($revflg){
 	$ukecd　= 9999;//WEB予約
 
 	//受付方法
-	$ukehkb= 98;//WEB予約
+	$ukehkb　= 98;//WEB予約
 
 	//ホール区分
 	$holekb =0;//暫定
@@ -203,7 +203,7 @@ if($revflg){
 	//内容
 	$naiyo = "";
 
-	if(isset($_POST[ 'naiyo'])){
+	if(isset($_POST['naiyo'])){
 		$naiyo = mb_convert_encoding( $_POST[ 'naiyo'] , "SJIS","UTF-8");
 	}
 
@@ -214,7 +214,7 @@ if($revflg){
 	$sekinin = "";
 
 	if(isset($_POST['sekinin'])){
-		 $sekinin = mb_convert_encoding( $_POST[ 'sekinin'] , "SJIS","UTF-8");
+		$sekinin = mb_convert_encoding( $_POST[ 'sekinin'] , "SJIS","UTF-8");
 	}
 
 	//顧客更新区分
@@ -314,6 +314,7 @@ if($revflg){
 	$thzkin=0;
 	$tkin = $tkin + $trmkin + $thzkin;
 	$holekb = 0;//ホール区分
+	$ukehkb　= 98;//WEB予約
 
 	for ($i = 0; $i < $meisai_count; $i++) {
 		
@@ -744,7 +745,8 @@ if($revflg){
 
 		}
 	}//end_for
-
+	$ukehkb　= 98;//WEB予約
+	$ukehkb=98;
 	$sql = "INSERT INTO dt_roomr (ukeno, ukedt, nen, krkb, krmemo,ukecd,ukehkb,kyacd,
 		dannm,dannm2,dannmk,daihyo,renraku,tel1,tel2,fax,url,mail,zipcd,adr1,adr2,gyscd,sihon,jygsu,kyakb,
 		kounoukb,holekb,kaigi,naiyo,kbiko,sekinin,kupdkb,rsbkb,riyokb,paylmtdt,expkb,expnocdt,expdt,

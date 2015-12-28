@@ -243,7 +243,19 @@ class DB
             }
             
             $sql = " select usedt , ukeno from ks_jkntai ";
-            $sql .= " WHERE rmcd = ".$rmcd." AND timekb = ".$timekb." AND usedt >= ".$sttdt." AND usedt <= ".$enddt." AND ukeno <> 0";
+            if($timekb==1){
+                $timestr =" timekb in(1,4,6) ";
+            }
+            if($timekb==2){
+                $timestr =" timekb in(2,4,5,6) ";
+            }
+            if($timekb==3){
+                $timestr =" timekb in(3,5,6) ";
+            }
+
+            $sql .= " WHERE rmcd = ".$rmcd." AND ". $timestr." AND usedt >= ".$sttdt." AND usedt <= ".$enddt." AND ukeno <> 0";
+            
+            //$sql .= " WHERE rmcd = ".$rmcd." AND timekb = ".$timekb." AND usedt >= ".$sttdt." AND usedt <= ".$enddt." AND ukeno <> 0";
             //echo $sql;
             //$sql .= " order by rmcd , usedt ";
             //echo $sql;

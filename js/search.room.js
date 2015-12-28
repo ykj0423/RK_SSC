@@ -193,15 +193,23 @@ jQuery(function () {
         var strlist = new Array();
 
 		/* 予約状態の復元 */		
-		var objData = JSON.parse(localStorage.getItem("sentaku"));//選択リスト
+		var strlist = JSON.parse(localStorage.getItem("sentaku"));//選択リスト
+		if( strlist != null){
+			for ( var i=0; i < strlist.length; i++ ){
+				var  lnkstr = strlist[i]['key'];
+				var imgstr = lnkstr.replace('a-', 'img-');
+				$("#" + imgstr).attr('src', 'icon/sentaku.png');
+			}
+		}
+		/*var objData = JSON.parse(localStorage.getItem("sentaku"));//選択リスト
 		if( objData != null){
 			for ( var i=0; i < objData.length; i++ ){
 				var  lnkstr = objData[i]['key'];
 				var imgstr = lnkstr.replace('a-', 'img-');
 				$("#" + imgstr).attr('src', 'icon/sentaku.png');
 			}
-		}
-
+		}*/
+		
 		/* 空室・選択クリック時 */                                                  
         $("a").click(function () {
 
@@ -317,9 +325,13 @@ jQuery(function () {
 					hzkin: 0,
                     value: 1
                 }
-                strlist.push(data);
+
+                if($.isEmptyObject(strlist)){
+                	strlist=new Array();
+                }
+	            strlist.push(data);
                 //選択中のtdの背景色変更
-        //$("#"+ tdstr ).css('background-color', '#f4f984');
+        		//$("#"+ tdstr ).css('background-color', '#f4f984');
                 //var list = JSON.parse(localStorage.getItem("sentaku"));//選択リスト
 				//9件/月にすべきか
 				for ( var i=0; i < strlist.length; i++ ){
@@ -334,9 +346,17 @@ jQuery(function () {
 				//}
             } else {	//選択解除時
 				$("#" + imgstr).attr('src', 'icon/kara.jpg');
-                strlist.some(function (v, i) {
-                    if (v.key == lnkstr) strlist.splice(i, 1); //key:lnkstrの要素を削除
-                });
+                //strlist.some(function (v, i) {
+                //    if (v.key == lnkstr) strlist.splice(i, 1); //key:lnkstrの要素を削除
+                //});
+
+$.each(strlist,
+    function(v, i) {
+      if (v.key == lnkstr) strlist.splice(i, 1);
+    }
+  );
+
+
                 localStorage.setItem('sentaku', JSON.stringify(strlist));
 			}
 
@@ -357,9 +377,16 @@ jQuery(function () {
 				$("#" + imgstr).attr('src', 'icon/kara.jpg');
 				
 				//strlistから一つ一つ要素を削除してゆく
-				strlist.some(function (v, i) {
-					if (v.key == wkey) strlist.splice(i, 1); //key:lnkstrの要素を削除
-				});
+				//strlist.some(function (v, i) {
+				//	if (v.key == wkey) strlist.splice(i, 1); //key:lnkstrの要素を削除
+				//});
+
+				$.each(strlist,
+    				function(v, i) {
+  						if (v.key == lnkstr) strlist.splice(i, 1);
+    				}
+  				);
+
 				//strlistの更新
 				localStorage.setItem('sentaku', JSON.stringify(strlist));
 				

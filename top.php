@@ -13,6 +13,22 @@ $_SESSION['centername'] = $ini['CENTER_NAME'];
 $pageTitle = "トップメニュー";
 include('include/header.php');
 ?>
+<script>
+    jQuery(function () {
+    
+    //ログアウト時、トップに戻る時のローカルストレージクリア
+    //$(".logout").click(function(){
+      
+      var strlist = JSON.parse(localStorage.getItem("sentaku"));
+      
+      for ( var i = 0; i < strlist.length; i++ ){
+          strlist.splice(i, 1);
+      }
+      
+      localStorage.setItem('sentaku', JSON.stringify(strlist));
+        //}); 
+  });
+</script>
 </head>
 <body class="container">
 <p class="bg-head text-right"><?php echo $_SESSION['centername']; ?></p>

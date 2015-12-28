@@ -313,7 +313,7 @@ for ($i = 0; $i < ( count( $room ) ) ; $i++ ) {
     //朝
     echo "<th>朝</th>";
     $mor = $db->select_ksjkntai( $rmcd , 1 ,  str_replace( "/", "", $sttdt ) ,  str_replace( "/", "", $enddt ) );
-
+//print_r($mor);
     for ($k = 0; $k < count( $date_array ) ; $k++) {
 
       $usedt = str_replace( "/", "", $date_array[$k]['yyyy'].$date_array[$k]['mm'].$date_array[$k]['dd'] );

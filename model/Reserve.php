@@ -166,7 +166,8 @@ class Reserve extends ModelBase {
                 /*----------------*/
                 if( $rmcd == 802 || $rmcd == 803 || $rmcd == 902 || $rmcd == 903 || $rmcd == 905 || $rmcd == 905 || $rmcd == 1001 || $rmcd == 1002){
                     
-                    $oyarmcd = 0;    
+                    $oyarmcd = 0;
+                    $mngrmcd = 0;   
                     
                     if( $rmcd == 802 || $rmcd == 803 ){
                         $oyarmcd = 823;
@@ -179,6 +180,15 @@ class Reserve extends ModelBase {
                     }
                     if( $rmcd == 1001 || $rmcd == 1002 ){
                         $oyarmcd = 1012;
+
+                        if( $rmcd == 1001 ){
+                            $mngrmcd = 1002;    
+                        }
+                        
+                        if( $rmcd == 1002 ){
+                            $mngrmcd = 1001;    
+                        }
+                    
                     }
 
                    
@@ -220,6 +230,64 @@ class Reserve extends ModelBase {
                             $sql = $sql." VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                             $params = array( $usedt, $jkn, $oyarmcd, 9, 2, $login, parent::getUdate(), parent::getUtime() );//2:予約済
 
+                        }
+
+                        $stmt = sqlsrv_query( $this->conn, $sql, $params );
+            
+                        if( $stmt === false) {
+                            $tran = false;
+                            //echo $sql;
+                            //break;//exit for
+                        }
+
+                    }
+
+                    if( $mngrmcd != 0 ){
+
+                         $sql = "SELECT * FROM ks_jknksi WHERE usedt = ".$usedt." AND jikan = ".$jkn." AND rmcd = ".$oyarmcd;
+                    
+                        $stmt = sqlsrv_query( $this->conn, $sql );
+                        
+                        if( $stmt === false) {
+                            die( print_r( sqlsrv_errors(), true) );
+                        }
+                        //echo $sql;
+                        $has_rows = sqlsrv_has_rows ( $stmt );
+                        
+                        if ( $has_rows ){
+                            
+                            while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+                            
+                                if( $row['rsignkb'] != 0 ){
+
+                                    sqlsrv_rollback( $this->conn );
+                                    return false;
+
+                                }
+
+                              
+                            }
+                            
+                            //update
+                            $sql = "UPDATE ks_jknksi SET rsignkb=(?), rjyokb=(?),login=(?), udate=(?), utime=(?)";
+                            $sql = $sql." WHERE usedt=(?) AND rmcd=(?) AND jikan=(?)";
+                            $params = array( 7, 2, $login, parent::getUdate(), parent::getUtime(), $usedt, $mngrmcd, $jkn ); //2:予約済
+
+                        }else{
+
+                            //insert
+                            $sql = "INSERT INTO ks_jknksi ( usedt, jikan, rmcd, rsignkb, rjyokb ,login, udate, utime)";
+                            $sql = $sql." VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                            $params = array( $usedt, $jkn, $mngrmcd, 7, 2, $login, parent::getUdate(), parent::getUtime() );//2:予約済
+
+                        }
+
+                        $stmt = sqlsrv_query( $this->conn, $sql, $params );
+            
+                        if( $stmt === false) {
+                            $tran = false;
+                            //echo $sql;
+                            //break;//exit for
                         }
 
                     }
@@ -289,6 +357,15 @@ class Reserve extends ModelBase {
                             $params = array( $usedt, $jkn, $count, 8, 2, $login, parent::getUdate(), parent::getUtime() );//2:予約済
 
                         }
+
+echo $sql;
+                        $stmt = sqlsrv_query( $this->conn, $sql, $params );
+            
+                        if( $stmt === false) {
+                            $tran = false;
+                            //echo $sql;
+                            //break;//exit for
+                        }
                     
                     }
 
@@ -298,9 +375,84 @@ class Reserve extends ModelBase {
 
             
             }//for
-    
+            
+            /*---------------------------------------*/
+            //hall
+            /*---------------------------------------*/
+            if( $rmcd == 301 ){
+                
+                $mng_rec = array();
+                
+                if( $timekb == 1 ){
+                    $mng_rec = array(12, 13, 14, 15, 16);
+                }else if( $timekb == 2 ) {
+                    $mng_rec = array(9, 10, 11, 12, 17, 18, 19, 20);
+                }else if( $timekb == 3 ) {
+                    $mng_rec = array(12, 13, 14, 15, 16);
+                }else if( $timekb == 4 ) {
+                    $mng_rec = array(17, 18, 19, 20);
+                }else if( $timekb == 5 ) {
+                    $mng_rec = array(9, 10, 11, 12);
+                }else if( $timekb == 6 ) {
+                }
+                
+                for ($cnt = 0 ; $cnt < count($mng_rec); $cnt++) {
+                //for ( $jkn = $stt; $jkn <= $end;  $jkn++) { // 3時間分回す
+
+                    $sql = "SELECT * FROM ks_jknksi WHERE usedt = ".$usedt." AND jikan = ".$mng_rec[$cnt]." AND rmcd = ".$rmcd;
+                    
+                    $stmt = sqlsrv_query( $this->conn, $sql );
+                    
+                    if( $stmt === false) {
+                        die( print_r( sqlsrv_errors(), true) );
+                    }
+                    //echo $sql;
+                    $has_rows = sqlsrv_has_rows ( $stmt );
+                    
+                    if ( $has_rows ){
+                        
+                        while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+                        
+                            //if( $row['rsignkb'] != 0 ){
+
+                            //    sqlsrv_rollback( $this->conn );
+                            //    return false;
+
+                            //}
+
+                        
+                        }
+                        
+                        //update
+                        $sql = "UPDATE ks_jknksi SET rsignkb=(?), rjyokb=(?),login=(?), udate=(?), utime=(?)";
+                        $sql = $sql." WHERE usedt=(?) AND rmcd=(?) AND jikan=(?)";
+                        $params = array( 7, 2, $login, parent::getUdate(), parent::getUtime(), $usedt, 301, $mng_rec[$cnt]); //7:使用不可
+
+
+
+                    }else{
+
+                        //insert
+                        $sql = "INSERT INTO ks_jknksi ( usedt, jikan, rmcd, rsignkb, rjyokb ,login, udate, utime)";
+                        $sql = $sql." VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                        $params = array( $usedt, $mng_rec[$cnt], 301, 7, 2, $login, parent::getUdate(), parent::getUtime() );//7:使用不可
+
+                    }
+
+                    $stmt = sqlsrv_query( $this->conn, $sql, $params );
+                
+                    if( $stmt === false) {
+                        $tran = false;
+                        //echo $sql;
+                        //break;//exit for
+                    }
+
+                }//for
+            }
+            /*---------------------------------------*/
             /* 空室チェック （時間帯）*/
             //満室：受付№が０以外のレコードが存在
+            /*---------------------------------------*/
             for ( $jkn = $stt; $jkn <= $end;  $jkn++) { // 3時間分回す
             
                 $sql = "SELECT * FROM ks_jkntai WHERE usedt = ".$usedt." AND rmcd = ".$rmcd." AND jikan = ".$jkn." AND timekb = ".$timekb ;
@@ -349,6 +501,7 @@ class Reserve extends ModelBase {
                 if( $rmcd == 802 || $rmcd == 803 || $rmcd == 902 || $rmcd == 903 || $rmcd == 905 || $rmcd == 905 || $rmcd == 1001 || $rmcd == 1002){
                     
                     $oyarmcd = 0;    
+                    $mngrmcd = 0 ;
                     
                     if( $rmcd == 802 || $rmcd == 803 ){
                         $oyarmcd = 823;
@@ -359,8 +512,19 @@ class Reserve extends ModelBase {
                     if( $rmcd == 904 || $rmcd == 905 ){
                         $oyarmcd = 945;
                     }
+                    
                     if( $rmcd == 1001 || $rmcd == 1002 ){
+                        
                         $oyarmcd = 1012;
+
+                        if( $rmcd == 1001 ){
+                            $mngrmcd = 1002;    
+                        }
+                        
+                        if( $rmcd == 1002 ){
+                            $mngrmcd = 1001;    
+                        }
+                    
                     }
 
                    
@@ -398,10 +562,63 @@ class Reserve extends ModelBase {
                             $params = array( $usedt, $jkn, $oyarmcd, $timekb, $ukeno, $gyo, $login, parent::getUdate(), parent::getUtime() );
 
                         }//if
+
+                        $stmt = sqlsrv_query( $this->conn, $sql, $params );
+            
+                        if( $stmt === false) {
+                            $tran = false;
+                            //echo $sql;
+                            //break;//exit for
+                        }
                     
 
                     }
+                    //1001,1002
+                    if( $mngrmcd != 0 ){
+
+                        $sql = "SELECT * FROM ks_jkntai WHERE usedt = ".$usedt." AND rmcd = ".$mngrmcd." AND jikan = ".$jkn." AND timekb = ".$timekb ;
+
+                        $stmt = sqlsrv_query( $this->conn, $sql );
+                        
+                        if( $stmt === false) {
+                            die( print_r( sqlsrv_errors(), true) );
+                        }
                     
+                        $has_rows = sqlsrv_has_rows ( $stmt );
+
+                        if ( $has_rows ){
+                        
+                            while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+                        
+                                if( $row['ukeno'] != 0 ){
+                                    die( "unexpected error" ); //想定外、先取りされているなど
+                                }
+                        
+                            }
+                            //update
+                            $sql = "UPDATE ks_jkntai SET ukeno=(?), gyo=(?),login=(?), udate=(?), utime=(?)";
+                            $sql = $sql." WHERE usedt=(?) AND rmcd=(?) AND jikan=(?) AND timekb=(?)";
+                            $params = array( $ukeno, $gyo, $login, parent::getUdate(), parent::getUtime() , $usedt, $mngrmcd, $jkn, $timekb );
+
+                        }else{
+                    
+                            //insert
+                            $sql = "INSERT INTO ks_jkntai ( usedt, jikan, rmcd, timekb, ukeno, gyo, login, udate, utime)";
+                            $sql = $sql." VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                            $params = array( $usedt, $jkn, $mngrmcd, $timekb, $ukeno, $gyo, $login, parent::getUdate(), parent::getUtime() );
+
+                        }//if
+
+                        $stmt = sqlsrv_query( $this->conn, $sql, $params );
+            
+                        if( $stmt === false) {
+                            $tran = false;
+                            //echo $sql;
+                            //break;//exit for
+                        }
+                    
+
+                    }
 
                 }
                 /*----------------*/

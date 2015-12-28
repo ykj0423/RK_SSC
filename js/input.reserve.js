@@ -411,6 +411,35 @@ jQuery(function () {
 				alert("当日の利用責任者を入力してください。");
 				return false;
 			}
+
+			if(objData.length>98){
+				alert("98件を超えるお申し込みはできません。");
+				return false;
+			}
+
+			for ( var i = 0; i < objData.length; i++ ){
+				var cnt = 0;
+				if(objData[i]['disp'] == 0 ) {
+					continue;
+				}
+				
+				for ( var j = 0; j < objData.length; j++ ){
+					
+					if(objData[j]['disp'] == 0 ) {
+						continue;
+					}
+					if(objData[i]['rmcd']==objData[j]['rmcd']){
+						cnt++;
+					}
+					if(cnt>7){
+						alert("7日を超えるお申し込みはできません。");	
+						return false;
+					}
+
+				}
+			
+			}
+
 //alert(objData.length);
 			for ( var i = 0; i < objData.length; i++ ){
 
@@ -578,7 +607,7 @@ jQuery(function () {
  
 				if ( $( '#partkb'+i+'0').length > 0 ){
 					if( $('input[name=partkb'+ i +']:eq(0)').prop('checked') ){
-					}else if( $('input[partkb=piano'+ i +']:eq(1)').prop('checked') ){
+					}else if( $('input[name=partkb'+ i +']:eq(1)').prop('checked') ){
 					}else{
 						alert( "間仕切りを開けるか閉めるかを選択してください。" );	
 						return false;
