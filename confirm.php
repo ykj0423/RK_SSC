@@ -251,7 +251,7 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 								$feekb = $_POST['feekb'.$i];
 							}
 
-							$partkb = 0;
+							$partkb = -1;
 							
 							if(isset( $_POST['partkb'.$i] )){
 								$partkb = $_POST['partkb'.$i];
@@ -354,16 +354,24 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 						        $rmentnk = $row['entnk'];	//延長単価
 
 						    }  
-$go = true;
-if($holekb == 1){
-	if($kyakb!=99){
-		if(empty($rmtnk)){
-			$go = false;
-			echo "<span class=\"status2\">時間内訳を正しく入力してください<br></span>";
-			echo $sql;
-		}
-	}
-}
+							
+							$go = true;
+							
+							if($holekb == 1){
+							
+								if($kyakb!=99){
+							
+									if(empty($rmtnk)){
+							
+										$go = false;
+										echo "<span class=\"status2\">時間内訳を正しく入力してください<br></span>";
+										echo $sql;
+							
+									}
+							
+								}
+							
+							}
 						    		
 						    //通常金額
 						    $rmtukin = $rmtnk * $zgrt / 100;

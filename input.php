@@ -11,6 +11,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta NAME="ROBOTS" CONTENT="NOINDEX,NOFOLLOW,NOARCHIVE">
+<meta content="86400" http-equiv="Expires" >
 <title>予約申込み[入力]　 | <?php //echo $_SESSION['webrk']['sysname']; ?></title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/custom.css" rel="stylesheet">
@@ -30,6 +31,7 @@ include("model/Kyaku.php");
 require_once( "func.php" );
 require_once( "model/db.php" );
 
+/* データベース接続 */
 $ini = parse_ini_file('config.ini');        
 $serverName = $ini['SERVER_NAME'];
 $connectionInfo = array( "Database"=>$ini['DBNAME'], "UID"=>$ini['UID'], "PWD"=>$ini['PWD'] );
@@ -38,11 +40,6 @@ $conn = sqlsrv_connect( $serverName, $connectionInfo);
 if( $conn === false ) {           
     die( print_r( sqlsrv_errors(), true));
 }
-
-/* データベース接続 */
-//$db = new DB;
-//$conErr = $db->connect();
-//if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 
 //別途validationを実装
 class input_validation
@@ -73,8 +70,6 @@ class input_validation
             //数字チェック、範囲チェック
 			$ret =  false;
         } 
-		//return true;
-		//return $ret;
 	}
 	
 	//エラー取得
@@ -112,14 +107,20 @@ $Kyaku->get_user_info( $_SESSION['wloginid'] );
       ・「削除」ボタン：施設のお申し込みを取りやめる場合は「削除」を押下してください。該当行のみ取り消されます。 <br>
     （※いったん「削除」を押すと元に戻せません。ご注意ください。）
       <br><br>
-      ※備品の貸し出しをご希望の場合は、備考欄にご記入ください。<a href="http://www.kobe-ipc.or.jp/conferenceroom_hall/rental_equip.html" target="_blank" class="btn btn-info btn-xs" role="button">貸出備品の一覧はこちら</a><br>
-  		※立看板をご希望の場合は、はじめの行の備考欄に「立看板」とご記入ください。<br>
-  	※マイク(2本)、スクリーン・プロジェクター・アンプ・レーザーポインター（各1個）は、各会議室にご用意しております。<br>追加等をご希望の場合は受付窓口までお問い合わせください。<br>
+      ※備品の貸し出しをご希望の場合は、備考欄にご記入ください。
+      <a href="http://www.kobe-ipc.or.jp/conferenceroom_hall/rental_equip.html" target="_blank" class="btn btn-info btn-xs" role="button">貸出備品の一覧はこちら</a>
+      <br>※立看板をご希望の場合は、はじめの行の備考欄に「立看板」とご記入ください。
+      <br>※マイク(2本)、スクリーン・プロジェクター・アンプ・レーザーポインター（各1個）は、各会議室にご用意しております。
+      <br>追加等をご希望の場合は受付窓口までお問い合わせください。<br>
   	<br><br>
     </p>
     <div class="col-xs-4">
-      <a href="help.html#input" class="btn alert-info" target="window_name"  onClick="disp('help.html#input')"><li class="glyphicon glyphicon-question-sign" aria-hidden="true">&nbsp;この画面の操作方法についてはこちら>></li></a> 
-      <a href="loginqa.html#input" class="btn alert-danger" target="window_name"  onClick="disp('loginqa.html#input')"><li class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">&nbsp;予約申込にあたってのご注意はこちら>></li></a> 
+      <a href="help.html#input" class="btn alert-info" target="window_name"  onClick="disp('help.html#input')">
+      	<li class="glyphicon glyphicon-question-sign" aria-hidden="true">&nbsp;この画面の操作方法についてはこちら>></li>
+      </a> 
+      <a href="loginqa.html#input" class="btn alert-danger" target="window_name"  onClick="disp('loginqa.html#input')">
+      	<li class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">&nbsp;予約申込にあたってのご注意はこちら>></li>
+      </a> 
     </div>
   </div>
 <span class="status2">＊＊ この画面では、ご予約は確保されていません。ご希望の内容を送信後、受付結果をメールでお知らせいたします。＊＊</span><br><br>
@@ -142,14 +143,14 @@ $Kyaku->get_user_info( $_SESSION['wloginid'] );
   	<tr>
   		<th colspan="2" width="20%">行事名<span class="text-danger">（必須)</span></th>
   		<td colspan="5" width="70%">
-  			<input type="text" class="form-control" name="kaigi" id="kaigi" 
+  		<input type="text" class="form-control" name="kaigi" id="kaigi" 
   			value="<?php 
   					if( isset($_POST['kaigi']) ){
   						echo $_POST['kaigi']; 	
   					}
   				?>" 
   			style="width:50%"  style="ime-mode: active;"  maxlength="20">
-  			<br>こちらの内容が案内板に表示されます。<span class="note">（例：人材育成セミナー、ピアノ発表会、幹部会議…)</span>
+		<br>こちらの内容が案内板に表示されます。<span class="note">（例：人材育成セミナー、ピアノ発表会、幹部会議…)</span>
   		</td>
   	</tr>
   	<tr>
@@ -186,26 +187,6 @@ $Kyaku->get_user_info( $_SESSION['wloginid'] );
 				echo "<option value=\"".$row[0]."\">".$riyonm."</option>";
 			}
 		}
-
-
-	/*$riyo = $db->get_mm_riyo();
-	for ($i = 0; $i < ( count( $riyo ) ) ; $i++ ) {
-	
-		$riyocd = $riyo[ $i ][ 'code' ];   			//施設コード
-		$riyonm = mb_convert_encoding($riyo[ $i ][ 'name' ], "utf8", "SJIS");//施設名称
-  		
-  		if( isset($_POST['riyokb']) ){
-
-			if ( $_POST[ 'riyokb' ] == $riyocd ){
-				echo "<option value=\"".$riyocd."\" selected>".$riyonm."</option>";
-			}else{
-				echo "<option value=\"".$riyocd."\">".$riyonm."</option>";
-			}
-	
-		}
-	
-	}*/
-	
 	?>
   		</select>
   		</td>

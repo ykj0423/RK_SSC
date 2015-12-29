@@ -45,9 +45,9 @@ $rmcls = $db->select_rmcls();
 //検索開始日
                
 $today = date( "Y/m/d" );
-$rsv_sttdt = date( "Y/m/d", strtotime( "".$today." +15 day" ) );       //会議室申込開始日
+$rsv_sttdt = date( "Y/m/d", strtotime( "".$today." +14 day" ) );       //会議室申込開始日
 $rsv_enddt = date( "Y/m/d", strtotime( "".$today." +365 day" ) );      //申込期限日
-$rsv_sttdt_hole = date( "Y/m/d", strtotime( "".$today." +1 month" ) ); //ホール申込開始日
+$rsv_sttdt_hole = date( "Y/m/d", strtotime( "".$today." +3 month" ) ); //ホール申込開始日
 $rsv_before = date( "Y/m/d", strtotime( "".$today." +14 day" ) );      //申込終了日
 
 $cal_year = (int)substr( $rsv_sttdt, 0, 4 );

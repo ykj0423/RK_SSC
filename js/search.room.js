@@ -1,10 +1,32 @@
 jQuery(function () {
 
+		/* 申込開始日の計算*/
+		var dt = new Date();
+		dt.setDate(dt.getDate() + 15);//申込期限
+		var y = dt.getFullYear();
+		var m = dt.getMonth() + 1;
+		var d = dt.getDate();
+		m = (m < 10) ? '0' + m : m ;
+    	d = (d < 10) ? '0' + d : d ;
+    	
+    	var limit = y.toString() + m.toString() + d.toString();
+
+		dt = new Date();
+		y = dt.getFullYear();
+		m = dt.getMonth() + 4;//1月は0->12月は11
+		d = dt.getDate();
+		
+		y = (m > 12) ? y + 1: y ;
+		m = (m > 12) ? m - 12: m ;		
+    	m = (m < 10) ? '0' + m : m ;
+    	d = (d < 10) ? '0' + d : d ;
+
+    	var limit_hl = y.toString() + m.toString() + d.toString();
+
 		/* 予約件数の復元 */		
-		var strlist = new Array(99);
-		//strlist = JSON.parse( localStorage.getItem("sentaku") );//選択リスト
-		//$(".selcnt").text("現在の選択 ： " + strlist.length + "件");
-		$(".selcnt").text("現在の選択 ： 0 件");
+		var strlist = new Array();
+
+		$(".selcnt").text("現在の選択 ： " + strlist.length + "件");
         
         jQuery('#date_timepicker_start').datetimepicker({
             format: 'Y/m/d',
@@ -30,9 +52,6 @@ jQuery(function () {
             timepicker: false
         });
 
-		//現在の選択件数の更新
-		//$(".selcnt").text("現在の選択 ： " + strlist.length + "件");
-		
 		//前へボタン
 		$('.prev').click(function() {
 			
@@ -65,9 +84,6 @@ jQuery(function () {
 			
 			var sttdt = calc_yyyy + "/" + calc_mm + "/" + calc_dd;
 
-			//var sttdt = calcDate.getFullYear() + "/" + (calcDate.getMonth()+1) + "/" + calcDate.getDate();
-			//$('#date_timepicker_start').attr({'value': sttdt });
-			
 			//やり方ダサすぎる
 			calc = 0;
 			
@@ -102,8 +118,6 @@ jQuery(function () {
 			if (calc_dd < 10) {
 				calc_dd = '0' + calc_dd;
 			}
-
-			//var enddt = calcDate.getFullYear() + "/" + (calcDate.getMonth()+1) + "/" + calcDate.getDate();
 
 			var enddt = calc_yyyy + "/" + calc_mm + "/" + calc_dd;
 
@@ -201,62 +215,12 @@ jQuery(function () {
 				$("#" + imgstr).attr('src', 'icon/sentaku.png');
 			}
 		}
-		/*var objData = JSON.parse(localStorage.getItem("sentaku"));//選択リスト
-		if( objData != null){
-			for ( var i=0; i < objData.length; i++ ){
-				var  lnkstr = objData[i]['key'];
-				var imgstr = lnkstr.replace('a-', 'img-');
-				$("#" + imgstr).attr('src', 'icon/sentaku.png');
-			}
-		}*/
 		
 		/* 空室・選択クリック時 */                                                  
         $("a").click(function () {
-
-			// Display the month, day, and year. getMonth() returns a 0-based number.
-        	var dt = new Date();
-			dt.setDate(dt.getDate() + 15);//申込期限
-			var y = dt.getFullYear();
-			var m = dt.getMonth() + 1;
-			var d = dt.getDate();
-			//if (m == 1) {
-			//  y = y + 1;
-			//}
-			if (m < 10) {
-			  m = '0' + m;
-			}
-			if (d < 10) {
-			  d = '0' + d;
-			}
         	
-        	var limit = y.toString() + m.toString() + d.toString();
-
-        	//var dt = new Date();
-			dt = new Date();
-			y = dt.getFullYear();
-			m = dt.getMonth() + 2;//1月は0->12月は11
-			d = dt.getDate();
-
-			if (m > 12) {
-				m = 1;
-			}
-			if (m == 1) {
-			  y = y + 1;
-			}
-			if (m < 10) {
-			  m = '0' + m;
-			}
-			if (d < 10) {
-			  d = '0' + d;
-			}
-        	
-        	var limit_hl = y.toString() + m.toString() + d.toString();
-			
 			/* 予約状態の復元 */
-			//var strlist = JSON.parse(localStorage.getItem("sentaku"));
-			//var strlist = array();
 			var lnkstr = $(this).attr("id");
-            //var tdstr = lnkstr.replace('a-', '');
             var imgstr = lnkstr.replace('a-', 'img-');
             var datastr = lnkstr.replace('a-', 'data-');
             var usedt = $("#" + datastr).attr('data-usedt');	//使用日
@@ -270,21 +234,15 @@ jQuery(function () {
             var oyakokb = $("#" + datastr).attr('data-oyakokb');//親子区分　1:単独 2:親 3:子(ct_oyako)
 			var sumrmcd = $("#" + datastr).attr('data-sumrmcd');//集約施設
             var src = $("#" + imgstr).attr('src');
-			/*var jstjkn_h = null;
-            var jstjkn_m = null;
-            var jedjkn_h = null;
-            var jedjkn_m = null;*/
-			if(rmcd == '301'){
-				//alert(usedt + "<" +limit_hl);
-				if( usedt < limit_hl ){
-					alert("ご選択の日付についてはインターネット予約でお申し込みできません。受付窓口までお問い合わせください。");
-					return false;
-				}
-			}else{
-				if( usedt < limit ){
-					alert("ご選択の日付についてはインターネット予約でお申し込みできません。受付窓口までお問い合わせください。");
-					return false;
-				}
+			
+			if( (rmcd == '301') && ( usedt < limit_hl )){
+				alert("ご選択の日付についてはインターネット予約でお申し込みできません。受付窓口までお問い合わせください。");
+				return false;
+			}
+			
+			if( (rmcd != '301') && ( usedt < limit )){
+				alert("ご選択の日付についてはインターネット予約でお申し込みできません。受付窓口までお問い合わせください。");
+				return false;
 			}
 			
 			if (src == 'icon/kara.jpg') {	//空室選択時
@@ -330,34 +288,27 @@ jQuery(function () {
                 	strlist=new Array();
                 }
 	            strlist.push(data);
-                //選択中のtdの背景色変更
-        		//$("#"+ tdstr ).css('background-color', '#f4f984');
-                //var list = JSON.parse(localStorage.getItem("sentaku"));//選択リスト
-				//9件/月にすべきか
+                
+                //9件/月にすべきか
 				for ( var i=0; i < strlist.length; i++ ){
 					var wkey = strlist[i]['key'].slice(4, 10);			
-					//alert(wkey);				
 				}
 				
-				//if(strlist.length>9){
-				//	alert("一度に9枠を超えるお申し込みは受け付けできません");
-				//}else{
-					localStorage.setItem('sentaku', JSON.stringify(strlist));
-				//}
-            } else {	//選択解除時
-				$("#" + imgstr).attr('src', 'icon/kara.jpg');
-                //strlist.some(function (v, i) {
-                //    if (v.key == lnkstr) strlist.splice(i, 1); //key:lnkstrの要素を削除
-                //});
+				localStorage.setItem('sentaku', JSON.stringify(strlist));
+				
+            } else {	//選択解除
 
-$.each(strlist,
-    function(v, i) {
-      if (v.key == lnkstr) strlist.splice(i, 1);
-    }
-  );
-
-
+				$.each(strlist,
+				    function(v, i) {
+						if (i.key == lnkstr){
+				      		strlist.splice(i, 1);
+			      		}
+      		    	}
+				);
+		
                 localStorage.setItem('sentaku', JSON.stringify(strlist));
+
+				$("#" + imgstr).attr('src', 'icon/kara.jpg');
 			}
 
 			//現在の選択件数の更新
@@ -376,22 +327,11 @@ $.each(strlist,
 				var imgstr = wkey.replace('a-', 'img-');			
 				$("#" + imgstr).attr('src', 'icon/kara.jpg');
 				
-				//strlistから一つ一つ要素を削除してゆく
-				//strlist.some(function (v, i) {
-				//	if (v.key == wkey) strlist.splice(i, 1); //key:lnkstrの要素を削除
-				//});
-
-				$.each(strlist,
-    				function(v, i) {
-  						if (v.key == lnkstr) strlist.splice(i, 1);
-    				}
-  				);
-
-				//strlistの更新
+				strlist = new Array();
 				localStorage.setItem('sentaku', JSON.stringify(strlist));
 				
 			}
-			//ローカルストレージstrlistクリア
+			//ローカルストレージクリア
 			//localStorage.removeItem('sentaku', JSON.stringify(strlist));
 			//現在の選択件数の更新
 			$(".selcnt").text("現在の選択 ： " + strlist.length + "件");
@@ -426,7 +366,9 @@ $.each(strlist,
 			for ( var i = 0; i < wklist.length; i++ ){
 					wklist.splice(i, 1);
 			}			
+			
 			localStorage.setItem('sentaku', JSON.stringify(wklist));
+        
         });
 
  });

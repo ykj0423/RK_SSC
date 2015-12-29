@@ -148,10 +148,10 @@ jQuery(function () {
 				td3.html( objData[i]['jkn1'] + "～" + objData[i]['jkn2'] );
 				//td4.html( "時間内訳" );
 				var jjkn ="<table class=\"table table-condensed  form-inline nest mb0\"><tr><th>練習・準備時間</th><td>"
-	           		+ "<input type=\"text\" class=\"form-control\" name='jstjkn_h" + i + "' id='jstjkn_h" + i + "' value=\"" + objData[i]['jstjkn_h'] + "\" style=\"width:30px; ime-mode: inactive;\" maxlength=\"2\" >時"
-	               	+ "<input type=\"text\" class=\"form-control\" name='jstjkn_m" + i + "' id='jstjkn_m" + i + "' value=\"" + objData[i]['jstjkn_m'] + "\" style=\"width:30px; ime-mode: inactive;\" maxlength=\"2\" >分～"
-	               	+ "<input type=\"text\" class=\"form-control\" name='jedjkn_h" + i + "' id='jedjkn_h" + i + "' value=\"" + objData[i]['jedjkn_h'] + "\" style=\"width:30px; ime-mode: inactive;\" maxlength=\"2\" >時"
-	               	+ "<input type=\"text\" class=\"form-control\" name='jedjkn_m" + i + "' id='jedjkn_m" + i + "' value=\"" + objData[i]['jedjkn_m'] + "\" style=\"width:30px; ime-mode: inactive;\" maxlength=\"2\" >分"
+	           		+ "<input type=\"text\" class=\"form-control\" name='jnstjkn_h" + i + "' id='jnstjkn_h" + i + "' value=\"" + objData[i]['jstjkn_h'] + "\" style=\"width:30px; ime-mode: inactive;\" maxlength=\"2\" >時"
+	               	+ "<input type=\"text\" class=\"form-control\" name='jnstjkn_m" + i + "' id='jnstjkn_m" + i + "' value=\"" + objData[i]['jstjkn_m'] + "\" style=\"width:30px; ime-mode: inactive;\" maxlength=\"2\" >分～"
+	               	+ "<input type=\"text\" class=\"form-control\" name='jnedjkn_h" + i + "' id='jnedjkn_h" + i + "' value=\"" + objData[i]['jedjkn_h'] + "\" style=\"width:30px; ime-mode: inactive;\" maxlength=\"2\" >時"
+	               	+ "<input type=\"text\" class=\"form-control\" name='jnedjkn_m" + i + "' id='jnedjkn_m" + i + "' value=\"" + objData[i]['jedjkn_m'] + "\" style=\"width:30px; ime-mode: inactive;\" maxlength=\"2\" >分"
 	               	+ "</td></tr></table>";
 	            var hjkn = "<table class=\"table table-condensed  form-inline nest mb0\"><tr><th>催物時間</th><td>"
 		            + "<input type=\"text\" class=\"form-control\" name='hstjkn_h" + i + "' id='hstjkn_h" + i + "' value=\"" + objData[i]['hstjkn_h'] + "\" style=\"width:30px; ime-mode: inactive;\" maxlength=\"2\" >時"
@@ -160,10 +160,10 @@ jQuery(function () {
 		            + "<input type=\"text\" class=\"form-control\" name='hedjkn_m" + i + "' id='hedjkn_m" + i + "' value=\"" + objData[i]['hedjkn_m'] + "\" style=\"width:30px; ime-mode: inactive;\" maxlength=\"2\" >分"
 		            + "</td></tr></table>";
 		        var tjkn = "<table class=\"table table-condensed  form-inline nest mb0\"><tr><th>撤去時間</th><td>"
-		            + "<input type=\"text\" class=\"form-control\" name='tstjkn_h" + i + "' id='tstjkn_h" + i + "' value=\"" + objData[i]['tstjkn_h'] + "\" style=\"width:30px; ime-mode: inactive;\" maxlength=\"2\" >時"
-		            + "<input type=\"text\" class=\"form-control\" name='tstjkn_m" + i + "' id='tstjkn_m" + i + "' value=\"" + objData[i]['tstjkn_m'] + "\" style=\"width:30px; ime-mode: inactive;\" maxlength=\"2\" >分～"
-		            + "<input type=\"text\" class=\"form-control\" name='tedjkn_h" + i + "' id='tedjkn_h" + i + "' value=\"" + objData[i]['tedjkn_h'] + "\" style=\"width:30px; ime-mode: inactive;\" maxlength=\"2\" >時"
-		            + "<input type=\"text\" class=\"form-control\" name='tedjkn_m" + i + "' id='tedjkn_m" + i + "' value=\"" + objData[i]['tedjkn_m'] + "\" style=\"width:30px; ime-mode: inactive;\" maxlength=\"2\" >分"
+		            + "<input type=\"text\" class=\"form-control\" name='tkstjkn_h" + i + "' id='tkstjkn_h" + i + "' value=\"" + objData[i]['tstjkn_h'] + "\" style=\"width:30px; ime-mode: inactive;\" maxlength=\"2\" >時"
+		            + "<input type=\"text\" class=\"form-control\" name='tkstjkn_m" + i + "' id='tkstjkn_m" + i + "' value=\"" + objData[i]['tstjkn_m'] + "\" style=\"width:30px; ime-mode: inactive;\" maxlength=\"2\" >分～"
+		            + "<input type=\"text\" class=\"form-control\" name='tkedjkn_h" + i + "' id='tkedjkn_h" + i + "' value=\"" + objData[i]['tedjkn_h'] + "\" style=\"width:30px; ime-mode: inactive;\" maxlength=\"2\" >時"
+		            + "<input type=\"text\" class=\"form-control\" name='tkedjkn_m" + i + "' id='tkedjkn_m" + i + "' value=\"" + objData[i]['tedjkn_m'] + "\" style=\"width:30px; ime-mode: inactive;\" maxlength=\"2\" >分"
 		            + "</td></tr></table>";
 				
 				if( objData[i]['rmcd'] == "301" ){
@@ -273,6 +273,7 @@ jQuery(function () {
 				            + "<input type=\"hidden\" class=\"form-control\" name='hstjkn_m" + i + "' id='hstjkn_m" + i + "' value=\"00\">"
 				            + "<input type=\"hidden\" class=\"form-control\" name='hedjkn_h" + i + "' id='hedjkn_h" + i + "' value=\"21\">"
 				            + "<input type=\"hidden\" class=\"form-control\" name='hedjkn_m" + i + "' id='hedjkn_m" + i + "' value=\"00\">";
+					
 					}else if(objData[i]['timekb'] == 6 ){
 
 						var jkn = "<input type=\"hidden\" class=\"form-control\" name='stjkn_h" + i + "' id='stjkn_h" + i + "' value=\"9\">"
@@ -318,13 +319,18 @@ jQuery(function () {
 			    var comlkb = "<tr><th>営利目的での利用<br>（販売やPR活動も含む）</th><td>";
 			    
 			    if( objData[i]['comlkb'] == 0 ){
+			    							alert("comlkb0") ;
+
 		        	comlkb = comlkb + "<label class=\"\"><input type=\"radio\" name=\"comlkb" + i + "\" id=\"comlkb" + i + "1\" value=\"1\">あてはまる</label>"
 			            + "<label class=\"\"><input type=\"radio\" name=\"comlkb" + i + "\" id=\"comlkb" + i + "0\" value=\"0\" checked>あてはまらない</label>";
 		    	
 		    	}else if( objData[i]['comlkb'] == 1 ){
+			    							alert("comlkb1");
 	      			comlkb = comlkb + "<label class=\"\"><input type=\"radio\" name=\"comlkb" + i + "\" id=\"comlkb" + i + "1\" value=\"1\" checked>あてはまる</label>"
 			            + "<label class=\"\"><input type=\"radio\" name=\"comlkb" + i + "\" id=\"comlkb" + i + "0\" value=\"0\">あてはまらない</label>";
 		    	}else{
+
+			    							alert("comlkb");
 	      			comlkb = comlkb + "<label class=\"\"><input type=\"radio\" name=\"comlkb" + i + "\" id=\"comlkb" + i + "1\" value=\"1\">あてはまる</label>"
 			            + "<label class=\"\"><input type=\"radio\" name=\"comlkb" + i + "\" id=\"comlkb" + i + "0\" value=\"0\">あてはまらない</label>";
 		    	}
@@ -376,7 +382,7 @@ jQuery(function () {
 				td8.html( "<input type='hidden' name='gyo" + i + "' id='gyo" + i + "' value='" + gyo + "'>" );	//行番
 				td9.html( "<input type='hidden' name='usedt" + i + "' id='usedt" + i + "' value=" + useyyyy + usemm + usedd + ">" ); //使用日付
 				td10.html( "<input type='hidden' name='timekb" + i + "' id='timekb" + i + "' value='" + objData[i]['timekb'] + "'>" ); //時間帯
-				//td14.html( "<input type='text' name='oyakokb" + i + "' id='oyakokb" + i + "' value='" + objData[i]['oyakokb'] + "'>" ); 
+				//td14.html( "<input type='text' name='oyakokb" + i + "' id='oyakokb" + i + "' value=" + oya+ "'>" ); 
 				//td12.html( "<input type='text' name='sumrmcd" + i + "' id='sumrmcd" + i + "' value='" + objData[i]['sumrmcd'] + "'>" ); //単価
 				td11.html( "<input type='hidden' name='yobi" + i + "' id='yobi" + i + "' value='" + yobi + "'>" ); 
 				td12.html( "<input type='hidden' name='yobikb" + i + "' id='yobikb" + i + "' value='" + yobikb + "'>" ); //単価
@@ -440,7 +446,7 @@ jQuery(function () {
 			
 			}
 
-//alert(objData.length);
+			//時間入力チェック
 			for ( var i = 0; i < objData.length; i++ ){
 
 				if(objData[i]['disp'] == 0 ) {
@@ -448,30 +454,32 @@ jQuery(function () {
 				}					
 				
 				var jkn1 = objData[i]['jkn1'];
-				jkn1 = jkn1.replace( ":" , "" ) ;
 				var jkn2 = objData[i]['jkn2'];
-				jkn2 = jkn2.replace( ":" , "" ) ;
+				jkn1 = parseInt(jkn1.replace( ":" , "" ));//使用開始
+				jkn2 = parseInt(jkn2.replace( ":" , "" ));//使用終了
 
-				jkn1 = parseInt(jkn1);
-				jkn2 = parseInt(jkn2);
-
-				var hstjkn_h = $('#hstjkn_h' + i ).val();
-				var hstjkn_m = $('#hstjkn_m' + i ).val();
-				var hstjkn = hstjkn_h.toString() + hstjkn_m.toString();
-				var hedjkn_h = $('#hedjkn_h' + i ).val();
-				var hedjkn_m = $('#hedjkn_m' + i ).val();
-				var hedjkn = hedjkn_h.toString() + hedjkn_m.toString();
-			
+				var hstjkn = 0;//本番開始
+				var hedjkn = 0;//本番終了
+				var jstjkn = 0;//準備開始
+				var jedjkn = 0;//準備終了
+				var tstjkn = 0;//撤去開始
+				var tedjkn = 0;//撤去終了
+				
 				//本番時間
 				if( $('#hstjkn_h' + i ).length ){
 					
+					var hstjkn_h = $('#hstjkn_h' + i ).val();//本番開始
+					var hstjkn_m = $('#hstjkn_m' + i ).val();//本番終了
+					var hedjkn_h = $('#hedjkn_h' + i ).val();//本番開始
+					var hedjkn_m = $('#hedjkn_m' + i ).val();//本番終了
+
 					//本番時間チェック
 					if( !check_time( hstjkn_h, hstjkn_m, hedjkn_h, hedjkn_m, "催物", true ) ){
 						return false;
 					}
-					
-					hstjkn = parseInt(hstjkn);
-					hedjkn = parseInt(hedjkn);
+								
+					hstjkn = parseInt(hstjkn_h.toString() + hstjkn_m.toString());
+					hedjkn = parseInt(hedjkn_h.toString() + hedjkn_m.toString());
 
 					if( hstjkn < jkn1 || hedjkn > jkn2 ){
 						alert("催物時間は使用時間内で入力してください");
@@ -482,7 +490,6 @@ jQuery(function () {
 					objData[i]['hstjkn_m'] = hstjkn_m;
 					objData[i]['hedjkn_h'] = hedjkn_h;
 					objData[i]['hedjkn_m'] = hedjkn_m;
-					//alert("a");
 	
 				}
 				//alert("b");
@@ -491,31 +498,35 @@ jQuery(function () {
 
 					var jstjkn_h = $('#jstjkn_h' + i ).val();
 					var jstjkn_m = $('#jstjkn_m' + i ).val();
-					var jstjkn = jstjkn_h.toString() + jstjkn_m.toString();
 					var jedjkn_h = $('#jedjkn_h' + i ).val();
 					var jedjkn_m = $('#jedjkn_m' + i ).val();
-					var jedjkn = jedjkn_h.toString() + jedjkn_m.toString();
-//alert(jstjkn+" " +hstjkn);
+
 					//時間チェック
 					if( !check_time( jstjkn_h, jstjkn_m, jedjkn_h, jedjkn_m, "準備・リハ", false ) ){
 						return false;
 					}
-		
-					jstjkn = parseInt(jstjkn);
-					jedjkn = parseInt(jedjkn);
+					
+					jstjkn = parseInt(jstjkn_h.toString() + jstjkn_m.toString());
+					jedjkn = parseInt(jedjkn_h.toString() + jedjkn_m.toString());
 
 					if( jstjkn < jkn1 || jedjkn > jkn2 ){
 						alert("準備・リハ時間は使用時間内で入力してください");
 						//alert("準備・リハ時間は催物時間より前で入力してください");
 						return false;
 					}			
-					if( jstjkn >= hstjkn || jedjkn > hstjkn ){
-						alert("準備・リハ時間は催物時間より前で入力してください");
-						return false;
-					}
-					if( jstjkn >= hedjkn || jedjkn >= hedjkn ){
-						alert("準備・リハ時間は催物時間より前で入力してください");
-						return false;
+					//本番あり
+					if( ( hstjkn != 0 ) &&( hedjkn != 0 ) ){
+
+						if( jstjkn > hstjkn || jedjkn > hstjkn ){
+							alert("準備・リハ時間は催物時間より前で入力してください");
+							return false;
+						}
+						
+						if( jstjkn > hedjkn || jedjkn > hedjkn ){
+							alert("準備・リハ時間は催物時間より前で入力してください");
+							return false;
+						}
+
 					}
 
 					objData[i]['jstjkn_h'] = jstjkn_h;
@@ -530,36 +541,40 @@ jQuery(function () {
 					//撤去
 					var tstjkn_h = $('#tstjkn_h' + i ).val();
 					var tstjkn_m = $('#tstjkn_m' + i ).val();
-					var tstjkn = tstjkn_h.toString() + tstjkn_m.toString();
 					var tedjkn_h = $('#tedjkn_h' + i ).val();
 					var tedjkn_m = $('#tedjkn_m' + i ).val();
-					var tedjkn = tedjkn_h.toString() + tedjkn_m.toString();
 
 					//時間チェック
 					if( !check_time( tstjkn_h, tstjkn_m, tedjkn_h, tedjkn_m, "撤去", false) ){
 						return false;
 					}
 
-					tstjkn = parseInt(tstjkn);
-					tedjkn = parseInt(tedjkn);
+					tstjkn = parseInt(tstjkn_h.toString() + tstjkn_m.toString());
+					tedjkn = parseInt(tedjkn_h.toString() + tedjkn_m.toString());
 
 					if( tstjkn < jkn1 || tedjkn > jkn2 ){
 						alert("撤去時間は使用時間内で入力してください");
 						return false;
 					}			
-					if( tstjkn <= hstjkn || tedjkn <= hstjkn ){
-						alert("撤去時間は催物時間より後で入力してください");
-						return false;
-					}
-					if( tstjkn <= hedjkn || tedjkn <= hedjkn ){
-						alert("撤去時間は催物時間より後で入力してください");
-						return false;
-					}
+					if( ( hstjkn != 0 ) &&( hedjkn != 0 ) ){
+					
+						if( tstjkn < hstjkn || tedjkn < hstjkn ){
+							alert("撤去時間は催物時間より後で入力してください");
+							return false;
+						}
+					
+						if( tstjkn < hedjkn || tedjkn < hedjkn ){
+							alert("撤去時間は催物時間より後で入力してください");
+							return false;
+						}
 
+					}
+					
 					objData[i]['tstjkn_h'] = tstjkn_h;
 					objData[i]['tstjkn_m'] = tstjkn_m;
 					objData[i]['tedjkn_h'] = tedjkn_h;
 					objData[i]['tedjkn_m'] = tedjkn_m;
+				
 				}//撤去
 				
 				
@@ -577,15 +592,13 @@ jQuery(function () {
 					objData[i]['ninzu'] = $( '#ninzu' + i ).val();//入力された人数を格納
 				}//人数
 
-//alert("a1");
-				//if($('#comlkb0').length){
+
 				if( $('input[name=comlkb'+ i +']:eq(0)').prop('checked') ){
 				}else if( $('input[name=comlkb'+ i +']:eq(1)').prop('checked') ){
 				}else{
 					alert( "「営利目的での利用」に該当するかどうかを選択してください。" );	
 					return false;
 				}
-//alert("a2");
 				
 				if( $('input[name=feekb'+ i +']:eq(0)').prop('checked') ){
 				}else if( $('input[name=feekb'+ i +']:eq(1)').prop('checked') ){
@@ -593,7 +606,6 @@ jQuery(function () {
 					alert( "入場料、受講料を徴収するかどうかを選択してください。" );	
 					return false;
 				}
-//alert("a3");
 
 				if ( $( '#piano'+i+'0').length > 0 ){
 					if( $('input[name=piano'+ i +']:eq(0)').prop('checked') ){
@@ -603,7 +615,6 @@ jQuery(function () {
 						return false;
 					}
 				}
-//alert("a4");
  
 				if ( $( '#partkb'+i+'0').length > 0 ){
 					if( $('input[name=partkb'+ i +']:eq(0)').prop('checked') ){
@@ -619,22 +630,17 @@ jQuery(function () {
 				objData[i]['piano'] = $( '#piano' + i ).val();//グランドピアノ
 				objData[i]['partkb'] = $( '#partkb' + i ).val();//間仕切り
 				objData[i]['oyakokb'] = $( '#oyakokb' + i ).val();//間仕切り
-//alert("a6");
 				//明細使用料
 				objData[i]['rmkin'] = objData[i]['tnk'];
 				objData[i]['hzkin'] = 0;//objData[i]['tnk'];
 
-//alert("a7");
 			}
-//alert("a8");			
+
 			localStorage.removeItem('sentaku');
-			//alert('removeitem');
 			localStorage.setItem('sentaku', JSON.stringify(objData));
-			//alert('setItem');
 			$('#input_form').append($('<input>',{type:'hidden',name:'meisai_count',value:objData.length}));		
 			
 			//バリデーションチェックの結果submitしない場合、return falseすることでsubmitを中止することができる。
-			//return false;
 			return true;
 		});
 
@@ -675,6 +681,7 @@ jQuery(function () {
     			alert( wd + "開始時間と終了時間を数字で入力してください");
     			return false;
     		}
+    		
     		if( (h1.length > 2) || (m2.length > 2) || (h2.length > 2) || (m2.length > 2) ){
     			alert( wd + "開始時間と終了時間を正しく入力してください。");
     			return false;
@@ -687,47 +694,43 @@ jQuery(function () {
 				alert( wd + "開始時間と終了時間を正しく入力してください.");
     			return false;
     		}
-			if ( h2 <= h1 ){
-				alert( wd + "開始時間と終了時間を正しく入力してください;"+h2+"<="+ h1);
+
+			var t1 = h1*100 + m1;
+			var t2 = h2*100 + m2;
+
+			if ( t2 < t1 ){
+				alert( wd + "開始時間と終了時間を正しく入力してください;");
     			return false;
     		}
+
     		return true;  		
 		}
 
 		//申し込みをやめる処理
 		$(".btn-del").click(function(){
-			if (!confirm('この施設のお申込みを取りやめます。よろしいですか？')) {
+			if (confirm('この施設のお申込みを取りやめます。よろしいですか？')) {
+			
+			var strlist = JSON.parse(localStorage.getItem("sentaku"));//選択リスト
+			
+			var btnkey = $(this).attr("id").replace('btn-','a-');
+			btnkey = btnkey.slice(13); 
+
+				$.each(strlist,
+				    function(v, i) {
+				    	//alert(i.key.indexOf(btnkey));
+						if (i.key.indexOf(btnkey)!== -1) {
+				      		strlist.splice(i, 1);
+			      		}
+	  		    	}
+				)
+
+				localStorage.setItem('sentaku', JSON.stringify(strlist));
+				location.reload();
+			}else{
 				return false;
 			}
-			//name属性 からrowNo取得し、該当DOMを消去。
-			var rowNo = $(this).attr("name"); 
-			//alert(rowNo);
-			//var lnkstr = $(this).attr("id"); 
-			var btnkey = $(this).attr("id").replace('btn-','a-');
-			//alert(btnkey);
-			var strlist = JSON.parse(localStorage.getItem("sentaku"));//選択リスト
-			//alert(btnkey);
-			//console.log( btnkey );
-			//var removed;
-			
-                //strlist.some(function (v, i) {
-                //    if (v.key == lnkstr) strlist.splice(i, 1); //key:lnkstrの要素を削除
-                //});
-                //localStorage.setItem('sentaku', JSON.stringify(strlist));
-			//該当の予約をstrlistから除く
-			for ( var i = 0; i < strlist.length; i++ ){
-				if( btnkey ==  strlist[i]['key']){
-					//alert(btnkey);
-					strlist.splice(i, 1);
-				}
-			}
-			//localStorage.removeItem('sentaku');
-			//$( '#list tr' ).eq( rowNo ).remove();
-			localStorage.setItem('sentaku', JSON.stringify(strlist));
-			location.reload();
-
-		});
 		
+		});
 		
 		//ログアウト時ローカルストレージクリア
 		$(".logout").click(function(){			
@@ -739,51 +742,4 @@ jQuery(function () {
 			localStorage.setItem('sentaku', JSON.stringify(wklist));
         });
 
-		//$('#ninzu').change(function() {
-        //    isChange = true;
-        //    console.log("Hello world");
-        //});
-
-        //formを作成
-            //サーバ側入力チェック
-
-		/*$('#submit_Click').click(function() {
-			//var val = $('#my-form [name=my-text]').val();
-			//console.log(val);  //
-			$('#inpit_form').submit();
-		});*/
-
-	    /*$(".btn_Click").click(function(){
-		    //attrで発生したイベントのidを取得する
-		    var anc = $(this).attr("id");
-		    //form用のHTMLを作成する
-		    var form = $('<form></form>',
-					    {id:'btnid',action:'end.php',method:'POST'}).hide();
-		    //bodyのオブジェクトを取得
-		    var body = $('body');
-		    //bodyに作成したformを追加する
-		    body.append(form);
-		    //追加したformにinputを追加する
-		    form.append($('<input>',{type:'hidden',name:'btnid',value:anc}));
-		    //作成したformでsubmitする
-		    form.submit();
-		    return false;
-	    });*/
-		
-
-		//var val = $('#my-form [name=my-text]').val();
-		//console.log(val);  //
-		
-		/*
-		jQuery.post( url [,object] [function] [type] )ver1.0〜
-		・url：読む込むデータのurl
-		・object：サーバに送るデータを設定。値の型はobjectオブジェクト。
-		・function：通信が「成功」したら実行される処理を設定。以下の引数を受け取る
-		 ・第1引数：取得したデータ
-		 ・第2引数：状態（success、error、notmodified、timeout、parsererror）
-		 ・第3引数：jqXHRオブジェクト
-		・type：予期されるデータの形式（省略してもxml,json,script,html位は判断してくれます）
-		*/
-		
- //);
 });

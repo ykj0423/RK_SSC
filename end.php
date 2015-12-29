@@ -276,39 +276,9 @@ if($revflg){
 	$wudate = date( "Ymd" );
 	$utime = date( "His" );
 	$wutime = date( "His" );
-
 	$ukecd = 9999;
 
-	/*$sql = "INSERT INTO dt_roomr (ukeno, ukedt, nen, krkb, krmemo,ukecd,ukehkb,kyacd,
-		dannm,dannm2,dannmk,daihyo,renraku,tel1,tel2,fax,url,mail,zipcd,adr1,adr2,gyscd,sihon,jygsu,kyakb,
-		kounoukb,holekb,kaigi,naiyo,kbiko,sekinin,kupdkb,rsbkb,riyokb,paylmtdt,expkb,expnocdt,expdt,
-		trmkin,thzkin,tkin,login,udate,utime,wrkkb,wloginid,wudate,wutime)";
-	$sql .= " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
-	$params = array($ukeno, $ukedt, $nen, $krkb, $krmemo, $ukecd, $ukehkb, $kyacd,
-		$dannm, $dannm2, $dannmk, $daihyo, $renraku, $tel1, $tel2, $fax, $url, $mail, $zipcd, $adr1, $adr2, $gyscd, $sihon, $jygsu, $kyakb,
-		$kounoukb, $holekb, $kaigi,$naiyo, $kbiko, $sekinin, $kupdkb, $rsbkb, $riyokb, $paylmtdt, $expkb, $expnocdt, $expdt,
-		$trmkin, $thzkin, $tkin, $login, $udate, $utime, $wrkkb, $wloginid, $wudate, $wutime);
-
-
-	$stmt = sqlsrv_query( $conn, $sql, $params);
-
-	if( $stmt === false ) {
-	    if( ($errors = sqlsrv_errors() ) != null) {
-	        foreach( $errors as $error ) {
-	            echo "dt_roomr<br>".$sql;
-	            print_r($params);
-	            echo "<br>";
-				echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-	            echo "code: ".$error[ 'code']."<br />";
-	            echo "message: ".mb_convert_encoding( $error[ 'message'] ,  "UTF-8" )."<br />";
-	            die();
-	        }
-	    }
-	}*/
-
-	//echo("meisai_start");
-
+	/* 初期値 */
 	$gyo = 0;
 	$trmkin=0;
 	$thzkin=0;
@@ -521,63 +491,11 @@ if($revflg){
 			$hzkin = $_POST[ 'hzkin'.$i ] ;
 			$trmkin = $rmkin;
 			$thzkin = $hzkin;
-//echo " tkin=".$tkin."<br>";
+
 			$tkin = $tkin + $trmkin + $thzkin;
-
-//echo " trmkin=".$trmkin."<br>";
-//echo " thzkin=".$thzkin."<br>";
-//echo "tkin=".$tkin."<br>";
-
-
-			/*$sql = "SELECT tnk, entnk FROM mt_rmtnk WHERE rmcd = ".$rmcd." AND kyakb = ".$kyacd." AND ratesb = 0 AND stjkn = ".$stjkn." AND edjkn = ".$edjkn;
-		        
-		    $stmt = sqlsrv_query( $conn, $sql );
-		    
-		    if( $stmt === false) {
-		    	echo "mt_rmtnk";
-		    	echo $sql;
-		    	die( print_r( sqlsrv_errors(), true) );
-			}
-
-		 	while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
-
-		        $rmtnk = $row['tnk'];		//通常単価
-		        $rmentnk = $row['entnk'];	//延長単価
-
-		    } */
-
-		    //通常金額
-		    //$rmtukin = $rmtnk;
-
-		    //延長金額
-		    //$rmenkin = $rmentnk;
-
-		    //施設使用合計金額
-		    //$rmkin = intval( $rmtukin ) + intval( $rmenkin );
-		    //$rmkin =  $rmtukin  + $rmenkin;
 
 			//ピアノ区分
 			$pianokb = $_POST[ 'piano'.$i ];
-			//if(isset($_POST[ 'pianokb'.$i ])){
-			//	$pianokb = $_POST[ 'pianokb'.$i ];
-			//}
-
-		    //付属設備合計金額
-		    /*$hzkin = 0;
-
-		    if( $pianokb == 1 ){
-		    	
-		    	if( $kyakb == 1 ){
-		    		
-		    		$hzkin = 13000;
-
-		    	}else if( $kyakb == 2 ){
-
-					$hzkin = 6500;
-		    	
-		    	}
-			
-			}*/
 
 			//入金額・償還金
 			$rmnykin = 0;
@@ -602,25 +520,23 @@ if($revflg){
 			//状態データ更新フラグ
 			$kskbn = 0;
 			
-			//間仕切り
-			$partkb = 0;
-
-			if( isset($_POST['partkb'.$i])){
-				$partkb = $_POST['partkb'.$i];
-			}
-
 			//備考
 			if( isset($_POST['biko'.$i])){
 				$biko = $_POST[ 'biko'.$i ];
 			}
 
+			//間仕切り
+			$partkb = 0;
+			
 			if( isset($_POST['partkb'.$i])){
 
-				if( $partkb == 1 ){
+				if( $_POST['partkb'.$i] == 1 ){
+					$partkb = $_POST['partkb'.$i];
 					$biko .= "P閉める";
 				}
 
-				if( $partkb == 0 ){
+				if( $_POST['partkb'.$i] == 0 ){
+					$partkb = $_POST['partkb'.$i];
 					$biko .= "P開ける"; 
 				}
 
@@ -693,7 +609,7 @@ if($revflg){
 			/* 付属設備 */
 			$hzgyo = 0;
 
-			if($pianokb ==1 ){
+			if( $pianokb == 1 ){
 
 				//付属設備行番
 				$hzgyo++;
@@ -738,15 +654,15 @@ if($revflg){
 
 			}
 
-
-
 			//管理者留保
 
 
 		}
 	}//end_for
-	$ukehkb　= 98;//WEB予約
-	$ukehkb=98;
+
+	//WEB予約
+	$ukehkb = 98;
+
 	$sql = "INSERT INTO dt_roomr (ukeno, ukedt, nen, krkb, krmemo,ukecd,ukehkb,kyacd,
 		dannm,dannm2,dannmk,daihyo,renraku,tel1,tel2,fax,url,mail,zipcd,adr1,adr2,gyscd,sihon,jygsu,kyakb,
 		kounoukb,holekb,kaigi,naiyo,kbiko,sekinin,kupdkb,rsbkb,riyokb,paylmtdt,expkb,expnocdt,expdt,

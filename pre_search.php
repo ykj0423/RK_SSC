@@ -87,7 +87,7 @@ echo "<th colspan=\"2\" rowspan=\"3\" width=\"300\">施設名</th>";
 
 
 $today = date( "Y/m/d" );
-$rsv_sttdt = date( "Y/m/d", strtotime( "".$today." +15 day" ) );       //会議室申込開始日
+$rsv_sttdt = date( "Y/m/d", strtotime( "".$today." +14 day" ) );       //会議室申込開始日
 $rsv_enddt = date( "Y/m/d", strtotime( "".$today." +365 day" ) );      //申込期限日
 
 $span_stt="";
