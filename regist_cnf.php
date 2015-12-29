@@ -261,7 +261,7 @@ echo "<input type='hidden' name='mail' id='mail' value=\"".$_POST[ 'mail' ]."\">
 echo "<input type='hidden' name='zipcd' id='zipcd' value=\"".$zipcd."\">";
 echo "<input type='hidden' name='adr1' id='adr1' value=\"".$_POST[ 'adr1' ]."\">";
 echo "<input type='hidden' name='adr2' id='adr2' value=\"".$_POST[ 'adr2' ]."\">";
-echo "<input type='hidden' name='gyscd' id='gyscd' value=\"".$sihon."\">";
+echo "<input type='hidden' name='gyscd' id='gyscd' value=\"".$gyscd."\">";
 echo "<input type='hidden' name='sihon' id='sihon' value=\"".$_POST[ 'sihon' ]."\">";
 echo "<input type='hidden' name='jygsu' id='jygsu' value=\"".$jygsu."\">";
 //$_SESSION['Kyaku'] = serialize( $Kyaku );
