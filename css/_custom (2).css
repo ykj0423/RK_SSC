@@ -3,12 +3,21 @@
 .midashi{color:#3300cc;margin-right:10px;}
 /*global navi custom	color:yellow*/
 
-/*.nav-custom {background-color: #f4c583;border-color: #edd3a1;margin-bottom:5px}*/
+/* 薄い紫 */
+/*
 .nav-custom {background-color: #D5D8F4;border-color: #CCD0F3;margin-bottom:5px}
-
 .nav-custom li {border-left: 1px solid #CCD0F3;}
 a.navbar-brand,.nav-custom li a , .navbar-brand {color: #000;}
 .nav-custom li a:hover,a.navbar-brand:hover,a.nav-brand:focus {background-color: #C6C6EE}
+*/
+
+/*紺navi*/
+.nav-custom {background-color: /*#29689E*//*#4D91CC*/#506DB8;border-color: #979DCC;margin-bottom: 5px;color:#fff;}
+.nav-custom li {border-left: 1px solid #CCD0F3;}
+a.navbar-brand,.nav-custom li a , .navbar-brand {color: #fff;}
+.nav-custom li a:hover,a.navbar-brand:hover,a.nav-brand:focus {background-color: #0A4373}
+#dlogout li a{color:#000}
+#dlogout li a:hover{background:#bce8f1;}
 div.noboder{border:none !important}
 .pt12{padding-top:12px !important}
 .dgray {background:#a9a9a9 !important}
@@ -18,14 +27,14 @@ div.noboder{border:none !important}
 #rsv tr td ,.rsv tr td{text-align:center;font-size:16px;height:40px;font-weight:normal}
 #rsv tr td img,.rsv tr td img{width:100%}
 
-.rsv tr th,#rsv tr th{background-color:#e3e3e3;font-weight:normal}
+.srch tr th,.rsv tr th,#rsv tr th{background-color:/*#e3e3e3*/#fff5ee;font-weight:normal}
 .rsv tr.head th,#rsv tr.head th{text-align:center;font-weight:normal;vertical-align:bottom;}
 .rsv .btn,#rsv .btn{margin-left:5px}
 .rsv .f120,#rsv .f120{font-size:120%}
 .rsv .f150,#rsv .f150{font-size:150%}
 .rsv tr th.col-sun,#rsv tr th.col-sun{color:#ff0000}
 .rsv tr th.col-sat,#rsv tr th.col-sat{color:#0000cd}
-.rsv tr th.bg-another,#rsv tr th.bg-another{background:#ded0d2}
+.rsv tr th.bg-another,#rsv tr th.bg-another{background:/*#ded0d2*/#fff0f5}
 .rsv tr.fff th,#rsv tr.fff th{background: #fff;border:1px solid #fff;; border-bottom: 1px solid #c0c0c0;}
 
 /*入力*/
@@ -41,10 +50,7 @@ div.noboder{border:none !important}
 .mr20{margin-right:20px;}
 
 .f120{font-size:120%}
-.btn-logout {
-    background-color: #CCCBEC;
-    color: #000;
-}
+.btn-logout {background-color: #fff; color: #000;}
 
 .hanrei {
     border: 1px solid transparent;
@@ -62,7 +68,7 @@ div.noboder{border:none !important}
 .status6{color:#000080}/*予約*/
 
 div#srch{
- /* background:#eae1cf;*/
+ background:#eae1cf;
  margin-bottom:30px;
 
 }
@@ -85,7 +91,6 @@ input[type=text] {padding:5px;}
 .mr10{margin-right:10px}
 .ml20{margin-left:20px}
 .mb0{margin-bottom:0;}
-.mb10{margin-bottom:10px}
 .mb20{margin-bottom:20px}
 .nest tr th{width:33%;background: #fff !important;}
 .nest2 tr th{width:48%;background: #fff !important;}
@@ -122,12 +127,31 @@ dd{margin:10px;}
 /*keta*/
 #srch .checkbox-inline,#srch .checkbox-inline + .checkbox-inline{margin-left:0;margin-right:10px}
 
+/*カレンダーリンク*/
+.cal {float:right;}
+.cal .btn-group button{border:2px solid #fff;}
 
-.btn-default2 {
-  color: #333;
-  background-color: #CCCBEC;
-  border-color: #ccc;
-}
+.btn-cal{color:#333;background-color:/*#d2d1d8*/#fff;border-color:#c0c0c0;width:45px}
+.btn-cal:hover,.btn-cal:focus,.btn-cal.focus,.btn-cal:active,.btn-cal.active,.open>.dropdown-toggle.btn-cal{/*color:#333;background-color:#e6e6e6*/color:#fff;background-color:#31b0d5;border-color:#adadad}
+.btn-cal:active,.btn-cal.active,.open>.dropdown-toggle.btn-cal{background-image:none}
+.btn-cal.disabled,.btn-cal[disabled],fieldset[disabled] .btn-cal,.btn-cal.disabled:hover,.btn-cal[disabled]:hover,fieldset[disabled] .btn-cal:hover,.btn-cal.disabled:focus,.btn-cal[disabled]:focus,fieldset[disabled] .btn-cal:focus,.btn-cal.disabled.focus,.btn-cal[disabled].focus,fieldset[disabled] .btn-cal.focus,.btn-cal.disabled:active,.btn-cal[disabled]:active,fieldset[disabled] .btn-cal:active,.btn-cal.disabled.active,.btn-cal[disabled].active,fieldset[disabled] .btn-cal.active{background-color:#fff;border-color:#ccc}
+.btn-cal .badge{color:#fff;background-color:#333}
+
+
 
 span.small {font-size: 100%; }
 span.green {color: #1EB35F; }
+
+ul.list{padding-left:5px}
+ul.list li{list-style-type:none;}
+.capture{border:1px solid;width:900px;margin-bottom:10px;}
+
+@media print {
+ a[href]:after {
+ content: "" !important;
+ }
+ 
+ abbr[title]:after {
+ content: "" !important;
+ }
+}
