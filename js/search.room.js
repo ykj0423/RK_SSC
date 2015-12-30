@@ -248,11 +248,13 @@ jQuery(function () {
 				return false;
 			}
 			
-			if( strlist.length >= 98 ){
-				alert("一度に98件を超えるお申し込みはできません。");
-				return false;
+			if(strlist!=null){
+				if( strlist.length >= 98 ){
+					alert("一度に98件を超えるお申し込みはできません。");
+					return false;
+				}
 			}
-
+			
 			if (src == 'icon/kara.jpg') {	//空室選択時
 
                 $("#" + imgstr).attr('src', 'icon/sentaku.png');
@@ -359,6 +361,18 @@ jQuery(function () {
 
 			}
 
+			for( var i = 0; i < ( sort_array.length-1 ); i++ ){
+				
+				var j = i+1;
+				
+				if(parseInt(parseInt(sort_array[j]) - parseInt(sort_array[i]))>0){
+					alert("規定により、連続していないお申込みは受け付けできません。一日単位でお申し込みください。");
+					return false;
+					break;
+				}
+				
+			}
+
 			//日付チェックリストの作成
 			var discontinuity = true;//不連続フラグ
 
@@ -426,7 +440,7 @@ jQuery(function () {
 				return false;
 			}
 
-			if( sort_array.length　>　7 ){
+			if( sort_array.length > 7 ){
 				alert("規定により、連続して7日を超えるお申込みは受け付けできません。７日以内でお申し込みください。");
 				return false;
 			}
@@ -435,7 +449,7 @@ jQuery(function () {
 		 
 		 });
 
-		//ログアウト時　ローカルストレージクリア
+		//ログアウト時ローカルストレージクリア
 		$(".logout").click(function(){			
 			var wklist = JSON.parse(localStorage.getItem("sentaku"));
 			
