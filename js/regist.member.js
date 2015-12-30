@@ -48,6 +48,12 @@ jQuery(function () {
 			$('#re_mail').focus();
 			return false;
 		}
+		
+		if( $('#mail').val() != $('#re_mail').val() ){
+			alert("メールアドレスが異なっています。");
+			$('#mail').focus();
+			return false;
+		}
 
 		if( $('#zipcd_1').val() == '' ){
 			alert("郵便番号を入力してください。");
