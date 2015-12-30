@@ -365,8 +365,8 @@ jQuery(function () {
 				
 				var j = i+1;
 				
-				if(parseInt(parseInt(sort_array[j]) - parseInt(sort_array[i]))>0){
-					alert("規定により、連続していないお申込みは受け付けできません。一日単位でお申し込みください。");
+				if( parseInt( parseInt(sort_array[j]) - parseInt(sort_array[i]) ) > 1 ){
+					alert("規定により、連続していないお申込みは受け付けできません。一日単位でお申し込みください。1");
 					return false;
 					break;
 				}
@@ -436,7 +436,7 @@ jQuery(function () {
 			}
 
 			if( !diff ){
-				alert("規定により、連続していないお申込みは受け付けできません。一日単位でお申し込みください。");
+				alert("規定により、連続していないお申込みは受け付けできません。一日単位でお申し込みください");
 				return false;
 			}
 

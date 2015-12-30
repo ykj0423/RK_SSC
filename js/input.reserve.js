@@ -388,7 +388,12 @@ jQuery(function () {
 		
 		//フォーム送信時
 		$('#input_form').submit(function(){
-
+			
+			if(objData.length==0){
+				alert("予約施設が選択されていません。画面をもどり、施設を選択してください。");
+				return false;
+			}
+			
 			// バリデーションチェックや、データの加工を行う。
 			if( $('#kaigi').val()=='' ){
 				alert("行事名を入力してください。");
@@ -709,27 +714,49 @@ jQuery(function () {
 		//申し込みをやめる処理
 		$(".btn-del").click(function(){
 			if (confirm('この施設のお申込みを取りやめます。よろしいですか？')) {
-			
-			var strlist = JSON.parse(localStorage.getItem("sentaku"));//選択リスト
-			
-			var btnkey = $(this).attr("id").replace('btn-','a-');
-			btnkey = btnkey.slice(13); 
+				var strlist = JSON.parse(localStorage.getItem("sentaku"));//選択リスト
+				//console.log(strlist.length);
+				var btnkey = $(this).attr("id").replace('btn-','a-');
+				console.log("btnkey "+btnkey);
+				//console.log("btnkey.length "+btnkey.length);
+				var btnkey_array = new Array();
+				var before_str = btnkey.substr( 0, btnkey.length-1 );
+				var last_str = btnkey.substr( btnkey.length-1, 1);
+				console.log("before_str "+before_str);
+				console.log("last_str "+last_str);
 
-				$.each(strlist,
-				    function(v, i) {
-				    	//alert(i.key.indexOf(btnkey));
-						if (i.key.indexOf(btnkey)!== -1) {
-				      		strlist.splice(i, 1);
-			      		}
-	  		    	}
-				)
+				if( ( last_str == 1 ) || ( last_str == 2 ) || ( last_str == 3 ) ){
+					btnkey_array.push( btnkey );
+				}
+				if( last_str == 4 ){
+					btnkey_array.push( before_str + "1" );
+					btnkey_array.push( before_str + "2" );
+				}
+				if( last_str == 5 ){
+					btnkey_array.push( before_str + "2" );
+					btnkey_array.push( before_str + "3" );
+				}
+				if( last_str == 6 ){
+					btnkey_array.push( before_str + "1" );
+					btnkey_array.push( before_str + "2" );
+					btnkey_array.push( before_str + "3" );
+				}
+				console.log(btnkey_array);
+				for ( var i = 0; i < strlist.length; i++ ){
+					for ( var j = 0; j < btnkey_array.length; j++ ){
+						if(strlist[i].key==btnkey_array[j]){
+							strlist.splice(i, 1);	
+						}
+					}
+				}
 
 				localStorage.setItem('sentaku', JSON.stringify(strlist));
 				location.reload();
-			}else{
-				return false;
+
+				//alert("");
+				//return false;
 			}
-		
+			//return false;
 		});
 		
 		//ログアウト時ローカルストレージクリア
