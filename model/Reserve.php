@@ -164,7 +164,7 @@ class Reserve extends ModelBase {
                     //break;//exit for
                 }
                 /*----------------*/
-                if( $rmcd == 802 || $rmcd == 803 || $rmcd == 902 || $rmcd == 903 || $rmcd == 905 || $rmcd == 905 || $rmcd == 1001 || $rmcd == 1002){
+                /*if( $rmcd == 802 || $rmcd == 803 || $rmcd == 902 || $rmcd == 903 || $rmcd == 905 || $rmcd == 905 || $rmcd == 1001 || $rmcd == 1002){
                     
                     $oyarmcd = 0;
                     $mngrmcd = 0;   
@@ -293,7 +293,7 @@ class Reserve extends ModelBase {
                     }
                     
 
-                }
+                }*/
                 /*----------------*/
                 if( $rmcd == 823 || $rmcd == 923 || $rmcd == 945 ){
 

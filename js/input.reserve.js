@@ -41,16 +41,67 @@ jQuery(function () {
         	        	
         	//親施設が同じ、同一日、同一時間帯であれば、親子施設とみなす
 			if( objData[i]['oyakokb'] == 3){
-				for ( var j = (i + 1) ; j < objData.length; j++ ){
-					if( objData[j]['oyakokb'] == 3){
-						if( objData[i]['sumrmcd'] == objData[j]['sumrmcd']){
+				
+				for ( var j = 0 ; j < objData.length; j++ ){
+			
+					if( i != j ){
+					
+						if( objData[j]['oyakokb'] == 3){
+							if( objData[i]['sumrmcd'] == objData[j]['sumrmcd']){
+								if( objData[i]['usedt'] == objData[j]['usedt']){
+									if( objData[i]['timekb'] == objData[j]['timekb']){
+										objData[i]['rmcd'] = objData[i]['sumrmcd'];
+										//alert( objData[i]['rmcd'] + objData[i]['sumrmcd'] );
+										//objData[i]['disp'] = 1;
+										objData[j]['disp'] = 0;
+										oya = true;
+										//break;
+									}
+								}
+							}
+						}
+			
+					}
+				}
+			
+			}
+
+			if( objData[i]['timekb'] == 1 || objData[i]['timekb'] == 2 || objData[i]['timekb'] == 3 ){
+				for ( var j = 0 ; j < objData.length; j++ ){
+					if( i != j ){
+						if( objData[i]['rmcd'] == objData[j]['rmcd']){
 							if( objData[i]['usedt'] == objData[j]['usedt']){
-								if( objData[i]['timekb'] == objData[j]['timekb']){
-									objData[i]['rmcd'] = objData[i]['sumrmcd'];
-									//alert( objData[i]['rmcd'] + objData[i]['sumrmcd'] );
-									//objData[i]['disp'] = 1;
-									objData[j]['disp'] = 0;
-									oya = true;
+								
+								if( objData[i]['timekb'] == 1 && objData[j]['timekb'] == 2 ){
+									objData[j]['jkn1'] = objData[i]['jkn1'];
+									objData[i]['jkn2'] = objData[j]['jkn2'];
+									objData[i]['timekb'] = 4;
+									objData[j]['timekb'] = 4;
+									objData[j]['disp'] = 0;					
+									//break;
+								}
+								if( objData[i]['timekb'] == 2 && objData[j]['timekb'] == 1 ){
+									objData[i]['jkn1'] = objData[j]['jkn1'];
+									objData[j]['jkn2'] = objData[i]['jkn2'];
+									objData[i]['timekb'] = 4;
+									objData[j]['timekb'] = 4;
+									objData[j]['disp'] = 0;					
+									//break;
+								}
+								if( objData[i]['timekb'] == 2 && objData[j]['timekb'] == 3 ){
+									objData[j]['jkn1'] = objData[i]['jkn1'];
+									objData[i]['jkn2'] = objData[j]['jkn2'];
+									objData[i]['timekb'] = 5;
+									objData[j]['timekb'] = 5;
+									objData[j]['disp'] = 0;					
+									//break;
+								}
+								if( objData[i]['timekb'] == 3 && objData[j]['timekb'] == 2 ){
+									objData[i]['jkn1'] = objData[j]['jkn1'];
+									objData[j]['jkn2'] = objData[i]['jkn2'];
+									objData[i]['timekb'] = 5;
+									objData[j]['timekb'] = 5;
+									objData[j]['disp'] = 0;					
 									//break;
 								}
 							}
@@ -59,52 +110,44 @@ jQuery(function () {
 				}
 			}
 
-			if( objData[i]['timekb'] == 1 || objData[i]['timekb'] == 2 || objData[i]['timekb'] == 3 ){
-				for ( var j = (i + 1) ; j < objData.length; j++ ){
-					if( objData[i]['rmcd'] == objData[j]['rmcd']){
-						if( objData[i]['usedt'] == objData[j]['usedt']){
-							
-							if( objData[i]['timekb'] == 1 && objData[j]['timekb']==2){
-								objData[j]['jkn1'] = objData[i]['jkn1'];
-								objData[i]['jkn2'] = objData[j]['jkn2'];
-								objData[i]['timekb'] = 4;
-								objData[j]['timekb'] = 4;
-								objData[j]['disp'] = 0;					
-								//break;
-							}
-							if( objData[i]['timekb'] == 2 && objData[j]['timekb']==3){
-								objData[j]['jkn1'] = objData[i]['jkn1'];
-								objData[i]['jkn2'] = objData[j]['jkn2'];
-								objData[i]['timekb'] = 5;
-								objData[j]['timekb'] = 5;
-								objData[j]['disp'] = 0;					
-								//break;
-							}
-						}
-					}
-				}
-			}
-
 			if( objData[i]['timekb'] == 4 || objData[i]['timekb'] == 5 ){
-				for ( var j = (i + 1) ; j < objData.length; j++ ){
-					if( objData[i]['rmcd'] == objData[j]['rmcd']){
-						if( objData[i]['usedt'] == objData[j]['usedt']){
+				for ( var j = 0 ; j < objData.length; j++ ){
+					if( i != j ){
+						if( objData[i]['rmcd'] == objData[j]['rmcd']){
+							if( objData[i]['usedt'] == objData[j]['usedt']){
 
-							if( objData[i]['timekb'] == 4 && objData[j]['timekb']== 3){
-								objData[j]['jkn1'] = objData[i]['jkn1'];
-								objData[i]['jkn2'] = objData[j]['jkn2'];
-								objData[i]['timekb'] = 6;
-								objData[j]['timekb'] = 6;
-								objData[j]['disp'] = 0;					
-								//break;
-							}
-							if( objData[i]['timekb'] == 1 && objData[j]['timekb']==5){
-								objData[j]['jkn1'] = objData[i]['jkn1'];
-								objData[i]['jkn2'] = objData[j]['jkn2'];
-								objData[i]['timekb'] = 6;
-								objData[j]['timekb'] = 6;
-								objData[j]['disp'] = 0;					
-								//break;
+								if( objData[i]['timekb'] == 4 && objData[j]['timekb']== 3 ){
+									objData[j]['jkn1'] = objData[i]['jkn1'];
+									objData[i]['jkn2'] = objData[j]['jkn2'];
+									objData[i]['timekb'] = 6;
+									objData[j]['timekb'] = 6;
+									objData[j]['disp'] = 0;					
+									//break;
+								}
+								if( objData[i]['timekb'] == 3 && objData[j]['timekb']== 4 ){
+									objData[i]['jkn1'] = objData[j]['jkn1'];
+									objData[j]['jkn2'] = objData[i]['jkn2'];
+									objData[i]['timekb'] = 6;
+									objData[j]['timekb'] = 6;
+									objData[j]['disp'] = 0;					
+									//break;
+								}
+								if( objData[i]['timekb'] == 1 && objData[j]['timekb']== 5 ){
+									objData[j]['jkn1'] = objData[i]['jkn1'];
+									objData[i]['jkn2'] = objData[j]['jkn2'];
+									objData[i]['timekb'] = 6;
+									objData[j]['timekb'] = 6;
+									objData[j]['disp'] = 0;					
+									//break;
+								}
+								if( objData[i]['timekb'] == 5 && objData[j]['timekb']== 1 ){
+									objData[i]['jkn1'] = objData[j]['jkn1'];
+									objData[j]['jkn2'] = objData[i]['jkn2'];
+									objData[i]['timekb'] = 6;
+									objData[j]['timekb'] = 6;
+									objData[j]['disp'] = 0;					
+									//break;
+								}
 							}
 						}
 					}

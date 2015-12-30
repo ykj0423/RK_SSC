@@ -28,7 +28,11 @@ jQuery(function () {
 	/* 予約件数の復元 */		
 	var strlist = new Array();
 	var strlist = JSON.parse(localStorage.getItem("sentaku"));//選択リスト
-	$(".selcnt").text("現在の選択 ： " + strlist.length + "件");
+	if(strlist!=null){
+		$(".selcnt").text("現在の選択 ： " + strlist.length + "件");
+	}else{
+		$(".selcnt").text("現在の選択 ： 0件");
+	}
         
     jQuery('#date_timepicker_start').datetimepicker({
         format: 'Y/m/d',
