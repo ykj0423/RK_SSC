@@ -27,7 +27,7 @@ jQuery(function () {
 
 	/* 予約件数の復元 */		
 	var strlist = new Array();
-
+	var strlist = JSON.parse(localStorage.getItem("sentaku"));//選択リスト
 	$(".selcnt").text("現在の選択 ： " + strlist.length + "件");
         
     jQuery('#date_timepicker_start').datetimepicker({
@@ -366,7 +366,7 @@ jQuery(function () {
 				var j = i+1;
 				
 				if( parseInt( parseInt(sort_array[j]) - parseInt(sort_array[i]) ) > 1 ){
-					alert("規定により、連続していないお申込みは受け付けできません。一日単位でお申し込みください。1");
+					alert("規定により、連続していないお申込みは受け付けできません。一日単位でお申し込みください。");
 					return false;
 					break;
 				}
