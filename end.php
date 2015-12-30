@@ -24,20 +24,10 @@
 <script src="js/jquery.datetimepicker.js"></script>
 <script src="js/custom.js"></script>
 <script>
-    jQuery(function () {
-		
-		//ログアウト時、トップに戻る時のローカルストレージクリア
-		//$(".logout").click(function(){
-			
-			var strlist = JSON.parse(localStorage.getItem("sentaku"));
-			
-			for ( var i = 0; i < strlist.length; i++ ){
-					strlist.splice(i, 1);
-			}
-			
-			localStorage.setItem('sentaku', JSON.stringify(strlist));
-        //});	
-	});
+jQuery(function () {
+	strlist = new Array();
+	localStorage.setItem('sentaku', JSON.stringify(strlist));
+});
  </script>
 </head>
 <body class="container">
@@ -46,9 +36,6 @@ include('session_check.php');
 require_once( "func.php" );
 require_once( "model/db.php" );
 require_once("model/Reserve.php");
-//include("model/Seikyu.php");
-//include("model/Seikyu.php");
-//require_once("model/Seikyu.php");
 
 /* データベース接続 */
 $db = new DB;

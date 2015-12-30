@@ -43,7 +43,6 @@ $rmcls = $db->select_rmcls();
 
 /* 検索日付（自至） */
 //検索開始日
-               
 $today = date( "Y/m/d" );
 $rsv_sttdt = date( "Y/m/d", strtotime( "".$today." +14 day" ) );       //会議室申込開始日
 $rsv_enddt = date( "Y/m/d", strtotime( "".$today." +365 day" ) );      //申込期限日
@@ -70,7 +69,6 @@ if( isset( $_POST['calbtn'] ) ){
 
   $calbtn = $_POST['calbtn'];
   $calbtn_year = (int)substr( $calbtn, 0, 4 );
-  //$calbtn_month = str_pad( (int)substr( $calbtn, 5, 2 ), 2, 0, STR_PAD_LEFT );
   $calbtn_month =  (int)substr( $calbtn, 4, 2 );
   if($calbtn_month < 10)
   {
@@ -258,8 +256,7 @@ if(is_array($rmcls)){
           [凡例]<br>
           空：予約可
           <span class="selcol" style="padding-left:5px;padding-right:5px">○</span>：選択中　
-            <span class="dgray" style="padding-left:5px;padding-right:5px">×</span>：予約不可　
-            <!--span class="dgray" style="padding-left:5px;padding-right:5px">空</span>：窓口にお申し付けください-->　<br>
+          <span class="dgray" style="padding-left:5px;padding-right:5px">×</span>：予約不可<br>
           朝：9:00～12:00 昼：13:00～17:00　夜:18:00～21:00
         </p>
       </div>
@@ -312,13 +309,13 @@ for ($i = 0; $i < ( count( $room ) ) ; $i++ ) {
     //本当は一気に取りたい
     //朝
     echo "<th>朝</th>";
-    $mor = $db->select_ksjkntai( $rmcd , 1 ,  str_replace( "/", "", $sttdt ) ,  str_replace( "/", "", $enddt ) );
+    $mor = $db->select_ksjkntai( $rmcd, 1, str_replace( "/", "", $sttdt ), str_replace( "/", "", $enddt ) );
 //print_r($mor);
     for ($k = 0; $k < count( $date_array ) ; $k++) {
 
       $usedt = str_replace( "/", "", $date_array[$k]['yyyy'].$date_array[$k]['mm'].$date_array[$k]['dd'] );
 
-      if( $db->select_kscal( $usedt , 1 )){
+      if( $db->select_kscal( $usedt, 1 )){
     		//$usedt = str_replace( "/", "", $sttdt ) + $k ;//仮
     		
         if( !array_key_exists( $usedt, $mor['data'] ) ){
@@ -326,7 +323,7 @@ for ($i = 0; $i < ( count( $room ) ) ; $i++ ) {
           echo "<td class=\"can\" id=".$rmcd.$usedt."1\" ><a id=\"a-".$rmcd.$usedt."1\">";
           echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."1\"></a>";
           //各種定数化。
-          echo "<div id=\"data-".$rmcd.$usedt."1\" data-usedt=\"".$usedt."\" data-yobi=".$k." data-timekb=\"1\" data-jkn1=\"9:00\" data-jkn2=\"12:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$asatnk."\" data-oyakokb=\"".$oyakokb."\" data-sumrmcd=\"".$sumrmcd."\" />";
+          echo "<div id=\"data-".$rmcd.$usedt."1\" data-usedt=\"".$usedt."\" data-yobi=".$k." data-timekb=\"1\" data-jkn1=\"9:00\" data-jkn2=\"12:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$asatnk."\" data-oyakokb=\"".$oyakokb."\" data-sumrmcd=\"".$sumrmcd."\" data-teiin=\"".$teiin."\" />";
           echo "</td>";
     		
         }elseif( array_key_exists( $usedt, $mor['data'] ) && ( $mor['data'][$usedt] == 0 ) ){
@@ -335,7 +332,7 @@ for ($i = 0; $i < ( count( $room ) ) ; $i++ ) {
     			echo "<td class=\"can\"><a id=\"a-".$rmcd.$usedt."1\">";
           echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."1\"></a>";
           //各種定数化。
-    			echo "<div id=\"data-".$rmcd.$usedt."1\" data-usedt=\"".$usedt."\" data-yobi=".$k." data-timekb=\"1\" data-jkn1=\"9:00\" data-jkn2=\"12:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$asatnk."\" data-oyakokb=\"".$oyakokb."\" data-sumrmcd=\"".$sumrmcd."\" />";
+    			echo "<div id=\"data-".$rmcd.$usedt."1\" data-usedt=\"".$usedt."\" data-yobi=".$k." data-timekb=\"1\" data-jkn1=\"9:00\" data-jkn2=\"12:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$asatnk."\" data-oyakokb=\"".$oyakokb."\" data-sumrmcd=\"".$sumrmcd."\"  data-teiin=\"".$teiin."\" />";
           echo "</td>";
             
     		}else{
@@ -367,14 +364,14 @@ for ($i = 0; $i < ( count( $room ) ) ; $i++ ) {
   		
     	       echo "<td  class=\"can\"><a id=\"a-".$rmcd.$usedt."2\">";
              echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."2\"></a>";
-             echo "<div id=\"data-".$rmcd.$usedt."2\" data-usedt=\"".$usedt."\" data-timekb=\"2\" data-jkn1=\"13:00\" data-jkn2=\"17:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$hirutnk."\" data-oyakokb=\"".$oyakokb."\" data-sumrmcd=\"".$sumrmcd."\" />";
+             echo "<div id=\"data-".$rmcd.$usedt."2\" data-usedt=\"".$usedt."\" data-timekb=\"2\" data-jkn1=\"13:00\" data-jkn2=\"17:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$hirutnk."\" data-oyakokb=\"".$oyakokb."\" data-sumrmcd=\"".$sumrmcd."\"  data-teiin=\"".$teiin."\" />";
              echo "</td>";
 
   		    }elseif ( array_key_exists( $usedt, $noon['data'] ) && ( $noon['data'][$usedt] == 0 ) ) {
               //echo "<td  class=\"can\"><a href=\"#\"><img src=\"icon/kara.jpg\"></a></td>";
               echo "<td  class=\"can\"><a id=\"a-".$rmcd.$usedt."2\">";
               echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."2\"></a>";
-              echo "<div id=\"data-".$rmcd.$usedt."2\" data-usedt=\"".$usedt."\" data-timekb=\"2\" data-jkn1=\"13:00\" data-jkn2=\"17:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$hirutnk."\" data-oyakokb=\"".$oyakokb."\" data-sumrmcd=\"".$sumrmcd."\" />";
+              echo "<div id=\"data-".$rmcd.$usedt."2\" data-usedt=\"".$usedt."\" data-timekb=\"2\" data-jkn1=\"13:00\" data-jkn2=\"17:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$hirutnk."\" data-oyakokb=\"".$oyakokb."\" data-sumrmcd=\"".$sumrmcd."\"  data-teiin=\"".$teiin."\" />";
               echo "</td>";
           
           }else{
@@ -410,14 +407,14 @@ for ($i = 0; $i < ( count( $room ) ) ; $i++ ) {
     		
             echo "<td  class=\"can\"><a id=\"a-".$rmcd.$usedt."3\">";
             echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."3\"></a>";
-            echo "<div id=\"data-".$rmcd.$usedt."3\" data-usedt=\"".$usedt."\" data-timekb=\"3\" data-jkn1=\"18:00\" data-jkn2=\"21:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$yorutnk."\" data-oyakokb=\"".$oyakokb."\" data-sumrmcd=\"".$sumrmcd."\" />";
+            echo "<div id=\"data-".$rmcd.$usedt."3\" data-usedt=\"".$usedt."\" data-timekb=\"3\" data-jkn1=\"18:00\" data-jkn2=\"21:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$yorutnk."\" data-oyakokb=\"".$oyakokb."\" data-sumrmcd=\"".$sumrmcd."\"  data-teiin=\"".$teiin."\" />";
             echo "</td>";	
             
           }elseif ( array_key_exists( $usedt, $night['data'] ) && ( $night['data'][$usedt] == 0 ) ) {
                 //echo "<td  class=\"can\"><a href=\"#\"><img src=\"icon/kara.jpg\"></a></td>";
             echo "<td  class=\"can\"><a id=\"a-".$rmcd.$usedt."3\">";
             echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."3\"></a>";
-            echo "<div id=\"data-".$rmcd.$usedt."3\" data-usedt=\"".$usedt."\" data-timekb=\"3\" data-jkn1=\"18:00\" data-jkn2=\"21:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$yorutnk."\" data-oyakokb=\"".$oyakokb."\" data-sumrmcd=\"".$sumrmcd."\" />";
+            echo "<div id=\"data-".$rmcd.$usedt."3\" data-usedt=\"".$usedt."\" data-timekb=\"3\" data-jkn1=\"18:00\" data-jkn2=\"21:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$yorutnk."\" data-oyakokb=\"".$oyakokb."\" data-sumrmcd=\"".$sumrmcd."\"  data-teiin=\"".$teiin."\" />";
             echo "</td>";		
             
           }else{

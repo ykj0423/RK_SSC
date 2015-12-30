@@ -1,56 +1,58 @@
 jQuery(function () {
-
-		/* 申込開始日の計算*/
-		var dt = new Date();
-		dt.setDate(dt.getDate() + 15);//申込期限
-		var y = dt.getFullYear();
-		var m = dt.getMonth() + 1;
-		var d = dt.getDate();
-		m = (m < 10) ? '0' + m : m ;
-    	d = (d < 10) ? '0' + d : d ;
-    	
-    	var limit = y.toString() + m.toString() + d.toString();
-
-		dt = new Date();
-		y = dt.getFullYear();
-		m = dt.getMonth() + 4;//1月は0->12月は11
-		d = dt.getDate();
 		
-		y = (m > 12) ? y + 1: y ;
-		m = (m > 12) ? m - 12: m ;		
-    	m = (m < 10) ? '0' + m : m ;
-    	d = (d < 10) ? '0' + d : d ;
+	//location.reload();
 
-    	var limit_hl = y.toString() + m.toString() + d.toString();
+	/* 申込開始日の計算*/
+	var dt = new Date();
+	dt.setDate(dt.getDate() + 14 );//申込期限
+	var y = dt.getFullYear();
+	var m = dt.getMonth() + 1;
+	var d = dt.getDate();
+	m = (m < 10) ? '0' + m : m ;
+	d = (d < 10) ? '0' + d : d ;
+	
+	var limit = y.toString() + m.toString() + d.toString();
 
-		/* 予約件数の復元 */		
-		var strlist = new Array();
+	dt = new Date();
+	y = dt.getFullYear();
+	m = dt.getMonth() + 4;//1月は0->12月は11
+	d = dt.getDate();
+	
+	y = (m > 12) ? y + 1: y ;
+	m = (m > 12) ? m - 12: m ;		
+	m = (m < 10) ? '0' + m : m ;
+	d = (d < 10) ? '0' + d : d ;
 
-		$(".selcnt").text("現在の選択 ： " + strlist.length + "件");
+	var limit_hl = y.toString() + m.toString() + d.toString();
+
+	/* 予約件数の復元 */		
+	var strlist = new Array();
+
+	$(".selcnt").text("現在の選択 ： " + strlist.length + "件");
         
-        jQuery('#date_timepicker_start').datetimepicker({
-            format: 'Y/m/d',
-            lang: 'ja',
-            //startDate: new Date(),
-            //defaultDate: new Date(),
-            //onShow: function (ct) {
-            //    this.setOptions({
-            //        maxDate: jQuery('#date_timepicker_end').val() ? jQuery('#date_timepicker_end').val() : false
-            //    })
-            //},
-            timepicker: false
-        });
-		//初期値は？
-		jQuery('#date_timepicker_end').datetimepicker({
-            format: 'Y/m/d',
-            lang: 'ja',
-            //onShow: function (ct) {
-            //    this.setOptions({
-            //        minDate: jQuery('#date_timepicker_start').val() ? jQuery('#date_timepicker_start').val() : false
-            //    })
-            //},
-            timepicker: false
-        });
+    jQuery('#date_timepicker_start').datetimepicker({
+        format: 'Y/m/d',
+        lang: 'ja',
+        //startDate: new Date(),
+        //defaultDate: new Date(),
+        //onShow: function (ct) {
+        //    this.setOptions({
+        //        maxDate: jQuery('#date_timepicker_end').val() ? jQuery('#date_timepicker_end').val() : false
+        //    })
+        //},
+        timepicker: false
+    });
+	//初期値は？
+	jQuery('#date_timepicker_end').datetimepicker({
+        format: 'Y/m/d',
+        lang: 'ja',
+        //onShow: function (ct) {
+        //    this.setOptions({
+        //        minDate: jQuery('#date_timepicker_start').val() ? jQuery('#date_timepicker_start').val() : false
+        //    })
+        //},
+        timepicker: false
+    });
 
 		//前へボタン
 		$('.prev').click(function() {
@@ -218,7 +220,7 @@ jQuery(function () {
 		
 		/* 空室・選択クリック時 */                                                  
         $("a").click(function () {
-        	
+
 			/* 予約状態の復元 */
 			var lnkstr = $(this).attr("id");
             var imgstr = lnkstr.replace('a-', 'img-');
@@ -233,6 +235,7 @@ jQuery(function () {
             var tnk = $("#" + datastr).attr('data-tnk');		//時間（至）
             var oyakokb = $("#" + datastr).attr('data-oyakokb');//親子区分　1:単独 2:親 3:子(ct_oyako)
 			var sumrmcd = $("#" + datastr).attr('data-sumrmcd');//集約施設
+            var teiin = $("#" + datastr).attr('data-teiin');	//定員
             var src = $("#" + imgstr).attr('src');
 			
 			if( (rmcd == '301') && ( usedt < limit_hl )){
@@ -245,6 +248,11 @@ jQuery(function () {
 				return false;
 			}
 			
+			if( strlist.length >= 98 ){
+				alert("一度に98件を超えるお申し込みはできません。");
+				return false;
+			}
+
 			if (src == 'icon/kara.jpg') {	//空室選択時
 
                 $("#" + imgstr).attr('src', 'icon/sentaku.png');
@@ -278,6 +286,7 @@ jQuery(function () {
 					partition: '',
 					oyakokb: oyakokb,
 					sumrmcd: sumrmcd,
+					teiin: teiin,
 					disp: 1,
 					rmkin: 0,
 					hzkin: 0,
@@ -287,25 +296,19 @@ jQuery(function () {
                 if($.isEmptyObject(strlist)){
                 	strlist=new Array();
                 }
+	            
 	            strlist.push(data);
                 
-                //9件/月にすべきか
-				for ( var i=0; i < strlist.length; i++ ){
-					var wkey = strlist[i]['key'].slice(4, 10);			
-				}
-				
 				localStorage.setItem('sentaku', JSON.stringify(strlist));
 				
             } else {	//選択解除
 
-				$.each(strlist,
-				    function(v, i) {
-						if (i.key == lnkstr){
-				      		strlist.splice(i, 1);
-			      		}
-      		    	}
-				);
-		
+				for(var i in strlist){
+					if (strlist[i].key == lnkstr){
+            			strlist.splice(i, 1);
+            		}            		
+        		}
+				
                 localStorage.setItem('sentaku', JSON.stringify(strlist));
 
 				$("#" + imgstr).attr('src', 'icon/kara.jpg');
@@ -318,21 +321,16 @@ jQuery(function () {
 		//選択解除ボタン押下時
 		$("#release_select").click(function(){
 			
-			var wklist = JSON.parse(localStorage.getItem("sentaku"));//ワークリスト
-			
-			for ( var i=0; i < wklist.length; i++ ){
-				
+			for ( var i=0; i < strlist.length; i++ ){				
 				//画像差し替え
-				var  wkey = wklist[i]['key'];			
-				var imgstr = wkey.replace('a-', 'img-');			
-				$("#" + imgstr).attr('src', 'icon/kara.jpg');
-				
-				strlist = new Array();
-				localStorage.setItem('sentaku', JSON.stringify(strlist));
+				$("#" + strlist[i].key.replace('a-', 'img-')).attr('src', 'icon/kara.jpg');
 				
 			}
+						
+			strlist = new Array();
+			localStorage.setItem('sentaku', JSON.stringify(strlist));
+
 			//ローカルストレージクリア
-			//localStorage.removeItem('sentaku', JSON.stringify(strlist));
 			//現在の選択件数の更新
 			$(".selcnt").text("現在の選択 ： " + strlist.length + "件");
 
@@ -343,20 +341,91 @@ jQuery(function () {
 		//フォーム送信時
 		$('#yoyaku_form').submit(function()
 		{
-			//$(this).attr('id');
-			//if($(this).attr("id") == "submit_Click"){
-				/*本当はボタンをfalseにしたほうがよい*/
-				var objData = JSON.parse(localStorage.getItem("sentaku"));//選択リスト
-				if( objData == null){
-					alert("施設を選択してください");
-					return false;
+			
+			if( strlist.length == 0){
+				alert("施設を選択してください");
+				return false;
+			}
+			
+			//日付チェックリストの作成
+			var sort_array = new Array();
+
+			for(var i in strlist){
+				
+				if(sort_array.indexOf(strlist[i].usedt) == -1){
+					sort_array.push(strlist[i].usedt);
+					sort_array.sort();
 				}
-				if( objData.length == 0){
-					alert("施設を選択してください");
-					return false;
+
+			}
+
+			//日付チェックリストの作成
+			var discontinuity = true;//不連続フラグ
+
+			for(var i in strlist){
+				
+				var wk_rmcd = strlist[i].rmcd;
+				var wk_usedt = strlist[i].usedt;
+				var room_usedt_array = new Array();
+				room_usedt_array.push( wk_usedt );
+
+				for(var j in strlist){
+					//同一施設他日の場合、配列に代入
+					if( ( strlist[j].rmcd == wk_rmcd ) && ( strlist[j].usedt != wk_usedt ) ){
+						room_usedt_array.push( strlist[j].usedt );						
+					}
+
 				}
-			//}
+				
+				//配列比較
+				sort_array.sort();
+				room_usedt_array.sort();
+
+				if( sort_array.toString() != room_usedt_array.toString() ){
+					discontinuity = false;
+					break;
+				}
+
+			}
+
+			if( !discontinuity ){
+				alert("規定により、連続した複数日、複数施設のお申込みは受け付けできません。一日単位でお申込みいただくか、一施設単位でお申込みください。");
+				console.log(sort_array);
+				console.log(room_usedt_array);
+				return false;
+			}
+
+			//ここまで成功
+			var diff = false;//不連続フラグ
+			for( var i = 0; i < sort_array.length; i++ ){
+				
+				for( var j = 0; j < sort_array.length ; j++ ){
+
+					if( i != j ){
+
+						var num = parseInt( parseInt( sort_array[j] ) - parseInt( sort_array[i] ) );
+						if( ( -2 < num ) && ( num < 2 ) ){											
+							diff = true;
+						}
+
+					}
+				
+				}			
+			
+			}
+
+			if( !diff ){
+				alert("規定により、連続していないお申込みは受け付けできません。一日単位でお申し込みください。");
+				return false;
+			}
+
+			if( sort_array.length　>　7 ){
+				alert("規定により、連続して7日を超えるお申込みは受け付けできません。７日以内でお申し込みください。");
+				return false;
+			}
+
 			return true;
+		 
 		 });
 
 		//ログアウト時　ローカルストレージクリア

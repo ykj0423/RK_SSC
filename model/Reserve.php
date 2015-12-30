@@ -358,7 +358,7 @@ class Reserve extends ModelBase {
 
                         }
 
-echo $sql;
+//echo $sql;
                         $stmt = sqlsrv_query( $this->conn, $sql, $params );
             
                         if( $stmt === false) {

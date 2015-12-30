@@ -126,10 +126,11 @@ jQuery(function () {
 				var td11 = $("<div></div>");
 				var td12 = $("<div></div>");
 				var td13 = $("<div></div>");
+				var td14 = $("<div></div>");
 				/* 命名を配列っぽくしてもいいかもしれない */
 				/* 後で変更 jkn1 jkn2 → stjkn edjkn */
 				$("#list").append(tr);
-				tr.append( td1 ).append( td2 ).append( td3 ).append( td4 ).append( td5 ).append( td6 ).append( td7 ).append( td8 ).append( td9 ).append( td10 ).append( td11 ).append( td12 ).append( td13 );
+				tr.append( td1 ).append( td2 ).append( td3 ).append( td4 ).append( td5 ).append( td6 ).append( td7 ).append( td8 ).append( td9 ).append( td10 ).append( td11 ).append( td12 ).append( td13 ).append( td14 );
 				
 				/* 日付のフォーマット もう少しスマートな方法がないか検討*/
 				var usedt = objData[i]['usedt'];
@@ -319,19 +320,13 @@ jQuery(function () {
 			    var comlkb = "<tr><th>営利目的での利用<br>（販売やPR活動も含む）</th><td>";
 			    
 			    if( objData[i]['comlkb'] == 0 ){
-			    							alert("comlkb0") ;
-
-		        	comlkb = comlkb + "<label class=\"\"><input type=\"radio\" name=\"comlkb" + i + "\" id=\"comlkb" + i + "1\" value=\"1\">あてはまる</label>"
+			    	comlkb = comlkb + "<label class=\"\"><input type=\"radio\" name=\"comlkb" + i + "\" id=\"comlkb" + i + "1\" value=\"1\">あてはまる</label>"
 			            + "<label class=\"\"><input type=\"radio\" name=\"comlkb" + i + "\" id=\"comlkb" + i + "0\" value=\"0\" checked>あてはまらない</label>";
-		    	
 		    	}else if( objData[i]['comlkb'] == 1 ){
-			    							alert("comlkb1");
-	      			comlkb = comlkb + "<label class=\"\"><input type=\"radio\" name=\"comlkb" + i + "\" id=\"comlkb" + i + "1\" value=\"1\" checked>あてはまる</label>"
+			   		comlkb = comlkb + "<label class=\"\"><input type=\"radio\" name=\"comlkb" + i + "\" id=\"comlkb" + i + "1\" value=\"1\" checked>あてはまる</label>"
 			            + "<label class=\"\"><input type=\"radio\" name=\"comlkb" + i + "\" id=\"comlkb" + i + "0\" value=\"0\">あてはまらない</label>";
 		    	}else{
-
-			    							alert("comlkb");
-	      			comlkb = comlkb + "<label class=\"\"><input type=\"radio\" name=\"comlkb" + i + "\" id=\"comlkb" + i + "1\" value=\"1\">あてはまる</label>"
+			   		comlkb = comlkb + "<label class=\"\"><input type=\"radio\" name=\"comlkb" + i + "\" id=\"comlkb" + i + "1\" value=\"1\">あてはまる</label>"
 			            + "<label class=\"\"><input type=\"radio\" name=\"comlkb" + i + "\" id=\"comlkb" + i + "0\" value=\"0\">あてはまらない</label>";
 		    	}
 			    
@@ -382,11 +377,10 @@ jQuery(function () {
 				td8.html( "<input type='hidden' name='gyo" + i + "' id='gyo" + i + "' value='" + gyo + "'>" );	//行番
 				td9.html( "<input type='hidden' name='usedt" + i + "' id='usedt" + i + "' value=" + useyyyy + usemm + usedd + ">" ); //使用日付
 				td10.html( "<input type='hidden' name='timekb" + i + "' id='timekb" + i + "' value='" + objData[i]['timekb'] + "'>" ); //時間帯
-				//td14.html( "<input type='text' name='oyakokb" + i + "' id='oyakokb" + i + "' value=" + oya+ "'>" ); 
-				//td12.html( "<input type='text' name='sumrmcd" + i + "' id='sumrmcd" + i + "' value='" + objData[i]['sumrmcd'] + "'>" ); //単価
 				td11.html( "<input type='hidden' name='yobi" + i + "' id='yobi" + i + "' value='" + yobi + "'>" ); 
-				td12.html( "<input type='hidden' name='yobikb" + i + "' id='yobikb" + i + "' value='" + yobikb + "'>" ); //単価
-				td13.html( "<input type='hidden' name='rmnm" + i + "' id='rmnm" + i + "' value='" + objData[i]['rmnm'] + "'>" ); //単価
+				td12.html( "<input type='hidden' name='yobikb" + i + "' id='yobikb" + i + "' value='" + yobikb + "'>" ); 		//曜日区分
+				td13.html( "<input type='hidden' name='rmnm" + i + "' id='rmnm" + i + "' value='" + objData[i]['rmnm'] + "'>" ); //施設名
+				td14.html( "<input type='hidden' name='teiin" + i + "' id='teiin" + i + "' value='" + objData[i]['teiin'] + "'>" ); //定員				
 			}
 
  
@@ -423,7 +417,7 @@ jQuery(function () {
 				return false;
 			}
 
-			for ( var i = 0; i < objData.length; i++ ){
+			/*for ( var i = 0; i < objData.length; i++ ){
 				var cnt = 0;
 				if(objData[i]['disp'] == 0 ) {
 					continue;
@@ -444,7 +438,7 @@ jQuery(function () {
 
 				}
 			
-			}
+			}*/
 
 			//時間入力チェック
 			for ( var i = 0; i < objData.length; i++ ){
@@ -474,7 +468,7 @@ jQuery(function () {
 					var hedjkn_m = $('#hedjkn_m' + i ).val();//本番終了
 
 					//本番時間チェック
-					if( !check_time( hstjkn_h, hstjkn_m, hedjkn_h, hedjkn_m, "催物", true ) ){
+					if( !check_time( hstjkn_h, hstjkn_m, hedjkn_h, hedjkn_m, "催物", false ) ){
 						return false;
 					}
 								
@@ -577,20 +571,24 @@ jQuery(function () {
 				
 				}//撤去
 				
-				
+				//人数
 				if($('#ninzu' + i ).length){
 					//後でちゃんと書き直す
 					if(  $('#ninzu' + i ).val()=='' ){
 						alert( "人数を入力してください。" );
 						return false;
 					}
-					if(  $('#ninzu' + i ).val()==0){
+					if(  $('#ninzu' + i ).val() == 0){
 						alert( "人数は0以上で入力してください。" );
 						return false;
 					}
+					if( $('#ninzu' + i ).val() > $('#teiin' + i ).val() ){
+						alert( "定員を超えています。人数をご確認ください。" );
+						return false;
+					}
 				
-					objData[i]['ninzu'] = $( '#ninzu' + i ).val();//入力された人数を格納
-				}//人数
+					objData[i]['ninzu'] = $( '#ninzu' + i ).val();
+				}
 
 
 				if( $('input[name=comlkb'+ i +']:eq(0)').prop('checked') ){

@@ -230,7 +230,7 @@ if( isset($_POST['renraku']) ){
 $sihon = 0;
 
 if( isset($_POST['sihon']) ){
-  $jygsu = $_POST['sihon'];
+  $sihon = $_POST['sihon'];
 }
 
 echo $sihon;
