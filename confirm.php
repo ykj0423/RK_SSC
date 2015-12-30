@@ -304,31 +304,38 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 						    	$zgrt = 150;
 
 						    }
-						    //練習準備撤去割引
-						    if($hstjkn==0 && $hedjkn==0){
+						    
+						    if($holekb == 1){
 
-						    	$zgrt = 50;
+							    //練習準備撤去割引
+							    if($hstjkn==0 && $hedjkn==0){
 
-						    }
+							    	$zgrt = 50;
+							    	$tnk_hstjkn = $stjkn;
+							    	$tnk_hedjkn = $edjkn;
 
-							if($holekb == 1){
+							    }else{
 
-						    	if($hstjkn <= 1200){
-						    		$tnk_hstjkn = 900;
-						    	}elseif($hstjkn <= 1700){
-						    		$tnk_hstjkn = 1300;
-						    	}else{
-						    		$tnk_hstjkn = 1800;
-						    	}
+							    	if($hstjkn <= 1200){
+						    			$tnk_hstjkn = 900;
+							    	}elseif($hstjkn <= 1700){
+							    		$tnk_hstjkn = 1300;
+							    	}else{
+							    		$tnk_hstjkn = 1800;
+							    	}
 
-						    	if($hedjkn <= 1200){
-						    		$tnk_hedjkn = 1200;
-						    	}elseif($hedjkn <= 1700){
-						    		$tnk_hedjkn = 1700;
-						    	}else{
-						    		$tnk_hedjkn = 2100;
-						    	}
+							    	if($hedjkn <= 1200){
+							    		$tnk_hedjkn = 1200;
+							    	}elseif($hedjkn <= 1700){
+							    		$tnk_hedjkn = 1700;
+							    	}else{
+							    		$tnk_hedjkn = 2100;
+							    	}
 
+
+							    }
+
+						    	
 								$sql = "SELECT tnk, entnk FROM mt_rmtnk WHERE rmcd = ".$rmcd." AND kyakb = ".$kyakb." AND ratesb = 0 AND stjkn = ".$stjkn." AND edjkn = ".$edjkn;
 								$sql .= " AND hstjkn = ".$tnk_hstjkn." AND hedjkn = ".$tnk_hedjkn;
 							}else{

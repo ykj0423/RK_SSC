@@ -396,21 +396,28 @@ jQuery(function () {
 			}
 
 			//ここまで成功
-			var diff = false;//不連続フラグ
-			for( var i = 0; i < sort_array.length; i++ ){
+			var diff = true;//不連続フラグ
+			
+			if(sort_array.length>1){
 				
-				for( var j = 0; j < sort_array.length ; j++ ){
+				diff = false;	
+				
+				for( var i = 0; i < sort_array.length; i++ ){
+					
+					for( var j = 0; j < sort_array.length ; j++ ){
 
-					if( i != j ){
+						if( i != j ){
 
-						var num = parseInt( parseInt( sort_array[j] ) - parseInt( sort_array[i] ) );
-						if( ( -2 < num ) && ( num < 2 ) ){											
-							diff = true;
+							var num = parseInt( parseInt( sort_array[j] ) - parseInt( sort_array[i] ) );
+							if( ( -2 < num ) && ( num < 2 ) ){											
+								diff = true;
+							}
+
 						}
-
-					}
+					
+					}			
 				
-				}			
+				}
 			
 			}
 

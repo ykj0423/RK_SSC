@@ -11,7 +11,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta NAME="ROBOTS" CONTENT="NOINDEX,NOFOLLOW,NOARCHIVE">
-<title>予約申込 送信済み　 |  <?php //echo $_SESSION['webrk']['sysname']; ?></title>
+<title>予約申込 送信済み  |  <?php //echo $_SESSION['webrk']['sysname']; ?></title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/custom.css" rel="stylesheet">
 <script src="js/custom.js"></script>
@@ -172,10 +172,10 @@ if($revflg){
 	$krmemo = "";
 
 	//受付者コード
-	$ukecd　= 9999;//WEB予約
+	$ukecd = 9999;//WEB予約
 
 	//受付方法
-	$ukehkb　= 98;//WEB予約
+	$ukehkb = 98;//WEB予約
 
 	//ホール区分
 	$holekb =0;//暫定
@@ -271,7 +271,7 @@ if($revflg){
 	$thzkin=0;
 	$tkin = $tkin + $trmkin + $thzkin;
 	$holekb = 0;//ホール区分
-	$ukehkb　= 98;//WEB予約
+	$ukehkb = 98;//WEB予約
 
 	for ($i = 0; $i < $meisai_count; $i++) {
 		
@@ -356,36 +356,50 @@ if($revflg){
 			$jnedjkn = format_db_jkn( $jnedjkn_h ,  $jnedjkn_m );
 
 			//本番開始時間
-			//$hbstjkn_h = 0;
-			//$hbstjkn_m = 0;
-
-			/*if(isset($_POST[ 'hbstjkn_h'.$i ] )){
-				$hbstjkn_h =  $_POST[ 'hbstjkn_h'.$i ];
-			}
+			if( $rmcd == 301 ){
 			
-			if(isset($_POST[ 'hstjkn_m'.$i ] )){
-				$hbstjkn_m =  $_POST[ 'hbstjkn_m'.$i ];
-			}
+				$hbstjkn = 0;
+				$hbedjkn = 0;
+				$hbstjkn_h = 0;
+				$hbstjkn_m = 0;
+				$hbedjkn_h = 0;
+				$hbedjkn_m = 0;
 
-			$hbstjkn = format_db_jkn( $hbstjkn_h ,  $hbstjkn_m );*/
+				if(isset($_POST[ 'hstjkn_h'.$i ] )){
+					if(!empty($_POST[ 'hstjkn_h'.$i ] )){
+						$hbstjkn_h =  $_POST[ 'hstjkn_h'.$i ];
+					}
+				}
+				
+				if(isset($_POST[ 'hstjkn_m'.$i ] )){
+					if(!empty($_POST[ 'hstjkn_m'.$i ] )){
+						$hbstjkn_m =  $_POST[ 'hstjkn_m'.$i ];
+					}
+				}
 
-			//本番終了時間
-			/*$hbedjkn_h = 0;
-			$hbedjkn_m = 0;
+				$hbstjkn = format_db_jkn( $hbstjkn_h ,  $hbstjkn_m );
+
+				if(isset($_POST[ 'hedjkn_h'.$i ] )){
+					if(!empty($_POST[ 'hedjkn_h'.$i ] )){	
+						$hbedjkn_h =  $_POST[ 'hedjkn_h'.$i ];
+					}
+				}
+				
+				if(isset($_POST[ 'hedjkn_m'.$i ] )){
+					if(!empty($_POST[ 'hedjkn_m'.$i ] )){	
+						$hbedjkn_m =  $_POST[ 'hedjkn_m'.$i ];
+					}
+				}
+
+				$hbedjkn = format_db_jkn( $hbedjkn_h ,  $hbedjkn_m );
+
+			}else{
 			
-			if(isset($_POST[ 'hbedjkn_h'.$i ] )){
-				$hedjkn_h =  $_POST[ 'hbedjkn_h'.$i ];
-			}
+				//ホール以外は開始・終了時間と同様
+				$hbstjkn = str_replace(":","",$_POST[ 'stjkn'.$i ]);
+				$hbedjkn = str_replace(":","",$_POST[ 'edjkn'.$i ]);
 			
-			if(isset($_POST[ 'hedjkn_m'.$i ] )){
-				$hbedjkn_m =  $_POST[ 'hbedjkn_m'.$i ];
 			}
-
-			$hbedjkn = format_db_jkn( $hbedjkn_h ,  $hbedjkn_m );*/
-			//ホール以外
-			$hbstjkn = str_replace(":","",$_POST[ 'stjkn'.$i ]);
-			$hbedjkn = str_replace(":","",$_POST[ 'edjkn'.$i ]);
-
 
 			//撤去開始時間
 			$tkstjkn_h = 0;
@@ -438,25 +452,27 @@ if($revflg){
 			}
 			
 			//料金区分・増減率
-			$ratekb = 1;//一般
+			//一般
+			$ratekb = 1;
 			$zgrt = 100;
 			
+			//練習準備撤去
 			//（注意）本番開始、本番終了時間がセットされていなければ、準備撤去（料金区分:2）とみなす
-			if( $hstjkn = 0 && $hedjkn = 0 ){
-			
+			if($hbstjkn==0 && $hbedjkn==0){
 				$ratekb = 2;
-				$zgrt　= 50;
-			
+				$zgrt=50;			
 			}else{
-
 				//営利目的の場合は、料金区分：3
 				if( ( $comlkb == 1 ) && ( $feekb == 1 ) ){
-					
 					$ratekb = 3;
-					$zgrt　= 150;
-				
+					$zgrt = 150;
 				}
-
+			}
+			
+			//内部
+			if($kyakb==99){
+				$ratekb = 9;
+				$zgrt = 0;
 			}
 
 			//料金種別
@@ -756,7 +772,7 @@ if($revflg){//echo "test1";
         <h1><span class="midashi">|</span>予約申込 送信済み</h1>
        	</div>
       	<div class="col-xs-6  text-right">
-          <span class="f120">現在の時間：　<span id="currentTime"></span></span>
+          <span class="f120">現在の時間： <span id="currentTime"></span></span>
        </div>
 	</div>
 <?php	

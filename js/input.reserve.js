@@ -145,7 +145,7 @@ jQuery(function () {
 
 				//td1.html( gyo );
 				td1.html( "<input type=\"button\" class=\"btn btn-default btn-del\" id='btn-" + objData[i]['rmcd'] + objData[i]['usedt'] + objData[i]['timekb'] + "' name='" + i + "' role=\"button\" value=\"削除\">" );
-				td2.html( useyyyy + "/" + usemm + "/" +  usedd + "（" + yobi + "）" + "<br>" + objData[i]['rmnm'] );
+				td2.html( useyyyy + "/" + usemm + "/" +  usedd + "（" + yobi + "）" + "<br>" + objData[i]['rmnm'] + "<br>定員:"+objData[i]['teiin'] + "名" );
 				td3.html( objData[i]['jkn1'] + "～" + objData[i]['jkn2'] );
 				//td4.html( "時間内訳" );
 				var jjkn ="<table class=\"table table-condensed  form-inline nest mb0\"><tr><th>練習・準備時間</th><td>"
@@ -578,11 +578,13 @@ jQuery(function () {
 						alert( "人数を入力してください。" );
 						return false;
 					}
-					if(  $('#ninzu' + i ).val() == 0){
+					var ninzu = parseInt($('#ninzu' + i ).val());
+					var teiin = parseInt($('#teiin' + i ).val());
+					if( ninzu == 0 ){
 						alert( "人数は0以上で入力してください。" );
 						return false;
 					}
-					if( $('#ninzu' + i ).val() > $('#teiin' + i ).val() ){
+					if( ninzu > teiin ){
 						alert( "定員を超えています。人数をご確認ください。" );
 						return false;
 					}
