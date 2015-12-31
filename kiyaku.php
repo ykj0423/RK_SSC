@@ -57,7 +57,7 @@ include('include/kiyaku.txt');
 <label class="mr10 f120"><input name="agree" id="agree" type="radio" value="1">同意する</label><br><br>
 <a class="btn btn-default btn-lg mb20" href="top.php" role="button">&lt;&lt;戻る</a>
 <!-- input type="submit" value="次へ進む&gt;&gt;" class="btn btn-primary btn-lg mb20"/-->
-<input type="submit" value="次へ進む＞＞" class="btn btn-primary btn-lg mb20"/>
+<input type="submit" value="次へ進む&nbsp;&gt;&gt;" class="btn btn-primary btn-lg mb20"/>
 </div>
 </form>
 </div>

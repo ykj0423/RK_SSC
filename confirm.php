@@ -10,7 +10,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta NAME="ROBOTS" CONTENT="NOINDEX,NOFOLLOW,NOARCHIVE">
-<title>予約申込み[確認]　 |</title>
+<title>使用申込[確認]　 | 神戸市産業振興センター　予約システム</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/custom.css" rel="stylesheet">
 <!--script src="js/confirm.reserve.js"></script-->
@@ -28,7 +28,7 @@ include('session_check.php');
 require_once( "func.php" );
 require_once( "model/db.php" );
 include("model/Kyaku.php"); 
-
+include("include/menu.php"); 
 $Kyaku = unserialize( $_SESSION['Kyaku'] );
 $Kyaku->get_user_info( $_SESSION['wloginid'] );
 
@@ -41,7 +41,7 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 
    <div class="row">
   		<div class="col-xs-6" style="padding:0">
-        	<h1><span class="midashi">|</span>予約申込み[確認]</h1>
+        	<h1><span class="midashi">|</span>使用申込[確認]</h1>
        	</div>
       	<div class="col-xs-6  text-right">
         	<span class="f120">現在の時間：　<span id="currentTime"></span>
@@ -74,8 +74,7 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
     			</tr>
 		        <tr>
 			    	<th colspan="2">メールアドレス</th>
-			    	<td  colspan="6"><?php echo $Kyaku->get_mail(); ?>
-			        <p>こちらのアドレスに予約受付のメールをお送りいたします。</p>
+			    	<td colspan="6"><?php echo $Kyaku->get_mail(); ?>
 			        </td>
 		        </tr>
 		        <tr>
@@ -470,9 +469,9 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 	        <?php } ?>
 			 <div class="form-group">
 			 	<div class="row mb20">
-			 		<a class="btn btn-default btn-lg" href="javascript:history.back();"><<修正する</a>
+			 		<a class="btn btn-default btn-lg" href="javascript:history.back();">&lt;&lt;&nbsp;修正する</a>&nbsp;
 			 		<?php if($go){ ?>
-					<input type='submit' class="btn btn-primary btn-lg" role="button" name="submit_next" id="submit_next" value='送信する'>
+					<input type='submit' class="btn btn-primary btn-lg" role="button" name="submit_next" id="submit_next" value='送信する&nbsp;&gt;&gt;'>
 			 		<?php } ?>
 				</div>
 	        </div>

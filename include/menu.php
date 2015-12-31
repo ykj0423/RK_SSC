@@ -17,13 +17,13 @@
             <li><a href="hitudoku2.html" target="_blank">ご使用にあたってのご注意</a></li>
             <li><a href="help.html" target="_blank">システムガイド</a></li>
          </ul>
-         <form class="navbar-form pull-right">
-            <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+        <form class="navbar-form pull-right" action="login.php">
+          <button type="button" class="btn btn-logout dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
             <?php echo mb_convert_encoding( $_SESSION['dannm'], "utf8","SJIS"); ?>様&nbsp;ログイン中 <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu">
-              <li><a href="top.php">ログアウト</a></li>
-            </ul>
-         </form>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li><input type="submit" class="btn btn-logout" value="ログアウト"></li>
+          </ul>
+        </form>
    </div>
   </nav>

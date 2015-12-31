@@ -59,7 +59,7 @@ require_once('func.php');
       	<tr>
       		<th width="8%">状態</th>
       		<th width="10%">お問い合わせ<br>番号<br>/申込日</th>
-          <th width="18%">使用日<br>/施設名</th>
+          <th width="18%">使用日<br>/施設名<br>/行事名称</th>
           <th width="15%">使用時 間</th>
           <th width="3%">人数</th>
           <th width="22%">行事名<br>/確認事項</th>
@@ -77,19 +77,13 @@ $conErr = $db->connect();
 if (!empty($conErr)) { echo $conErr; die();}
 
 $rsvlist = $db->select_rsvlist($_SESSION['kyacd']);//客コード
-$cnt = count( $rsvlist );
-echo $cnt;
-$cnt=$cnt+1;
-echo $cnt;
-//$cnt = count( $rsvlist ) +1;
-//print_r($rsvlist);
 for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
   
     echo "<tr>";
     //入金チェック（入金有無にかかわらず、予約は取り消しできる）
     //if( $db->select_nyukin_status( $rsvlist[ $i ][ 'ukeno' ] ) ) {
     if( $rsvlist[ $i ][ 'wrsvkb' ] ==2 ){
-      echo "<td class=\"status6\">予約</td>";     
+      echo "<td class=\"status1\">予約</td>";     
     //  echo "<div id=\"data-".$rmcd.$usedt."1\" data-usedt=\"".$usedt."\" data-yobi=".$k." data-timekb=\"1\" data-jkn1=\"9:00\" data-jkn2=\"12:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" />";
     }else{
       echo "<td class=\"status3\">仮予約</td>";
@@ -105,10 +99,12 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
     /* 明細 */
     echo "<td>".$rsvdt."(".mb_convert_encoding($rsvlist[$i]['yobi'], "utf8", "SJIS").")<br>";//使用日
     echo mb_convert_encoding($rsvlist[$i]['rmnm'], "utf8", "SJIS")."<br>";//施設名
-    echo "<td>使用時間：".format_jkn( $rsvlist[$i]['stjkn'] , ":" )."～".format_jkn( $rsvlist[$i]['edjkn'] , ":" )."<br/>";//使用時間
-    echo "<td>".$rsvlist[$i]['ninzu']."人</td>";//人数
-    echo "<td>「".mb_convert_encoding($rsvlist[$i]['kaigi'], "utf8", "SJIS")."」</td>";//行事内容
+    echo "「".mb_convert_encoding($rsvlist[$i]['kaigi'], "utf8", "SJIS")."」<br>";//行事名
     
+    echo "<td>使用時間：".format_jkn( $rsvlist[$i]['stjkn'] , ":" )."～".format_jkn( $rsvlist[$i]['edjkn'] , ":" )."<br/>";//使用時間
+    echo "<td>".$rsvlist[$i]['ninzu']."</td>";//人数
+    //echo "<td>「".mb_convert_encoding($rsvlist[$i]['kaigi'], "utf8", "SJIS")."」</td>";//行事内容
+    echo "<td></td>";
     //納付期限
     if( ($rsvlist[$i]['kounoukb'] == 0) && ($rsvlist[$i]['paylmtdt'] > 0) ){    
       echo "<td>".$rsvlist[$i]['paylmtdt']."</td>";    

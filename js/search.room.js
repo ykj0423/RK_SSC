@@ -382,17 +382,13 @@ jQuery(function () {
 
 			for(var i in strlist){
 				
-				var wk_rmcd = strlist[i].rmcd;
+				//var wk_rmcd = strlist[i].rmcd;
 				var wk_usedt = strlist[i].usedt;
 				var room_usedt_array = new Array();
 				room_usedt_array.push( wk_usedt );
 
 				for(var j in strlist){
-					//同一施設他日の場合、配列に代入
 					if( $.inArray( strlist[j].usedt, room_usedt_array ) == -1 ){
-					//if( ( strlist[j].rmcd == wk_rmcd ) && ( strlist[j].usedt != wk_usedt ) ){
-						//console.log(strlist[j].rmcd);
-						//console.log(strlist[j].usedt);
 						room_usedt_array.push( strlist[j].usedt );						
 					}
 

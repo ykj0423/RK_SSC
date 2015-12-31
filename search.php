@@ -13,6 +13,7 @@
 <title>空き状況</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/custom.css" rel="stylesheet">
+<link href="css/bootstrap-glyphicons.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.css"/>
 <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -206,7 +207,7 @@ if(is_array($rmcls)){
             </td>
           </tr>
           <tr>
-            <th class="pt12">日付</th>
+            <th class="pt12">使用日</th>
             <td>
               <div class="form-inline">
                   <div class=" input-group date">
@@ -232,38 +233,36 @@ if(is_array($rmcls)){
       <a href="help.html#akijoukyou"  class="btn alert-info" target="window_name" onClick="disp('help.html#akijoukyou')"><li class="glyphicon glyphicon-question-sign" aria-hidden="true">&nbsp;この画面の操作方法についてはこちら>></li></a> <br>
     </div>
   </div><!-- row_end -->
+  <hr>
 	<!--検索結果-->
   <div id="result">
-        <p class="f120">本日（<?php echo $today; ?>）現在、<b><?php echo($rsv_sttdt); ?>～<?php echo($rsv_enddt); ?></b>
-            (※ﾊｰﾊﾞｰﾎｰﾙは<b><?php echo($rsv_sttdt_hole); ?>～<?php echo($rsv_enddt); ?></b>）のお申し込みが可能です。<br>
-            <?php echo($rsv_before); ?>以前の使用をご希望の方は、下記窓口までお問合せください。
-        </p>
-        <span class="status2">＊＊ この画面では、ご予約は確保されていません。ご希望の内容を送信後、受付結果をメールでお知らせいたします。＊＊</span>
-        <br>
-		<div class="row mb10">
-			<div class="col-xs-5">
-			<p class="h4"><div class="h4 selcnt">現在の選択 ： &nbsp;件</div></p>
-			</div>
-			<div class="text-right  col-xs-7">
-				<form name="yoyaku_form" id="yoyaku_form" role="form"  action="input.php" method="post">
- 					<a class="btn btn-default btn-lg" id="release_select" role="button">選択解除</a>
-					<input type='submit' class="btn btn-primary btn-lg ml20" role="button" name="submit_Click" id="submit_Click" value="予約申込へ進む&nbsp;>>">
-				</form>
-			</div>
-		</div>
-		<div class="col-xs-7">
+    <p class="f120">本日(<?php echo $today; ?>)現在、この予約システムにより、会議室、レセプションルームは、<b><?php echo($rsv_sttdt); ?>～<?php echo($rsv_enddt); ?></b>、
+      <br>ハーバーホールは<b><?php echo($rsv_sttdt_hole); ?>～<?php echo($rsv_enddt); ?></b>のお申込みが可能です。<br>上記期間以前の使用をご希望の方は、受付までお問い合わせください。
+    </p>
+    <span class="status2">＊＊ この画面では、ご予約は確保されていません。ご希望の内容を送信後、受付結果をメールでお知らせいたします。＊＊</span>
+    <br><br>
+    <div class="row mb10">
+      <div class="col-xs-7">
         <p>
           [凡例]<br>
           空：予約可
           <span class="selcol" style="padding-left:5px;padding-right:5px">○</span>：選択中　
           <span class="dgray" style="padding-left:5px;padding-right:5px">×</span>：予約不可<br>
-          朝：9:00～12:00 昼：13:00～17:00　夜:18:00～21:00
+　         朝：9:00～12:00 昼：13:00～17:00　夜:18:00～21:00
         </p>
       </div>
-      <p class="text-right">
-	    <input type='submit' class="btn btn-default mr48p prev" href="#" role="button" value="<<前へ"></a>
+      <div class="text-right  col-xs-5">
+        <form name="yoyaku_form" id="yoyaku_form" role="form"  action="input.php" method="post">
+          <a class="btn btn-default btn-lg" id="release_select" role="button">選択解除</a>
+          <input type='submit' class="btn btn-primary btn-lg ml20" role="button" name="submit_Click" id="submit_Click" value="使用申込へ進む&nbsp;>>">
+        </form>
+      </div>
+    </div>
+    <div class="row mb10 text-right clearfix">
+    <span class="col-sm-5"></span>
+      <input type='submit' class="btn btn-default mr48p prev" href="#" role="button" value="<<前へ"></a>
       <input type='submit' class="btn btn-default mr20 next" href="#" role="button" value="次へ>>"></a>
-      </p>
+    </div>
 <?php
 //========================================================================================
 //TODO design-separatable
@@ -303,13 +302,12 @@ for ($i = 0; $i < ( count( $room ) ) ; $i++ ) {
   echo "<tr class=\"dgray\">";
   //施設情報
  	echo "<th rowspan=\"3\"><span class=\"f150\">".$rmnm."</span><br>[定員]".$teiin;
- 	echo "<a href=\"".$weblink."\" target=\"_blank\" class=\"btn btn-primary btn-xs\" role=\"button\">施設情報</a></th>";
-
-    //カレンダー
-    //本当は一気に取りたい
-    //朝
-    echo "<th>朝</th>";
-    $mor = $db->select_ksjkntai( $rmcd, 1, str_replace( "/", "", $sttdt ), str_replace( "/", "", $enddt ) );
+ 	echo "<a href=\"".$weblink."\" target=\"_blank\" class=\"btn btn-info btn-xs\" role=\"button\">施設情報を見る&nbsp;&gt;&gt;</a></th>";
+  //カレンダー
+  //本当は一気に取りたい
+  //朝
+  echo "<th>朝</th>";
+  $mor = $db->select_ksjkntai( $rmcd, 1, str_replace( "/", "", $sttdt ), str_replace( "/", "", $enddt ) );
 //print_r($mor);
     for ($k = 0; $k < count( $date_array ) ; $k++) {
 
@@ -451,6 +449,9 @@ for ($i = 0; $i < ( count( $room ) ) ; $i++ ) {
 ?>
     	</table>
     </div>
-<br><br><br>
+      <div style="text-align:center">
+    <img src="img/img_02.gif" width="864">
+    <br><br><br><br>
+  </div>
 </body>
 </html>

@@ -10,11 +10,16 @@ include('include/header.php');
 <p class="bg-head text-right"><?php echo $_SESSION['centername']; ?></p>
 <h1><span class="midashi">|</span><?php echo $pageTitle; ?></h1>
 <?php
-
-if( isset( $_POST['submit'] ) ){
-    header( 'location: '.$_SESSION['next_page'] );
+$next_page = 'search.php';
+if(isset($_SESSION['next_page'])){
+	$next_page = $_SESSION['next_page'];
+}else{
+	$next_page = 'search.php';
 }
 
+if( isset( $_POST['submit'] ) ){
+    header( 'location: '.$next_page );
+}
 /**
  * ReserveKeeperWeb予約システム
  *
@@ -37,8 +42,7 @@ include('include/notice.txt');
 </div>
     <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
         <div style="text-align:center">
-            <!--a class="btn btn-primary btn-lg mb20" href="search.html" role="button">次へ進む　>></a-->
-            <input type="submit" name="submit" id="submit" value="次へ進む" class="btn btn-primary btn-lg">
+            <input type="submit" name="submit" id="submit" value="次へ進む&nbsp;&gt;&gt;" class="btn btn-primary btn-lg">
         </div>
     </form>
 </body>

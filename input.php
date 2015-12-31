@@ -12,9 +12,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta NAME="ROBOTS" CONTENT="NOINDEX,NOFOLLOW,NOARCHIVE">
 <meta content="86400" http-equiv="Expires" >
-<title>予約申込み[入力]　 | <?php //echo $_SESSION['webrk']['sysname']; ?></title>
+<title>使用申込[入力]　 | 神戸市産業振興センター　予約システム</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/custom.css" rel="stylesheet">
+<link href="css/bootstrap-glyphicons.css" rel="stylesheet">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="js/bootstrap.min.js"></script>
@@ -91,7 +92,7 @@ $Kyaku->get_user_info( $_SESSION['wloginid'] );
 <body class="container">
    	<div class="row">
     <div class="col-xs-6" style="padding:0">
-    	<h1><span class="midashi">|</span>予約申込み[入力]</h1>
+    	<h1><span class="midashi">|</span>使用申込[入力]</h1>
     </div>
     <div class="col-xs-6  text-right">
     	<span class="f120">現在の時間：　<span id="currentTime"></span></span>
@@ -100,26 +101,20 @@ $Kyaku->get_user_info( $_SESSION['wloginid'] );
 <!-- main -->
 <h4>必要事項をご記入のうえ、「確認画面へ」ボタンを押してください。</h4>
   <div class="row mb20">
-    <p class="col-xs-8">
+     <p class="col-xs-8">
       ・受付は先着順となっております。<br>
-      ・お申し込み後、ご登録いただいたメールアドレスに宛に、受付可否のメールを送信いたします。<br>
+      ・お申込み後、ご登録いただいたメールアドレスにあてに、受付可否のメールを送信いたします。<br>
       ・受付状況は予約照会画面でもご覧いただけます。<br>
-      ・「削除」ボタン：施設のお申し込みを取りやめる場合は「削除」を押下してください。該当行のみ取り消されます。 <br>
-    （※いったん「削除」を押すと元に戻せません。ご注意ください。）
+      ・「削除」ボタン：施設のお申込みを取りやめる場合は「削除」を押してください。該当行のみ取り消されます。 <br>
+    （※一度「削除」ボタンを押すと元に戻せません。ご注意ください。）
       <br><br>
-      ※備品の貸し出しをご希望の場合は、備考欄にご記入ください。
-      <a href="http://www.kobe-ipc.or.jp/conferenceroom_hall/rental_equip.html" target="_blank" class="btn btn-info btn-xs" role="button">貸出備品の一覧はこちら</a>
-      <br>※立看板をご希望の場合は、はじめの行の備考欄に「立看板」とご記入ください。
-      <br>※マイク(2本)、スクリーン・プロジェクター・アンプ・レーザーポインター（各1個）は、各会議室にご用意しております。
-      <br>追加等をご希望の場合は受付窓口までお問い合わせください。<br>
-  	<br><br>
+      ※備品の貸し出しをご希望の場合は、備考欄にご記入ください。<a href="http://www.kobe-ipc.or.jp/conferenceroom_hall/rental_equip.html" target="_blank" class="btn btn-info btn-xs" role="button">貸出備品の一覧はこちら</a><br>
+  		※立看板をご希望の場合は、はじめの行の備考欄に「立看板」とご記入ください。<br>
+      ※ホワイトボードは、各会議室にご用意しております。<br>
     </p>
     <div class="col-xs-4">
       <a href="help.html#input" class="btn alert-info" target="window_name"  onClick="disp('help.html#input')">
-      	<li class="glyphicon glyphicon-question-sign" aria-hidden="true">&nbsp;この画面の操作方法についてはこちら>></li>
-      </a> 
-      <a href="loginqa.html#input" class="btn alert-danger" target="window_name"  onClick="disp('loginqa.html#input')">
-      	<li class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">&nbsp;予約申込にあたってのご注意はこちら>></li>
+      	<li class="glyphicon glyphicon-question-sign" aria-hidden="true">&nbsp;この画面の操作方法についてはこちら&gt;&gt;</li>
       </a> 
     </div>
   </div>

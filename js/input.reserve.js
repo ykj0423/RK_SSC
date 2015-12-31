@@ -757,17 +757,13 @@ jQuery(function () {
 		//申し込みをやめる処理
 		$(".btn-del").click(function(){
 			if (confirm('この施設のお申込みを取りやめます。よろしいですか？')) {
+			
 				var strlist = JSON.parse(localStorage.getItem("sentaku"));//選択リスト
-				//console.log(strlist.length);
 				var btnkey = $(this).attr("id").replace('btn-','a-');
-				console.log("btnkey "+btnkey);
-				//console.log("btnkey.length "+btnkey.length);
 				var btnkey_array = new Array();
 				var before_str = btnkey.substr( 0, btnkey.length-1 );
 				var last_str = btnkey.substr( btnkey.length-1, 1);
-				console.log("before_str "+before_str);
-				console.log("last_str "+last_str);
-
+			
 				if( ( last_str == 1 ) || ( last_str == 2 ) || ( last_str == 3 ) ){
 					btnkey_array.push( btnkey );
 				}
@@ -784,22 +780,26 @@ jQuery(function () {
 					btnkey_array.push( before_str + "2" );
 					btnkey_array.push( before_str + "3" );
 				}
-				console.log(btnkey_array);
+				
+				//console.log("btnkey_array" + btnkey_array);
+			
 				for ( var i = 0; i < strlist.length; i++ ){
+					
+
 					for ( var j = 0; j < btnkey_array.length; j++ ){
-						if(strlist[i].key==btnkey_array[j]){
-							strlist.splice(i, 1);	
+						if (strlist[i] !== undefined) {
+							if(strlist[i].key==btnkey_array[j]){
+								strlist.splice(i, 1);
+								localStorage.setItem('sentaku', JSON.stringify(strlist));
+								strlist = JSON.parse(localStorage.getItem("sentaku"));//選択リスト
+							}
 						}
 					}
 				}
 
 				localStorage.setItem('sentaku', JSON.stringify(strlist));
 				location.reload();
-
-				//alert("");
-				//return false;
 			}
-			//return false;
 		});
 		
 		//ログアウト時ローカルストレージクリア
