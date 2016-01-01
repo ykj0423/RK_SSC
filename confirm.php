@@ -184,7 +184,7 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 							$zgrt = 100;
 
 							//使用開始、終了時間
-							echo "<td>".format_jkn( $stjkn , ":" )."～".format_jkn( $edjkn, ":" )."</td>";
+							echo "<td>".format_jkn( $stjkn, ":", "" )."～".format_jkn( $edjkn, ":", "" )."</td>";
 
 							//本番時間
 							$hstjkn = $_POST['hstjkn_h'.$i].$_POST['hstjkn_m'.$i];
@@ -228,7 +228,7 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 
 							}else{
 																
-								echo "<td>".format_jkn( $hstjkn , ":" )."～".format_jkn( $hedjkn, ":" )."</td>";
+								echo "<td>".format_jkn( $hstjkn , ":", "" )."～".format_jkn( $hedjkn, ":", "" )."</td>";
 
 							}
 
