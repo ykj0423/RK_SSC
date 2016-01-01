@@ -121,6 +121,11 @@ if( sqlsrv_fetch( $stmt ) === false) {
 }
 
 $max_ukeno = (int)sqlsrv_get_field( $stmt, 0);//nullの場合を考慮し、キャストする
+
+if($max_ukeno === 0){
+	$max_ukeno = (int)$nen1."000000";
+}
+
 $ukeno =  $max_ukeno + 1;
 
 /*----------------------------------------------------*/
