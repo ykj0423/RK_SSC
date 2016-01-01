@@ -79,7 +79,7 @@ class Kyaku extends ModelBase {
 
     }
 
-    public function push_data( $source_array, $key_name, $require , $beZero　) {
+    public function push_data( $source_array, $key_name, $require , $beZero) {
         //見直しが必要かもしれない
         
         if ( array_key_exists( $key_name, $source_array ) ) {

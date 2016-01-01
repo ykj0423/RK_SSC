@@ -6,6 +6,46 @@ $errmsg = "";
 $pageTitle =  "予約照会";
 include('include/header.php');
 ?>
+<script src="js/jquery.dataTables.min.js"></script>
+<script>
+$(document).ready(function() {
+  $('#rsv_input').dataTable( {
+  // 大量データ利用時、「処理中」メッセージを表示するかを設定
+  "bProcessing": true,
+  // 初期表示の行数設定
+  //"iDisplayLength": 20,
+  // ページングボタンの制御
+  "bFilter":false,
+  "bLengthChange":false,
+  "bPaginate":false,
+  "bInfo":false,
+  "order": [[ 1, "desc" ]],
+  "columnDefs": [ {
+      "targets": [ 0, 3, 4, 5, 6],
+      "orderable": false
+    } ],
+  "bLengthChange":false,
+   "oLanguage" : {
+           "sProcessing":   "処理中...",
+           "sLengthMenu":   "_MENU_ 件表示",
+           "sZeroRecords":  "データはありません。",
+           "sInfo":         "_START_件～_END_件を表示（全_TOTAL_ 件中）",
+           "sInfoEmpty":    " 0 件中 0 から 0 まで表示",
+           "sInfoFiltered": "（全 _MAX_ 件より抽出）",
+           "sInfoPostFix":  "",
+           "sSearch":       "検索フィルター:",
+           "sUrl":          "",
+           "oPaginate": {
+               "sFirst":    "先頭",
+               "sPrevious": "前へ",
+               "sNext":     "次へ",
+               "sLast":     "最終"
+           }
+        }
+
+  } );
+} );
+</script>
 </head>
 <body class="container">
 <?php include('include/menu.php');
@@ -57,17 +97,17 @@ require_once('func.php');
     <table id ="rsv_input" class="table table-bordered table-condensed form-inline" >
       <thead>
       	<tr>
-      		<th width="8%">状態</th>
-      		<th width="10%">お問い合わせ<br>番号<br>/申込日</th>
-          <th width="18%">使用日<br>/施設名<br>/行事名称</th>
-          <th width="15%">使用時 間</th>
+          <th width="5%">状態</th>
+          <th width="10%">お問い合わせ<br>番号<br>/申込日</th>
+          <th width="20%">使用日<br>/施設名<br>/行事名称</th>
+          <th width="8%">使用時間</th>
+          <th></th>
           <th width="3%">人数</th>
-          <th width="22%">行事名<br>/確認事項</th>
-       		<th width="10%">納付期限</th>
-       		<th>請求書<br>/使用許可書</th>
+          <th width="20%">確認事項</th>
+          <th width="10%">納付期限</th>
+          <th width="10%">請求書<br>/使用許可書</th>
       	</tr>
-      </thead>
-      
+      </thead>      
 <tbody>
 <?php 
 require_once("model/db.php");
@@ -80,18 +120,22 @@ $rsvlist = $db->select_rsvlist($_SESSION['kyacd']);//客コード
 for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
   
     echo "<tr>";
-    //入金チェック（入金有無にかかわらず、予約は取り消しできる）
-    //if( $db->select_nyukin_status( $rsvlist[ $i ][ 'ukeno' ] ) ) {
-    if( $rsvlist[ $i ][ 'wrsvkb' ] ==2 ){
-      echo "<td class=\"status1\">予約</td>";     
-    //  echo "<div id=\"data-".$rmcd.$usedt."1\" data-usedt=\"".$usedt."\" data-yobi=".$k." data-timekb=\"1\" data-jkn1=\"9:00\" data-jkn2=\"12:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" />";
-    }else{
-      echo "<td class=\"status3\">仮予約</td>";
-    }
     
+    if( $rsvlist[ $i ][ 'wrsvkb' ] == 2 ){
+      echo "<td class=\"status1\">予約</td>";     
+    }else if( $rsvlist[ $i ][ 'wrsvkb' ] == 3 ){
+      echo "<td class=\"status3\">仮予約</td>";
+    }else if( $rsvlist[ $i ][ 'wrsvkb' ] == 4 ){
+        echo "<td class=\"status3\">予約→変更済</td>";
+    }else if( $rsvlist[ $i ][ 'wrsvkb' ] == 6 ){
+        echo "<td class=\"status3\">失効</td>";
+    }else if( $rsvlist[ $i ][ 'wrsvkb' ] == 9 ){
+        echo "<td class=\"status3\">予約取消</td>";
+    }
+
     $rsvdt = date( "Y/m/d", strtotime( substr( $rsvlist[$i]['usedt'], 0, 4 )."-".substr( $rsvlist[$i]['usedt'], 4, 2 )."-".substr( $rsvlist[$i]['usedt'], 6, 2 )) );      //申込終了日
+    $paylmtdt = date( "Y/m/d", strtotime( substr( $rsvlist[$i]['paylmtdt'], 0, 4 )."-".substr( $rsvlist[$i]['paylmtdt'], 4, 2 )."-".substr( $rsvlist[$i]['paylmtdt'], 6, 2 )) );      //申込終了日
     echo "<td><span class=\"green\">".$rsvlist[$i]['ukeno']."</span><br>";
-    //echo "<td><span class=\"green\">".$rsvlist[$i]['ukeno']."-".$rsvlist[$i]['gyo']."</span><br>";
     echo format_ymd( $rsvlist[$i]['ukedt'] )."</td>";
     /* hidden */
     echo "<input type='hidden' name='ukeno".$i."' id='ukeno".$i."'  value=\"".$rsvlist[$i]['ukeno']."\">";//受付№
@@ -101,18 +145,98 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
     echo mb_convert_encoding($rsvlist[$i]['rmnm'], "utf8", "SJIS")."<br>";//施設名
     echo "「".mb_convert_encoding($rsvlist[$i]['kaigi'], "utf8", "SJIS")."」<br>";//行事名
     
-    echo "<td>使用時間：".format_jkn( $rsvlist[$i]['stjkn'] , ":" )."～".format_jkn( $rsvlist[$i]['edjkn'] , ":" )."<br/>";//使用時間
+
+    echo "<td><ul class=\"list\"><li>使用時間</li>";
+
+    if( $rsvlist[$i]['rmcd'] == 301 ){
+      echo "<li>準備・リハ</li>";
+      echo "<li>本　　　番</li>";
+      echo "<li>撤　　　去</li>";
+      echo "</ul></td>";
+    }
+
+    echo "<td><ul class=\"list\"><li>".format_jkn( $rsvlist[$i]['stjkn'], "時", "分" )."～".format_jkn( $rsvlist[$i]['edjkn'] , "時", "分" )."</li>";//使用時間
+    
+    if( $rsvlist[$i]['rmcd'] == 301 ){
+
+      if( ( !empty( $rsvlist[$i]['jnstjkn'] ) ) && ( !empty($rsvlist[$i]['jnedjkn'] ) ) ){
+        echo "<li>".format_jkn( $rsvlist[$i]['jnstjkn'], "時", "分" )."～".format_jkn( $rsvlist[$i]['jnedjkn'] , "時", "分" )."</li>";//使用時間
+      }
+
+      if( ( !empty( $rsvlist[$i]['hbstjkn'] ) ) && ( !empty($rsvlist[$i]['hbedjkn'] ) ) ){
+       
+        echo "<li>".format_jkn( $rsvlist[$i]['hbstjkn'], "時", "分" )."～".format_jkn( $rsvlist[$i]['hbedjkn'] , "時", "分" )."</li>";//使用時間
+      }
+
+      if( ( !empty( $rsvlist[$i]['tkstjkn'] ) ) && ( !empty($rsvlist[$i]['tkedjkn'] ) ) ){
+        echo "<li>".format_jkn( $rsvlist[$i]['tkstjkn'], "時", "分" )."～".format_jkn( $rsvlist[$i]['tkedjkn'] , "時", "分" )."</li>";//使用時間
+      }
+
+    }
+
+
+    echo "</ul></td>";
+    
     echo "<td>".$rsvlist[$i]['ninzu']."</td>";//人数
-    //echo "<td>「".mb_convert_encoding($rsvlist[$i]['kaigi'], "utf8", "SJIS")."」</td>";//行事内容
-    echo "<td></td>";
+    
+    echo "<td><span class=\"small\"><ul class=\"list\">";
+    echo "<li>・営利目的での使用に";
+
+    if( $rsvlist[$i]['comlkb'] == 0 ){
+      echo "あてはまらない";  
+    }else{
+        echo "あてはまる";  
+    }
+
+    echo "</li>";
+
+    
+    echo "<li>・入場料・受講料を徴収";
+    
+    if( $rsvlist[$i]['feekb'] == 0 ){
+      echo "しない";  
+    }else{
+      echo "する";  
+    }
+    
+    echo "</li>";
+
+    if( $rsvlist[$i]['rmcd'] == 301 ){
+      echo "<li>・グランドピアノを使用";
+      
+      if( $rsvlist[$i]['pianokb'] == 0 ){
+        echo "しない";  
+      }else{
+          echo "する";  
+      }
+      
+      echo "</li>";
+    
+    }
+
+    if( $rsvlist[$i]['oyakokb'] == 2 ){
+      
+      echo "<li>・間仕切りを";
+      
+      if( $rsvlist[$i]['partkb'] == 0){
+        echo "あける";  
+      }else{
+          echo "しめる";  
+      }
+
+      echo "</li>";
+    
+    }
+
+    echo "</ul></span></td>";
+    
     //納付期限
     if( ($rsvlist[$i]['kounoukb'] == 0) && ($rsvlist[$i]['paylmtdt'] > 0) ){    
-      echo "<td>".$rsvlist[$i]['paylmtdt']."</td>";    
+      echo "<td>".$paylmtdt."</td>";    
     }else{    
       echo "<td></td>";
     }
-    
- 
+     
     //ドキュメント
     echo "<td>";
 
@@ -159,49 +283,5 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
   </table>
 <a class="btn btn-default btn-lg" href="top.php" role="button">トップページへ戻る</a>
 <br><br>
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="http://code.jquery.com/jquery.js"></script>
-<script src="js/jquery.dataTables.min.js"></script>
-<script>
-$(document).ready(function() {
-	$('#rsv_input').dataTable( {
-  // 大量データ利用時、「処理中」メッセージを表示するかを設定
-  "bProcessing": true,
-  // 初期表示の行数設定
-  //"iDisplayLength": 20,
-  // ページングボタンの制御
- 	"bFilter":false,
- 	"bLengthChange":false,
- 	"bPaginate":false,
- 	"bInfo":false,
-  "order": [[ 1, "desc" ]],
-  "columnDefs": [ {
-      "targets": [ 0, 3, 4, 5, 6, 7 ],
-      "orderable": false
-    } ],
-	"bLengthChange":false,
-   "oLanguage" : {
-           "sProcessing":   "処理中...",
-           "sLengthMenu":   "_MENU_ 件表示",
-           "sZeroRecords":  "データはありません。",
-           "sInfo":         "_START_件～_END_件を表示（全_TOTAL_ 件中）",
-           "sInfoEmpty":    " 0 件中 0 から 0 まで表示",
-           "sInfoFiltered": "（全 _MAX_ 件より抽出）",
-           "sInfoPostFix":  "",
-           "sSearch":       "検索フィルター:",
-           "sUrl":          "",
-           "oPaginate": {
-               "sFirst":    "先頭",
-               "sPrevious": "前へ",
-               "sNext":     "次へ",
-               "sLast":     "最終"
-           }
-        }
-
-	} );
-} );
-</script>
 </body>
 </html>

@@ -72,8 +72,8 @@ include("search_entry.php");
 		<p>
       		[凡例]
       		空：予約可      		
-      		<span class="dgray" style="padding-left:5px;padding-right:5px">×</span>：予約不可　
-      		<span class="dgray" style="padding-left:5px;padding-right:5px">休</span>：休館日　
+      		<span class="dgray" style="padding-left:5px;padding-right:5px">×</span>：予約不可
+      		<span class="dgray" style="padding-left:5px;padding-right:5px">休</span>：休館日
       </p>
       <p class="text-right">
 	    <input type='submit' class="btn btn-default mr48p prev"  href="#" role="button" value="<<前へ"></a>

@@ -594,10 +594,10 @@ class DB
     {
 
             $ret = array();
-           
+
             $sql = " select dt_roomrmei.* , dt_roomr.kaigi, dt_roomr.ukedt, dt_roomr.paylmtdt, dt_roomr.kounoukb, ";
             $sql .= " dt_wbseikyu.seino, dt_wbseikyu.seiurl, dt_wbseikyu.seifile, dt_wbseikyu.seideal, dt_wbseikyu.seifbd, ";
-            $sql .= " mt_room.rmnm from dt_roomrmei ";
+            $sql .= " mt_room.rmnm, mt_room.oyakokb from dt_roomrmei ";
             $sql .= " left outer join dt_roomr on dt_roomrmei.ukeno = dt_roomr.ukeno ";
             $sql .= " left outer join dt_wbseikyu on dt_roomrmei.ukeno = dt_wbseikyu.ukeno ";
             $sql .= " left outer join mt_room on dt_roomrmei.rmcd = mt_room.rmcd ";

@@ -114,11 +114,11 @@ function get_mb_wday( $param )
 	return $wd;
 
 }
-function format_jkn( $param , $delimiter )
+function format_jkn( $param, $delimiter1, $delimiter2)
 {
 	$val = $param;
 	$val = str_pad( $param, 4, "0", STR_PAD_LEFT );
-	$val = intval( substr( $val, 0, 2 ) ) .  $delimiter . substr( $val , 2, 2 );
+	$val = intval( substr( $val, 0, 2 ) ) .  $delimiter1 . substr( $val , 2, 2 ).$delimiter2;
 	return $val;
 }
 

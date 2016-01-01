@@ -99,13 +99,13 @@ jQuery(function () {
 						
 						calc++;
 						
-						if(　calc　>　12 ) {
+						if(calc>12 ) {
 							break;
 						}					
 					}				
 				}
 				
-				if(　calc　>　12 ) {
+				if(calc>12 ) {
 					break;
 				}
 			
@@ -177,13 +177,13 @@ jQuery(function () {
 						
 						calc++;
 						
-						if(　calc　>　12 ) {
+						if(calc>12 ) {
 							break;
 						}					
 					}				
 				}
 				
-				if(　calc　>　12 ) {
+				if(calc>12 ) {
 					break;
 				}			
 			}
