@@ -51,11 +51,18 @@ class Seikyu extends ModelBase {
         $seifbd = 0;  //ZERO
         
         //年度
-        $nen = substr( $ukedt, 0, 4 );
+       /* $nen = substr( $ukedt, 0, 4 );
         $m = substr( $ukedt, 4, 2 );
         if( $m < 10 ) { $m = '0'.$m; }
         $d = substr( $ukedt, 6, 4 );
+        if( $d < 10 ) { $d = '0'.$d; }*/
+
+        $nen = substr( $ukedt, 0, 4 );
+        $m = intval(substr( $ukedt, 4, 2 ));
+        if( $m < 10 ) { $m = '0'.$m; }
+        $d = intval(substr( $ukedt, 6, 4 ));
         if( $d < 10 ) { $d = '0'.$d; }
+
         
         //請求金額
         $seikin = 0;
