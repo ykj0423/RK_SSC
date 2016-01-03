@@ -1,0 +1,132 @@
+<!--
+2013.1.10 ローカル上にて無事動作、デザインの修正(css)などの変更が必要
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>jQureyでAJAX</title>
+<link href="base.css" rel="stylesheet" type="text/css">
+<style type="text/css">  
+<!--
+#modal-overlay{
+	z-index:1;
+	display:none;
+	position:fixed;
+	top:0;
+	left:0;
+	width:100%;
+	height:120%;
+	background-color:rgba(0,0,0,0.75);
+}
+#modal-content{
+	width:50%;
+	margin:1.5em auto 0;
+	padding:10px 20px;
+	border:2px solid #aaa;
+	background:#fff;
+	z-index:2;
+	position:fixed;
+}
+.modal-p{
+	margin-top:1em;
+}
+.modal-p:first-child{
+	margin-top:0;
+}
+.button-link{
+	color:#00f;
+	text-decoration:underline;
+}
+.button-link:hover{
+	cursor:pointer;
+	color:#f00;
+}
+-->  
+</style>
+	<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>-->
+	<script type="text/javascript" src="../jquery1.4.2.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script type="text/javascript">	 
+	   // ここらへんはjQurey
+	   $( function(){
+	      $("*[name=btn]").click( 
+	         function() {	 
+	            var $keyword = '1';	 			
+	            $.ajax({
+	               url: "./getAr.php",
+	               type: "POST",
+               data: { val : $keyword }, // 検索など引数を渡す必要があるときこれを使う
+	              // dataType: 'json',        // サーバーなどの環境によってこのオプションが必要なときがある
+	               success: function(arr){	 
+						var parseAr = JSON.parse( arr );
+	                  	reWriteTable(parseAr);
+	               }
+	            });
+	         }
+	      );	 
+	   });
+	 $("#modal-open").click(
+	function(){
+		//[id:modal-open]をクリックしたら起こる処理
+		$(this).blur() ;	//ボタンからフォーカスを外す
+if($("#modal-overlay")[0]) return false ;		//新しくモーダルウィンドウを起動しない [下とどちらか選択]
+//if($("#modal-overlay")[0]) $("#modal-overlay").remove() ;		//現在のモーダルウィンドウを削除して新しく起動する [上とどちらか選択]
+
+//オーバーレイ用のHTMLコードを、[body]内の最後に生成する
+$("body").append('<div id="modal-overlay"></div>');
+
+//[$modal-overlay]をフェードインさせる
+$("#modal-overlay").fadeIn("slow");
+	}
+);	
+	   // テーブルを書き換える関数
+	   function reWriteTable( response )
+	   {
+   		//元々あった行を消去し、そこから新しいものを挿入していく
+          $("#list li").remove();             
+          // 取得したデータを入れる
+          /*各種情報をここで生成*/
+        var id = response['id'].toString();
+        var girl_image = "";//<img src='"+ id +".jpg'width='180' height='240'/>";//女の子のイメージ画像
+        var girl_name ="名前."+ response['name'];//女の子の名前
+        var girl_tall = " T."+ response['tall'];//女の子の身長
+        var girl_bust = " B."+ response['bust'];//女の子のバスト
+        var girl_west = " W."+ response['west'];//女の子のウエスト
+        var girl_hip = " H."+ response['hip'];//女の子のヒップ                  
+		var final_echo = girl_tall + girl_bust + girl_west + girl_hip;//最終的な出力
+        $("#list").append(
+             $('<li class="girls_icon1"></li>').html(girl_image)
+                   .append(
+             $('<li class="girls_name1"></li>').text(girl_name)
+                        .append(
+             $('<li class="information1"></li>').text(final_echo)
+ 		)
+			)
+ 		);
+	      //}
+	   }	 
+	</script>	 
+	</head>	 
+	<body>
+	   <div><a href="javascript:void(0)" name="btn">→後3件</a></div><br/>
+	   <p><a id="modal-open" class="button-link">クリックするとモーダルウィンドウを開きます。</a></p>
+	   <div id="modal-overlay">
+	   <div id="modal-content">
+	<p>「閉じる」か「背景」をクリックするとモーダルウィンドウを終了します。</p>
+	<p><a id="modal-close" class="button-link">閉じる</a></p>
+</div></div>
+           <!--デザインを組み替えて行く-->
+           <table border="0">
+               <tr>
+                   <td>
+                       <ul id="list">
+                           <li class="girls_icon1"></li>
+                           <li class="girls_name1"></li>
+                           <li class="information1"></li>
+                       </ul>
+                   </td>                                   
+               </tr>
+           </table>
+           </body>
+	</html>
