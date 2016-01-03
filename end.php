@@ -88,46 +88,9 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 }
 
 /* --------------------*/
-/*  WEB受付№取得処理  */
-/* --------------------*/
-//$sql = "SELECT MAX(ukeno) AS webukeno FROM dt_roomr";
-//$stmt = sqlsrv_query( $conn, $sql);
-//if( $stmt === false ) {
-     //die( print_r( sqlsrv_errors(), true));
-//}
-
-//if( sqlsrv_fetch( $stmt ) === false) {
-     //die( print_r( sqlsrv_errors(), true));
-//}
-
-//$webukeno = (int)sqlsrv_get_field( $stmt, 0) + 1 ;//nullの場合を考慮し、キャストする
-
-/* --------------------*/
 /*  RK受付№取得処理  */
 /* --------------------*/
 $ukeno = get_ukeno($conn);
-//echo ("RK受付№取得処理<br>");
-//$sql = "SELECT MAX(ukeno)  AS ukeno FROM dt_roomr";
-// $nen1 = date("y");
-// $nen2 = date("y") +1;
-
-// $sql = "SELECT MAX(ukeno)  AS ukeno FROM dt_roomr where ukeno >= ".$nen1."000000 and ukeno <".$nen2."000000";
-// $stmt = sqlsrv_query( $conn, $sql);
-// if( $stmt === false ) {
-//      die( print_r( sqlsrv_errors(), true));
-// }
-// //echo "ukeno== ".$sql;
-// if( sqlsrv_fetch( $stmt ) === false) {
-//      //die( print_r( sqlsrv_errors(), true));
-// }
-
-// $max_ukeno = (int)sqlsrv_get_field( $stmt, 0);//nullの場合を考慮し、キャストする
-
-// if($max_ukeno === 0){
-// 	$max_ukeno = (int)$nen1."000000";
-// }
-//$ukeno =  $max_ukeno + 1;
-
 
 /*----------------------------------------------------*/
 $login = $_SESSION['wloginid'];
@@ -601,7 +564,8 @@ if($revflg){
 				$wrsvkb, $rsvchgdt, $comlkb, $feekb, $pianokb, $partkb, $login, $udate, $utime, $ukedt, $wloginid, $wudate, $wutime, $pgnm );
 		 
 			$stmt = sqlsrv_query( $conn, $sql, $params);
-
+echo $sql."<br />";
+print_r($params);
 			if( $stmt === false ) {
 				if( ($errors = sqlsrv_errors() ) != null) {
 					/*foreach( $errors as $error ) {
@@ -755,16 +719,12 @@ if($revflg){//echo "test1";
 				'rmcd' => $_POST[ 'rmcd'.$i ], 'rmnmr' => $rmnmr, 'stjkn' => $_POST[ 'stjkn'.$i ], 'edjkn' => $_POST[ 'edjkn'.$i ], 
 				'hbstjkn' => $_POST[ 'hbstjkn'.$i ], 'hbedjkn' => $_POST[ 'hbedjkn'.$i ], 
 				'pianokb' => $_POST[ 'piano'.$i ],'tnk' => $tnk, 
-				'rmkin'=> $_POST[ 'rmkin'.$i ], 'hzkin'=>$_POST[ 'hzkin'.$i ]);
-			
+				'rmkin'=> $_POST[ 'rmkin'.$i ], 'hzkin'=>$_POST[ 'hzkin'.$i ]);		
 
 		}
 	
 	}
-	//echo "_POST";
-	//print_r($_POST);
-	//echo "請求";
-	//print_r($list);
+
 	$Seikyu->seikyu( $ukeno, $ukedt, $kyacd, $list );
 
 }
@@ -1147,7 +1107,7 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 //		if($mng_rec[$cnt][0]==301){
 		if($rmcd==301){
 
-echo "1146 <br>";			
+//echo "1146 <br>";			
 			/*時間帯更新*/
 			if( $mng_rec[$cnt][1] == 1 ){
 	            $jkn_rec = array(9, 10, 11);

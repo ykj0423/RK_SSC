@@ -438,6 +438,7 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 							echo "<input type='hidden' name='hbstjkn".$i."' id='hbstjkn".$i."' value='".$hstjkn."'>";
 							echo "<input type='hidden' name='hbedjkn".$i."' id='hbedjkn".$i."' value='".$hedjkn."'>";
 							echo "<input type='hidden' name='comlkb".$i."' id='comlkb".$i."' value='".$comlkb."'>";
+							echo "<input type='hidden' name='feekb".$i."' id='comlkb".$i."' value='".$feekb."'>";
 							echo "<input type='hidden' name='biko".$i."' id='biko".$i."' value='".$biko."'>";
 							
 							echo "</tr>";
