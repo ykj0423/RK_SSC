@@ -694,15 +694,15 @@ class Reserve extends ModelBase {
 
         /* If both queries were successful, commit the transaction. */
         /* Otherwise, rollback the transaction. */
-        /*if( $tran ) {
-             sqlsrv_commit( $this->conn );
+        if( $tran ) {
+        //     sqlsrv_commit( $this->conn );
              return true;
              //echo "Transaction committed.<br />";
         } else {
-             sqlsrv_rollback( $this->conn );
+        //     sqlsrv_rollback( $this->conn );
              return false;
              //echo "Transaction rolled back.<br />";
-        }*/
+        }
     
     }
     

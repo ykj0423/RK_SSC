@@ -702,9 +702,6 @@ if($revflg){
 
 }
 
-
-
-
 /* 請求データ作成 */
 include("model/Seikyu.php");
 
@@ -772,7 +769,7 @@ if($revflg){//echo "test1";
 
 }
 
-
+//echo "775";
 /* --------------------*/
 /*  管理者留保			*/
 /* --------------------*/
@@ -782,9 +779,9 @@ for ($i = 0 ; $i < $meisai_count; $i++) {
 	$rmcd = $_POST[ 'rmcd'.$i ];
 	//時間帯
 	$timekb = $_POST[ 'timekb'.$i ];
-	
+	$mng_rec = array();
 	if( $rmcd == 301 || $rmcd == 1001 || $rmcd == 1002 ){
-		$mng_rec = array();
+		
 	
 		if( $rmcd == 1001 ){
 			$mngrmcd = 1002; 
@@ -807,7 +804,9 @@ for ($i = 0 ; $i < $meisai_count; $i++) {
 	    }
 
 	}
-	//print_r($mng_rec);
+
+//echo "812";
+//print_r($mng_rec);
 	$gyo = 0;
     
     for ($cnt = 0 ; $cnt < count($mng_rec); $cnt++) {
@@ -988,7 +987,7 @@ for ($i = 0 ; $i < $meisai_count; $i++) {
 			$wrsvkb, $rsvchgdt, $comlkb, $feekb, $pianokb, $partkb, $login, $udate, $utime, $ukedt, $wloginid, $wudate, $wutime, $pgnm );
 	 
 		$stmt = sqlsrv_query( $conn, $sql, $params);
-
+//echo $sql; 
 		if( $stmt === false ) {
 			if( ($errors = sqlsrv_errors() ) != null) {
 				foreach( $errors as $error ) {
@@ -1115,7 +1114,7 @@ for ($i = 0 ; $i < $meisai_count; $i++) {
 			$kounoukb, $holekb, $kaigi,$naiyo, $kbiko, $sekinin, $kupdkb, $rsbkb, $riyokb, $paylmtdt, $expkb, $expnocdt, $expdt,
 			$trmkin, $thzkin, $tkin, $login, $udate, $utime, $wrkkb, $wloginid, $wudate, $wutime);
 
-
+//echo $sql;
 		$stmt = sqlsrv_query( $conn, $sql, $params);
 
 		if( $stmt === false ) {
@@ -1134,26 +1133,26 @@ for ($i = 0 ; $i < $meisai_count; $i++) {
 
 		if($mng_rec[$cnt][0]==301){
 			/*時間帯更新*/
-			if( $mng_rec[1] == 1 ){
+			if( $mng_rec[$cnt][1] == 1 ){
 	            $jkn_rec = array(9, 10, 11);
-	        }else if( $mng_rec[1] == 2 ) {
+	        }else if( $mng_rec[$cnt][1] == 2 ) {
 	            $jkn_rec = array(13,14,15,16);
-	        }else if( $mng_rec[1] == 3 ) {
+	        }else if( $mng_rec[$cnt][1] == 3 ) {
 	            $jkn_rec = array(18,19,20);
-	        }else if( $timekb == 4 ) {
+	        }else if( $mng_rec[$cnt][1] == 4 ) {
 	            $jkn_rec = array(9,10,11,12,13,14,15,16,17);
-	        }else if( $timekb == 5 ) {
+	        }else if( $mng_rec[$cnt][1] == 5 ) {
 	            $jkn_rec = array(13,14,15,15,16,17,18,19,20);
-	        }else if( $timekb == 6 ) {
+	        }else if( $mng_rec[$cnt][1] == 6 ) {
 	        	$jkn_rec = array(9,10,11,12,13,14,15,15,16,17,18,19,20);
 	        }
 
 	        
-	        for ($cnt = 0 ; $cnt < count($jkn_rec); $cnt++) {
+	        for ($cnt2 = 0 ; $cnt2 < count($jkn_rec); $cnt2++) {
 	        //for ( $jkn = $stt; $jkn <= $end;  $jkn++) { // 3時間分回す
-	        	$sql = "SELECT * FROM ks_jkntai WHERE usedt = ".$usedt." AND rmcd = ".$mng_rec[0]." AND jikan = ".$jkn_rec[$cnt]." AND timekb = ".$mng_rec[1];
+	        	$sql = "SELECT * FROM ks_jkntai WHERE usedt = ".$usedt." AND rmcd = ".$mng_rec[$cnt][0]." AND jikan = ".$jkn_rec[$cnt2]." AND timekb = ".$mng_rec[$cnt][1];
 
-	                $stmt = sqlsrv_query( $this->conn, $sql );
+	                $stmt = sqlsrv_query( $conn, $sql );
 	                
 	                if( $stmt === false) {
 	                    //echo $sql;
@@ -1173,7 +1172,7 @@ for ($i = 0 ; $i < $meisai_count; $i++) {
 	                                                                //update
 	                            $sql = "UPDATE ks_jkntai SET ukeno=(?), gyo=(?),login=(?), udate=(?), utime=(?)";
 	                            $sql = $sql." WHERE usedt=(?) AND rmcd=(?) AND jikan=(?) AND timekb=(?)";
-	                            $params = array( $ukeno, $gyo, $login, parent::getUdate(), parent::getUtime() , $usedt, $mng_rec[0], $jkn_rec[$cnt], $mng_rec[1] );
+	                            $params = array( $ukeno, $gyo, $login, parent::getUdate(), parent::getUtime() , $usedt, $mng_rec[$cnt][0], $jkn_rec[$cnt2], $mng_rec[$cnt][1] );
 
 	                        }
 	                
@@ -1184,11 +1183,11 @@ for ($i = 0 ; $i < $meisai_count; $i++) {
 	                    //insert
 	                    $sql = "INSERT INTO ks_jkntai ( usedt, jikan, rmcd, timekb, ukeno, gyo, login, udate, utime)";
 	                    $sql = $sql." VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	                    $params = array( $usedt, $jkn_rec[$cnt], $mng_rec[0], $mng_rec[1], $ukeno, $gyo, $login, parent::getUdate(), parent::getUtime() );
+	                    $params = array( $usedt, $jkn_rec[$cnt2], $mng_rec[$cnt][0], $mng_rec[$cnt][1], $ukeno, $gyo, $login, parent::getUdate(), parent::getUtime() );
 
 	                }//if
-
-	                $stmt = sqlsrv_query( $this->conn, $sql, $params );
+//echo "<br>1191 ".$sql;
+	                $stmt = sqlsrv_query( $conn, $sql, $params );
 	    
 	                if( $stmt === false) {
 	                    $tran = false;
@@ -1205,12 +1204,12 @@ for ($i = 0 ; $i < $meisai_count; $i++) {
 }//exit forvmeisai
 
 if( $revflg ) {
-     sqlsrv_commit( $this->conn );
-     return true;
+     sqlsrv_commit( $conn );
+     //return true;
      //echo "Transaction committed.<br />";
 } else {
-     sqlsrv_rollback( $this->conn );
-     return false;
+     sqlsrv_rollback( $conn);
+     //return false;
      //echo "Transaction rolled back.<br />";
 }
 
