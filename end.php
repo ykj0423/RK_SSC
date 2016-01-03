@@ -1172,7 +1172,8 @@ for ($i = 0 ; $i < $meisai_count; $i++) {
 	                                                                //update
 	                            $sql = "UPDATE ks_jkntai SET ukeno=(?), gyo=(?),login=(?), udate=(?), utime=(?)";
 	                            $sql = $sql." WHERE usedt=(?) AND rmcd=(?) AND jikan=(?) AND timekb=(?)";
-	                            $params = array( $ukeno, $gyo, $login, parent::getUdate(), parent::getUtime() , $usedt, $mng_rec[$cnt][0], $jkn_rec[$cnt2], $mng_rec[$cnt][1] );
+
+	                            $params = array( $ukeno, $gyo, $login, date( "Ymd" ), date( "His" ) , $usedt, $mng_rec[$cnt][0], $jkn_rec[$cnt2], $mng_rec[$cnt][1] );
 
 	                        }
 	                
@@ -1183,7 +1184,7 @@ for ($i = 0 ; $i < $meisai_count; $i++) {
 	                    //insert
 	                    $sql = "INSERT INTO ks_jkntai ( usedt, jikan, rmcd, timekb, ukeno, gyo, login, udate, utime)";
 	                    $sql = $sql." VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	                    $params = array( $usedt, $jkn_rec[$cnt2], $mng_rec[$cnt][0], $mng_rec[$cnt][1], $ukeno, $gyo, $login, parent::getUdate(), parent::getUtime() );
+	                    $params = array( $usedt, $jkn_rec[$cnt2], $mng_rec[$cnt][0], $mng_rec[$cnt][1], $ukeno, $gyo, $login, date( "Ymd" ), date( "His" ) );
 
 	                }//if
 //echo "<br>1191 ".$sql;
