@@ -225,9 +225,9 @@ if($revflg){
 
 	//納付期限
 	$nen = substr( $ukedt, 0, 4 );
-	$m = substr( $ukedt, 4, 2 );
+	$m = intval(substr( $ukedt, 4, 2 ));
 	if( $m < 10 ) { $m = '0'.$m; }
-	$d = substr( $ukedt, 6, 4 );
+	$d = intval(substr( $ukedt, 6, 4 ));
 	if( $d < 10 ) { $d = '0'.$d; }
 
 	$date_ukedt = strtotime( $nen.'-'.$m.'-'.$d );
@@ -768,12 +768,25 @@ if($revflg){//echo "test1";
 	$Seikyu->seikyu( $ukeno, $ukedt, $kyacd, $list );
 
 }
-
+if( $revflg ) {
+     sqlsrv_commit( $conn );
+     //return true;
+     //echo "Transaction committed.<br />";
+} else {
+     sqlsrv_rollback( $conn );
+     //return false;
+     //echo "Transaction rolled back.<br />";
+}
+//print_r($_POST);
 //echo "775";
+//echo $meisai_count;
 /* --------------------*/
 /*  管理者留保			*/
 /* --------------------*/
 for ($i = 0 ; $i < $meisai_count; $i++) {
+	//echo "meisai_count".$meisai_count;
+if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
+			
 	
 	//施設コード
 	$rmcd = $_POST[ 'rmcd'.$i ];
@@ -815,7 +828,7 @@ for ($i = 0 ; $i < $meisai_count; $i++) {
 		/*  RK受付№取得処理  */
 		/* --------------------*/
 		//新たに受付Noを取得
-		$ukeno = get_ukeno($conn);
+		$mng_ukeno = get_ukeno($conn);
 		
 		$gyo++;
 
@@ -980,7 +993,7 @@ for ($i = 0 ; $i < $meisai_count; $i++) {
 	    
 	    $sql .= "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-	    $params = array($ukeno, $gyo, $rmcd, $kyono, $kyodt, $shindt, $kyourl, $kyofile, $kyofbd, $usedt, $yobi, $yobikb,
+	    $params = array($mng_ukeno, $gyo, $rmcd, $kyono, $kyodt, $shindt, $kyourl, $kyofile, $kyofbd, $usedt, $yobi, $yobikb,
 			$timekb, $stjkn, $edjkn, $jnstjkn, $jnedjkn, $hbstjkn, $hbedjkn, $tkstjkn, $tkedjkn,
 			$ratekb, $ratesb, $zgrt, $ninzu, $rmtnk, $rmentnk, $rmtukin, $rmenkin, $rmkin, $hzkin, $rmnykin, $hznykin, $synykin,
 			$candt, $cankb, $hkktdt, $hkdt, $hkkin, $kskbn, $biko, $tag1, $tag2, $tag3,
@@ -1101,7 +1114,6 @@ for ($i = 0 ; $i < $meisai_count; $i++) {
 		$kyakb =  0;
 		$kounoukb = 0; //後納区分
 
-
 		$sql = "INSERT INTO dt_roomr (ukeno, ukedt, nen, krkb, krmemo,ukecd,ukehkb,kyacd,
 			dannm,dannm2,dannmk,daihyo,renraku,tel1,tel2,fax,url,mail,zipcd,adr1,adr2,gyscd,sihon,jygsu,kyakb,
 			kounoukb,holekb,kaigi,naiyo,kbiko,sekinin,kupdkb,rsbkb,riyokb,paylmtdt,expkb,expnocdt,expdt,
@@ -1109,12 +1121,12 @@ for ($i = 0 ; $i < $meisai_count; $i++) {
 		
 		$sql .= " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-		$params = array($ukeno, $ukedt, $nen, $krkb, $krmemo, $ukecd, $ukehkb, $kyacd,
+		$params = array($mng_ukeno, $ukedt, $nen, $krkb, $krmemo, $ukecd, $ukehkb, $kyacd,
 			$dannm, $dannm2, $dannmk, $daihyo, $renraku, $tel1, $tel2, $fax, $url, $mail, $zipcd, $adr1, $adr2, $gyscd, $sihon, $jygsu, $kyakb,
 			$kounoukb, $holekb, $kaigi,$naiyo, $kbiko, $sekinin, $kupdkb, $rsbkb, $riyokb, $paylmtdt, $expkb, $expnocdt, $expdt,
 			$trmkin, $thzkin, $tkin, $login, $udate, $utime, $wrkkb, $wloginid, $wudate, $wutime);
 
-//echo $sql;
+//echo "<br>1122 ".$sql;
 		$stmt = sqlsrv_query( $conn, $sql, $params);
 
 		if( $stmt === false ) {
@@ -1147,11 +1159,11 @@ for ($i = 0 ; $i < $meisai_count; $i++) {
 	        	$jkn_rec = array(9,10,11,12,13,14,15,15,16,17,18,19,20);
 	        }
 
-	        
+	  //print_r($jkn_rec);
 	        for ($cnt2 = 0 ; $cnt2 < count($jkn_rec); $cnt2++) {
 	        //for ( $jkn = $stt; $jkn <= $end;  $jkn++) { // 3時間分回す
 	        	$sql = "SELECT * FROM ks_jkntai WHERE usedt = ".$usedt." AND rmcd = ".$mng_rec[$cnt][0]." AND jikan = ".$jkn_rec[$cnt2]." AND timekb = ".$mng_rec[$cnt][1];
-
+//echo "<br>1158 ".$sql;
 	                $stmt = sqlsrv_query( $conn, $sql );
 	                
 	                if( $stmt === false) {
@@ -1161,11 +1173,12 @@ for ($i = 0 ; $i < $meisai_count; $i++) {
 	            
 	                $has_rows = sqlsrv_has_rows ( $stmt );
 
-	                if ( $has_rows ){
-	                
+	                //if ( $has_rows===true ){
+	                	$has_rows==false;
 	                    while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
-	                
-	                        if( $row['ukeno'] != 0 ){
+	                		//echo "has_rows";
+	                		$has_rows==true;
+	                        /*if( $row['ukeno'] != 0 ){
 	                            //echo $sql;                                    
 	                            //die( "unexpected error" ); //想定外、先取りされているなど
 	                        }else{
@@ -1175,23 +1188,31 @@ for ($i = 0 ; $i < $meisai_count; $i++) {
 
 	                            $params = array( $ukeno, $gyo, $login, date( "Ymd" ), date( "His" ) , $usedt, $mng_rec[$cnt][0], $jkn_rec[$cnt2], $mng_rec[$cnt][1] );
 
-	                        }
+	                        }*/
 	                
 	                    }
 
-	                }else{
-	            
+	                //}else{
+	            	if ( $has_rows==true ){
+
+	            		 $sql = "UPDATE ks_jkntai SET ukeno=(?), gyo=(?),login=(?), udate=(?), utime=(?)";
+	                            $sql = $sql." WHERE usedt=(?) AND rmcd=(?) AND jikan=(?) AND timekb=(?)";
+
+	                            $params = array( $mng_ukeno, $gyo, $login, date( "Ymd" ), date( "His" ) , $usedt, $mng_rec[$cnt][0], $jkn_rec[$cnt2], $mng_rec[$cnt][1] );
+
+	            	}else{
+
 	                    //insert
 	                    $sql = "INSERT INTO ks_jkntai ( usedt, jikan, rmcd, timekb, ukeno, gyo, login, udate, utime)";
 	                    $sql = $sql." VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	                    $params = array( $usedt, $jkn_rec[$cnt2], $mng_rec[$cnt][0], $mng_rec[$cnt][1], $ukeno, $gyo, $login, date( "Ymd" ), date( "His" ) );
+	                    $params = array( $usedt, $jkn_rec[$cnt2], $mng_rec[$cnt][0], $mng_rec[$cnt][1], $mng_ukeno, $gyo, $login, date( "Ymd" ), date( "His" ) );
 
 	                }//if
-//echo "<br>1191 ".$sql;
+//echo "<br>1195 ".$sql;
 	                $stmt = sqlsrv_query( $conn, $sql, $params );
 	    
 	                if( $stmt === false) {
-	                    $tran = false;
+	                    //$tran = false;
 	                    //echo $sql;
 	                    //break;//exit for
 	                }
@@ -1201,7 +1222,7 @@ for ($i = 0 ; $i < $meisai_count; $i++) {
     	}//301				
 	
 	}//mng_rec:end
-
+}
 }//exit forvmeisai
 
 if( $revflg ) {

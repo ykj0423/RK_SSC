@@ -279,7 +279,7 @@ class Reserve extends ModelBase {
                     
                 }//$rmcd == 802 || $rmcd == 803 || $rmcd == 902 || $rmcd == 903 || $rmcd == 905 || $rmcd == 905 || $rmcd == 1001 || $rmcd == 1002
                 
-                if( $rmcd == 823 || $rmcd == 923 || $rmcd == 945 ){
+                if( $rmcd == 823 || $rmcd == 923 || $rmcd == 945 || $rmcd == 1012 ){
 
                     if( $rmcd == 823 ){
                          
@@ -302,10 +302,17 @@ class Reserve extends ModelBase {
                             
                     }
 
+                    if( $rmcd == 1012 ){
+
+                        $child1 = 1001;   
+                        $child2 = 1002;                        
+                            
+                    }
+
                     for ($count = $child1; $count <= $child2 ; $count++) {
                     
                         $sql = "SELECT * FROM ks_jknksi WHERE usedt = ".$usedt." AND jikan = ".$jkn." AND rmcd = ".$count;
-                    
+ //echo "315 ".$sql;                   
                         $stmt = sqlsrv_query( $this->conn, $sql );
                         
                         if( $stmt === false) {
@@ -313,12 +320,12 @@ class Reserve extends ModelBase {
                             //die( print_r( sqlsrv_errors(), true) );
                         }
                         
-                        $has_rows = sqlsrv_has_rows ( $stmt );
-                        
-                        if ( $has_rows ){
+                        //$has_rows = sqlsrv_has_rows ( $stmt );
+                        $has_rows = false;
+                        //if ( $has_rows ){
                             
                             while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
-                            
+                                $has_rows = true;
                                 if( $row['rsignkb'] != 0 ){
 
                                     //sqlsrv_rollback( $this->conn );
@@ -329,7 +336,7 @@ class Reserve extends ModelBase {
 
                               
                             }
-                            
+                        if ( $has_rows ){ 
                             //update
                             $sql = "UPDATE ks_jknksi SET rsignkb=(?), rjyokb=(?),login=(?), udate=(?), utime=(?)";
                             $sql = $sql." WHERE usedt=(?) AND rmcd=(?) AND jikan=(?)";
@@ -344,7 +351,7 @@ class Reserve extends ModelBase {
 
                         }
 
-
+//echo $sql;
                         $stmt = sqlsrv_query( $this->conn, $sql, $params );
             
                         if( $stmt === false) {
@@ -687,19 +694,16 @@ class Reserve extends ModelBase {
 
             }//for
 
-
-
-
         }//exit foreach
 
         /* If both queries were successful, commit the transaction. */
         /* Otherwise, rollback the transaction. */
         if( $tran ) {
-        //     sqlsrv_commit( $this->conn );
+             sqlsrv_commit( $this->conn );
              return true;
              //echo "Transaction committed.<br />";
         } else {
-        //     sqlsrv_rollback( $this->conn );
+             sqlsrv_rollback( $this->conn );
              return false;
              //echo "Transaction rolled back.<br />";
         }
