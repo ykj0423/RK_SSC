@@ -105,7 +105,7 @@ class Seikyu extends ModelBase {
                 $seiurl = trim($row['azrfldsei']);
             } 
 
-        } */
+        } 
 
         //納付期限
         $date_ukedt = strtotime( $nen.'-'.$m.'-'.$d );
