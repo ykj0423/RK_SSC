@@ -777,9 +777,7 @@ if( $revflg ) {
      //return false;
      //echo "Transaction rolled back.<br />";
 }
-//print_r($_POST);
-//echo "775";
-//echo $meisai_count;
+
 /* --------------------*/
 /*  管理者留保			*/
 /* --------------------*/
@@ -813,12 +811,17 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 				$mng_rec[] = array( 301, 3 );
 	        }else if( $timekb == 3 ) {
 				$mng_rec[] = array( 301, 2 );
+	        }else if( $timekb == 4) {
+	        	$mng_rec[] = array( 301, 3);
+	        }else if( $timekb == 5 ){
+	        	$mng_rec[] = array( 301, 1);
 	        }
+
 	    }
 
 	}
 
-//echo "812";
+//ho "812";
 //print_r($mng_rec);
 	$gyo = 0;
     
@@ -832,8 +835,6 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 		
 		$gyo++;
 
-
-
 		//施設コード
 		$rmcd = $mng_rec[$cnt][0];//$_POST[ 'rmcd'.$i ];
 		
@@ -841,7 +842,7 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 		if($rmcd==301){
 			$holekb = 1;
 		}
-
+		$ukedt = date( 'Ymd' );
 		//許可番号
 		$kyono = 0;
 
@@ -1143,7 +1144,10 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 		    }
 		}
 
-		if($mng_rec[$cnt][0]==301){
+//		if($mng_rec[$cnt][0]==301){
+		if($rmcd==301){
+
+echo "1146 <br>";			
 			/*時間帯更新*/
 			if( $mng_rec[$cnt][1] == 1 ){
 	            $jkn_rec = array(9, 10, 11);
@@ -1159,7 +1163,8 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 	        	$jkn_rec = array(9,10,11,12,13,14,15,15,16,17,18,19,20);
 	        }
 
-	  //print_r($jkn_rec);
+//print_r($jkn_rec);
+
 	        for ($cnt2 = 0 ; $cnt2 < count($jkn_rec); $cnt2++) {
 	        //for ( $jkn = $stt; $jkn <= $end;  $jkn++) { // 3時間分回す
 	        	$sql = "SELECT * FROM ks_jkntai WHERE usedt = ".$usedt." AND rmcd = ".$mng_rec[$cnt][0]." AND jikan = ".$jkn_rec[$cnt2]." AND timekb = ".$mng_rec[$cnt][1];
@@ -1171,10 +1176,10 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 	                    //die( print_r( sqlsrv_errors(), true) );
 	                }
 	            
-	                $has_rows = sqlsrv_has_rows ( $stmt );
+	                //$has_rows = sqlsrv_has_rows ( $stmt );
 
 	                //if ( $has_rows===true ){
-	                	$has_rows==false;
+	                	$has_rows=false;
 	                    while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 	                		//echo "has_rows";
 	                		$has_rows==true;
@@ -1209,6 +1214,7 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 
 	                }//if
 //echo "<br>1195 ".$sql;
+//echo print_r($params);
 	                $stmt = sqlsrv_query( $conn, $sql, $params );
 	    
 	                if( $stmt === false) {

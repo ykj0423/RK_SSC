@@ -623,7 +623,7 @@ class Reserve extends ModelBase {
                 }
                 /*----------------*/
                 
-                 if( $rmcd == 823 || $rmcd == 923 || $rmcd == 945 ){
+                 if( $rmcd == 823 || $rmcd == 923 || $rmcd == 945 || $rmcd == 1012){
 
                     if( $rmcd == 823 ){
                          
@@ -645,6 +645,12 @@ class Reserve extends ModelBase {
                         $child2 = 905;                        
                             
                     }
+                    if( $rmcd == 1012 ){
+
+                        $child1 = 1001;   
+                        $child2 = 1002;                        
+                            
+                    }
 
                     for ($count = $child1; $count <= $child2 ; $count++) {
 
@@ -658,19 +664,20 @@ class Reserve extends ModelBase {
                             //return false;
                         }
                     
-                        $has_rows = sqlsrv_has_rows ( $stmt );
-
-                        if ( $has_rows ){
+                        //$has_rows = sqlsrv_has_rows ( $stmt );
+                        $has_rows = false;
+                        //if ( $has_rows ){
                         
                             while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
-                        
+                                $has_rows = true;
                                 if( $row['ukeno'] != 0 ){
-                                    return false;
+                                    //return false;
                                     //die( "unexpected error" ); //想定外、先取りされているなど
                                 }
                         
                             }
-                            //update
+
+                        if ( $has_rows ){      //update
                             $sql = "UPDATE ks_jkntai SET ukeno=(?), gyo=(?),login=(?), udate=(?), utime=(?)";
                             $sql = $sql." WHERE usedt=(?) AND rmcd=(?) AND jikan=(?) AND timekb=(?)";
                             $params = array( $ukeno, $gyo, $login, parent::getUdate(), parent::getUtime() , $usedt, $count, $jkn, $timekb );
@@ -684,6 +691,13 @@ class Reserve extends ModelBase {
 
                         }//if
 
+                        $stmt = sqlsrv_query( $this->conn, $sql, $params );
+            
+                        if( $stmt === false) {
+                            $tran = false;
+                            //echo $sql;
+                            //break;//exit for
+                        }
 
                     }
 
