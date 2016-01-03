@@ -217,11 +217,11 @@ if(is_array($rmcls)){
               <div class="form-inline">
                   <div class=" input-group date">
                     <input type="text" id="date_timepicker_start" name="search_ymd_stt" value="<?php echo $sttdt; ?>" style="width:100px">
-                    <span id="sttbtn" class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                    <span id="sttbtn" class="input-group-addon"></span>
               </div>～
               <div class=" input-group date">
                 <input type="text" id="date_timepicker_end" name="serch_ymd_end" value="<?php echo $enddt; ?>" style="width:100px">
-                <span  id="endbtn" class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                <span  id="endbtn" class="input-group-addon"></span>
               </div>
             </td>
           </tr>
