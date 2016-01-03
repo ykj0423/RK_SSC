@@ -90,10 +90,10 @@ class Seikyu extends ModelBase {
         }
         
         //請求書ダウンロードURL
-        $seiurl = "http://reservekeeper.cloudapp.net/rk_ssc/rsvlist.php";
+        $seiurl = "";
         
         /* システム管理データ */
-        /*$sql = "SELECT azrfldsei, azrfldtuchi FROM mt_system";
+        $sql = "SELECT azrfldsei, azrfldtuchi FROM mt_system";
         
         $stmt = sqlsrv_query( $this->conn, $sql );
 
