@@ -252,7 +252,7 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
     }else{    
       echo "<td></td>";
     }
-     
+    $kyourl = "http://reservekeeper.cloudapp.net/rk_ssc/pdf/kyo/";
     //ドキュメント
     echo "<td>";
 
@@ -260,12 +260,13 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
     if(!empty($rsvlist[$i]['kyono'])){
 
       if( $rsvlist[$i]['kyofbd'] == 0) {
-          echo "<a href=\"".$rsvlist[$i]['kyourl'].$rsvlist[$i]['kyofile']."\" class=\"btn-icon\"><img src=\"icon_btn_pdf.png\" alt=\"許可書\">使用許可書ダウンロード</a>";
+          echo "<a href=\"".$kyourl.$rsvlist[$i]['kyofile']."\" class=\"btn-icon\"><img src=\"icon_btn_pdf.png\" alt=\"許可書\">使用許可書ダウンロード</a>";
       }else{
         echo "許可番号：".$rsvlist[$i]['kyono'];
       }
 
     }
+
 
     if(!empty($rsvlist[$i]['seino'])){
 
@@ -274,12 +275,14 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
       //料金後納の場合
       if($rsvlist[$i]['kounoukb'] == 1){
         $doc_name ="料金のお知らせ";
+        $seiurl = "http://reservekeeper.cloudapp.net/rk_ssc/pdf/tuchi/";
       }else{
         $doc_name ="請求書";
+        $seiurl = "http://reservekeeper.cloudapp.net/rk_ssc/pdf/sei/";
       }
 
       if( ( $rsvlist[$i]['seifbd'] == 0 ) && ( $rsvlist[$i]['seideal'] == 1 ) ) {
-        echo "<a href=\"".$rsvlist[$i]['seiurl'].$rsvlist[$i]['seifile']."\" class=\"btn-icon\"><img src=\"icon_btn_pdf.png\" alt=\"".$doc_name."\">".$doc_name."ダウンロード</a>";
+        echo "<a href=\"".$seiurl.$rsvlist[$i]['seifile']."\" class=\"btn-icon\"><img src=\"icon_btn_pdf.png\" alt=\"".$doc_name."\">".$doc_name."ダウンロード</a>";
         //echo "<a href=\"".$rsvlist[$i]['seiurl'].$rsvlist[$i]['seifile']."\" class=\"btn-icon\"><img src=\"icon_btn_pdf.png\" alt=\"".$doc_name."\">".$doc_name."ダウンロード</a>";
       }else{
         echo $doc_name."番号：".$rsvlist[$i]['seino'];
