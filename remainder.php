@@ -20,8 +20,8 @@
 <script src="js/bootstrap.min.js"></script>
 </head>
 <?php
-print_r($_POST);
 $errmsg = "";
+$msg = "";
 
 $ini = parse_ini_file('config.ini');        
 $serverName = $ini['SERVER_NAME'];
@@ -44,7 +44,7 @@ if( isset( $_POST['submit'] ) && ( !empty($_POST['submit'] ) ) ){
     	//顧客を検索する
     	$ex = false;
 
-    	$sql = " select kyacd from mt_kyaku where mail = ".$_POST['mail'] ."'";
+    	$sql = " select kyacd from mt_kyaku where mail = '".$_POST['mail'] ."'";
 
     	$stmt = sqlsrv_query( $conn, $sql );
         
@@ -58,10 +58,12 @@ if( isset( $_POST['submit'] ) && ( !empty($_POST['submit'] ) ) ){
     	}
 
     	if(!$ex){
-    		echo "<span class=\"red note\">メールを送信しました。しばらくお待ちください。</span>";
+    	
+    		$errmsg = "ご指定のメールアドレスは登録されていません。再度メールアドレスをご確認ください。";
+    	
     	}else{
     		//一致：いったんたてたsndflgを倒す
-    		$sql = "update mt_kyaku set sndflg = 0 where kyacd ='".$kyacd ."'";
+    		$sql = "update mt_kyaku set sndflg = 0 where kyacd =".$kyacd;
 
     		$stmt = sqlsrv_query( $conn, $sql );
         
@@ -69,10 +71,12 @@ if( isset( $_POST['submit'] ) && ( !empty($_POST['submit'] ) ) ){
 	            return false;
 	        }
 
-	        echo "メールが送信されますので、しばらくお待ちください。";
+	        $msg = "ご指定のメールアドレスに利用情報のメールが送信されますので、しばらくお待ちください。";
 
     	}
 	
+	}else{
+	//	echo $errmsg;
 	}
 
 }
@@ -85,17 +89,19 @@ if( isset( $_POST['submit'] ) && ( !empty($_POST['submit'] ) ) ){
 <form id="id_form" role="form" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">  
 <div class="row">
 <label class="col-sm-4">ご利用登録されているメールアドレス<span class="red note">(必須)</span></label>
-<input class="col-sm-7" type="text" name="email" value=""><br><br>
+<input class="col-sm-7" type="text" name="mail" value="<?php echo $_POST['mail']; ?>"><br><br>
 <label class="col-sm-4">メールアドレス<span class="red note">(再入力)</span></label>
-<input class="col-sm-7" type="text" name="email" value="">
+<input class="col-sm-7" type="text" name="remail"  value="<?php echo $_POST['remail']; ?>">
 </div>
 <p class="text-danger ">
 　※迷惑メールの拒否設定をされている場合は、@kobe-ipc.or.jpドメインの受信許可をお願いいたします。
 </p>
-<a class="btn btn-default" href="javascript:history.back();" role="button">&lt;&lt;&nbsp;戻る</a>
+<a class="btn btn-default" href="login.php" role="button">&lt;&lt;&nbsp;戻る</a>
 <input type="submit" class="btn btn-primary" id="submit" name="submit" role="button" value="送信する&nbsp;&gt;&gt;"> 
 <!--a href="help.hhtml#loginqa" target="window_name"  onClick="disp('help.hhtml#loginqa')">
 <!--li class="glyphicon glyphicon-question-sign" aria-hidden="true">メールアドレスが不明な場合はこちら　>></li></a-->
 </form>
+<span class="red note"><?php echo $errmsg; ?></span><br>
+<?php echo $msg; ?>
 </body>
 </html>

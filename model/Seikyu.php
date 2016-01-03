@@ -83,10 +83,10 @@ class Seikyu extends ModelBase {
         }
         
         //請求書ダウンロードURL
-        $seiurl = "";
+        $seiurl = "http://reservekeeper.cloudapp.net/rk_ssc/rsvlist.php";
         
         /* システム管理データ */
-        $sql = "SELECT azrfldsei, azrfldtuchi FROM mt_system";
+        /*$sql = "SELECT azrfldsei, azrfldtuchi FROM mt_system";
         
         $stmt = sqlsrv_query( $this->conn, $sql );
 
@@ -98,7 +98,7 @@ class Seikyu extends ModelBase {
                 $seiurl = trim($row['azrfldsei']);
             } 
 
-        } 
+        } */
 
         //納付期限
         $date_ukedt = strtotime( $nen.'-'.$m.'-'.$d );
@@ -111,15 +111,15 @@ class Seikyu extends ModelBase {
         if( $kyakb == 99 ){//内部であればセットしない
             $paylmtdt = 0;
         }
-
-        if( $kounoukb ==1){//後納であればセットしない
+        $seifile = null;
+        /*if( $kounoukb ==1){//後納であればセットしない
             //料金通知書
             $seifile = "T".$ukeno.".pdf";
         
         }else{
             //請求書ファイル名
             $seifile = "S".$ukeno.".pdf";
-        }
+        }*/
 
         /* 請求書明細 */
         $gyo_num = 0;

@@ -29,9 +29,11 @@ class Reserve extends ModelBase {
 
         /* Begin the transaction. */
         if ( sqlsrv_begin_transaction( $this->conn ) === false ) {
-             die( print_r( sqlsrv_errors(), true ));
+             //die( print_r( sqlsrv_errors(), true ));
         }
 
+        /* 空室チェック （予約マーク）*/
+        // ks_jknksi, ks_jkntai //
         foreach ($list as $gyo => $rec) {
 
             $usedt = $rec['usedt'];
@@ -60,6 +62,7 @@ class Reserve extends ModelBase {
                 $stt = 9;
                 $end = 20;
             }
+            
             /* 1 */
             /* 空室チェック （予約マーク）*/
             //満室：空室マークが０以外のレコードが存在、利用状況０以外のレコードが存在
@@ -70,7 +73,6 @@ class Reserve extends ModelBase {
                 $has_rows = sqlsrv_has_rows ( $stmt );
                 
                 if ( $has_rows ){
-                    //echo $sql;
                     $tran =  false;
                 }
         
@@ -84,24 +86,22 @@ class Reserve extends ModelBase {
             $has_rows = sqlsrv_has_rows ( $stmt );
             
             if ( $has_rows ){
-               //echo  $sql;
                 $tran =  false;
             }
-
             
+            /* 3 */
             /* 空室チェック （予約マーク） 更新　*/
-            $rsignkb=3;//仮予約
+            $rsignkb = 3;//仮予約
             
-            if($_SESSION['kyakb']==99){
+            if( $_SESSION['kyakb'] == 99 ){
                 
-                $rsignkb=5;//内部手続き済み
+                $rsignkb = 5;//内部手続き済み
 
-            }else if($_SESSION['kounoukb']==1){
+            }else if( $_SESSION['kounoukb'] == 1 ){
 
-                $rsignkb=4;//未収
+                $rsignkb = 4;//未収
 
             }
-
 
             //レコードが存在しなければ挿入、存在すれば更新        
             for ( $jkn = $stt; $jkn <= $end;  $jkn++) { // 3時間分回す
@@ -111,8 +111,7 @@ class Reserve extends ModelBase {
                 $stmt = sqlsrv_query( $this->conn, $sql );
                 
                 if( $stmt === false) {
-                    //echo $sql;
-                    //die( print_r( sqlsrv_errors(), true) );
+                    return false;
                 }
                 
                 $has_rows = sqlsrv_has_rows ( $stmt );
@@ -123,22 +122,10 @@ class Reserve extends ModelBase {
                     
                         if( $row['rsignkb'] != 0 ){
 
-                            sqlsrv_rollback( $this->conn );
-                            //echo "Transaction rolled back.<br />";
-                            //die( "unexpected error" ); //想定外、先取りされているなど
+                            //sqlsrv_rollback( $this->conn );
                             //echo $sql;
                             return false;
-
-                        }
-
-                        /*if( $row['rjyokb'] != 0 ){
-                            
-                            sqlsrv_rollback( $this->conn );
-                            echo "Transaction rolled back.<br />";
-                            //die( "unexpected error" ); //想定外、先取りされているなど
-                            return false;
-
-                        }*/
+                        }                  
                     
                     }
                     
@@ -147,8 +134,6 @@ class Reserve extends ModelBase {
                     $sql = $sql." WHERE usedt=(?) AND rmcd=(?) AND jikan=(?)";
                     $params = array( $rsignkb, 2, $login, parent::getUdate(), parent::getUtime(), $usedt, $rmcd, $jkn ); //2:予約済
 
-
-
                 }else{
 
                     //insert
@@ -156,7 +141,7 @@ class Reserve extends ModelBase {
                     $sql = $sql." VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                     $params = array( $usedt, $jkn, $rmcd, $rsignkb, 2, $login, parent::getUdate(), parent::getUtime() );//2:予約済
 
-                }
+                }//has_rows
 
                 $stmt = sqlsrv_query( $this->conn, $sql, $params );
             
@@ -193,7 +178,7 @@ class Reserve extends ModelBase {
                     
                     }
 
-                   
+                    //親施設
                     if( $oyarmcd != 0 ){
 
                         $sql = "SELECT * FROM ks_jknksi WHERE usedt = ".$usedt." AND jikan = ".$jkn." AND rmcd = ".$oyarmcd;
@@ -201,6 +186,7 @@ class Reserve extends ModelBase {
                         $stmt = sqlsrv_query( $this->conn, $sql );
                         
                         if( $stmt === false) {
+                            $tran = false;
                             //die( print_r( sqlsrv_errors(), true) );
                         }
                         $has_rows = sqlsrv_has_rows ( $stmt );
@@ -241,16 +227,16 @@ class Reserve extends ModelBase {
                             //break;//exit for
                         }
 
-                    }
+                    }//oya
 
                     if( $mngrmcd != 0 ){
 
-                        $sql = "SELECT * FROM ks_jknksi WHERE usedt = ".$usedt." AND jikan = ".$jkn." AND rmcd = ".$oyarmcd;
+                        $sql = "SELECT * FROM ks_jknksi WHERE usedt = ".$usedt." AND jikan = ".$jkn." AND rmcd = ".$mngrmcd;
                   
                         $stmt = sqlsrv_query( $this->conn, $sql );
                         
                         if( $stmt === false) {
-                            
+                            return false;
                             //echo $sql;
                             //die( print_r( sqlsrv_errors(), true) );
                         }
@@ -263,6 +249,7 @@ class Reserve extends ModelBase {
                             
                                 if( $row['rsignkb'] != 0 ){
                                     //sqlsrv_rollback( $this->conn );
+                                    //echo $sql;
                                     return false;
                                 }
                               
@@ -286,15 +273,12 @@ class Reserve extends ModelBase {
             
                         if( $stmt === false) {
                             $tran = false;
-                            //echo $sql;
-                            //break;//exit for
                         }
 
-                    }
+                    }//mngrmcd
                     
-                }
-                /*----------------*/
-
+                }//$rmcd == 802 || $rmcd == 803 || $rmcd == 902 || $rmcd == 903 || $rmcd == 905 || $rmcd == 905 || $rmcd == 1001 || $rmcd == 1002
+                
                 if( $rmcd == 823 || $rmcd == 923 || $rmcd == 945 ){
 
                     if( $rmcd == 823 ){
@@ -325,6 +309,7 @@ class Reserve extends ModelBase {
                         $stmt = sqlsrv_query( $this->conn, $sql );
                         
                         if( $stmt === false) {
+                            $tran = false;
                             //die( print_r( sqlsrv_errors(), true) );
                         }
                         
@@ -336,7 +321,8 @@ class Reserve extends ModelBase {
                             
                                 if( $row['rsignkb'] != 0 ){
 
-                                    sqlsrv_rollback( $this->conn );
+                                    //sqlsrv_rollback( $this->conn );
+                                    //echo $sql;
                                     return false;
 
                                 }
@@ -358,7 +344,7 @@ class Reserve extends ModelBase {
 
                         }
 
-//echo $sql;
+
                         $stmt = sqlsrv_query( $this->conn, $sql, $params );
             
                         if( $stmt === false) {
@@ -368,9 +354,9 @@ class Reserve extends ModelBase {
                     
                     }
                 
-                }
+                }//$rmcd == 823 || $rmcd == 923 || $rmcd == 945 )
             
-            }//for
+            }//for/* 3 */
            
             /*---------------------------------------*/
             //hall
@@ -400,6 +386,7 @@ class Reserve extends ModelBase {
                     $stmt = sqlsrv_query( $this->conn, $sql );
                     
                     if( $stmt === false) {
+                        return false;
                         //echo $sql;
                         //die( print_r( sqlsrv_errors(), true) );
                     }
@@ -443,7 +430,8 @@ class Reserve extends ModelBase {
                     }
 
                 }//for
-            }
+            
+            }//hall end
 
             /*---------------------------------------*/
             /* 空室チェック （時間帯）*/
@@ -456,7 +444,8 @@ class Reserve extends ModelBase {
                 $stmt = sqlsrv_query( $this->conn, $sql );
                 
                 if( $stmt === false) {
-                    die( print_r( sqlsrv_errors(), true) );
+                    return false;
+                    //die( print_r( sqlsrv_errors(), true) );
                 }
             
                 $has_rows = sqlsrv_has_rows ( $stmt );
@@ -466,7 +455,8 @@ class Reserve extends ModelBase {
                     while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
                 
                         if( $row['ukeno'] != 0 ){
-                            die( "unexpected error" ); //想定外、先取りされているなど
+                            $tran = false;
+                            //die( "unexpected error" ); //想定外、先取りされているなど
                         }
                 
                     }
@@ -493,7 +483,7 @@ class Reserve extends ModelBase {
                     break;//exit for
                 }
 
-                /*----------------*/
+                /*----------------*/                              
                 if( $rmcd == 802 || $rmcd == 803 || $rmcd == 902 || $rmcd == 903 || $rmcd == 905 || $rmcd == 905 || $rmcd == 1001 || $rmcd == 1002){
                     
                     $oyarmcd = 0;    
@@ -531,6 +521,7 @@ class Reserve extends ModelBase {
                         $stmt = sqlsrv_query( $this->conn, $sql );
                         
                         if( $stmt === false) {
+                            return false;    
                             //echo $sql;
                             //die( print_r( sqlsrv_errors(), true) );
                         }
@@ -581,7 +572,8 @@ class Reserve extends ModelBase {
                         $stmt = sqlsrv_query( $this->conn, $sql );
                         
                         if( $stmt === false) {
-                            die( print_r( sqlsrv_errors(), true) );
+                            return false; 
+                            //die( print_r( sqlsrv_errors(), true) );
                         }
                     
                         $has_rows = sqlsrv_has_rows ( $stmt );
@@ -591,7 +583,8 @@ class Reserve extends ModelBase {
                             while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
                         
                                 if( $row['ukeno'] != 0 ){
-                                    die( "unexpected error" ); //想定外、先取りされているなど
+                                    $tran = false;
+                                    //die( "unexpected error" ); //想定外、先取りされているなど
                                 }
                         
                             }
@@ -613,7 +606,7 @@ class Reserve extends ModelBase {
             
                         if( $stmt === false) {
                             $tran = false;
-                            echo $sql;
+                            //echo $sql;
                             //break;//exit for
                         }
                     
@@ -654,8 +647,8 @@ class Reserve extends ModelBase {
                         $stmt = sqlsrv_query( $this->conn, $sql );
                         
                         if( $stmt === false) {
-                            echo $sql;
-                            die( print_r( sqlsrv_errors(), true) );
+                            $tran = false;
+                            //return false;
                         }
                     
                         $has_rows = sqlsrv_has_rows ( $stmt );
@@ -665,7 +658,8 @@ class Reserve extends ModelBase {
                             while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
                         
                                 if( $row['ukeno'] != 0 ){
-                                    die( "unexpected error" ); //想定外、先取りされているなど
+                                    return false;
+                                    //die( "unexpected error" ); //想定外、先取りされているなど
                                 }
                         
                             }
@@ -700,7 +694,7 @@ class Reserve extends ModelBase {
 
         /* If both queries were successful, commit the transaction. */
         /* Otherwise, rollback the transaction. */
-        if( $tran ) {
+        /*if( $tran ) {
              sqlsrv_commit( $this->conn );
              return true;
              //echo "Transaction committed.<br />";
@@ -708,7 +702,7 @@ class Reserve extends ModelBase {
              sqlsrv_rollback( $this->conn );
              return false;
              //echo "Transaction rolled back.<br />";
-        }
+        }*/
     
     }
     

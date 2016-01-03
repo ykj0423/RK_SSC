@@ -20,7 +20,7 @@ class Reserve extends ModelBase {
              //TODO
             echo "db-err";
         }else{
-            echo "suc";
+            //echo "suc";
         }
                
     }
@@ -83,8 +83,8 @@ class Reserve extends ModelBase {
 
             if( !$tran ){
 
-                sqlsrv_rollback( $this->conn );
-                echo "Transaction rolled back.<br />";
+                //sqlsrv_rollback( $this->conn );
+                //echo "Transaction rolled back.<br />";
                 return false;
 
             }
@@ -98,6 +98,7 @@ class Reserve extends ModelBase {
                 $stmt = sqlsrv_query( $this->conn, $sql );
                 
                 if( $stmt === false) {
+                    return false;
                     die( print_r( sqlsrv_errors(), true) );
                 }
                 
@@ -145,7 +146,7 @@ class Reserve extends ModelBase {
             
                 if( $stmt === false) {
                     $tran = false;
-
+                    return false;
                     break;//exit for
                 }
             
@@ -168,6 +169,7 @@ class Reserve extends ModelBase {
                 $stmt = sqlsrv_query( $this->conn, $sql );
                 
                 if( $stmt === false) {
+                    return false;
                     die( print_r( sqlsrv_errors(), true) );
                 }
             
@@ -207,9 +209,13 @@ class Reserve extends ModelBase {
         
         }
         
+        if($tran==false){
+            return false;
+        }
+        return true;
         /* If both queries were successful, commit the transaction. */
         /* Otherwise, rollback the transaction. */
-        if( $tran ) {
+        /*if( $tran ) {
              sqlsrv_commit( $this->conn );
              return true;
              echo "Transaction committed.<br />";
@@ -217,7 +223,7 @@ class Reserve extends ModelBase {
              sqlsrv_rollback( $this->conn );
              return false;
              echo "Transaction rolled back.<br />";
-        }
+        }*/
     
     }
 

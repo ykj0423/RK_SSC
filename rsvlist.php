@@ -5,6 +5,13 @@ $errmsg = "";
 //header
 $pageTitle =  "予約照会";
 include('include/header.php');
+/*if( isset( $_SESSION['wloginid'] ) && ( !empty( $_SESSION['wloginid'] ) ) ){
+
+  //ログイン後予約照会に飛ぶように
+  $_SESSION['next_page'] = 'rsvlist.php';
+  header( 'location: login.php' );
+
+}*/
 ?>
 <script src="js/jquery.dataTables.min.js"></script>
 <script>
@@ -48,7 +55,11 @@ $(document).ready(function() {
 </script>
 </head>
 <body class="container">
-<?php include('include/menu.php');
+<?php 
+include('include/menu.php');
+
+
+
 ?>
 <h1><span class="midashi">|</span><?php echo $pageTitle; ?><?php echo "<small>".$_SESSION['sysname']."</small>" ?></h1>
 <?php
@@ -91,12 +102,12 @@ require_once('func.php');
       <span class="status5">取消：</span>お客様のお申し出により予約を取り消しました。<br>
     </div>
   </div>
-	<div class="row mb10 text-right">
-	<a href="help.html#rsvlist"  class="btn alert-info" target="window_name"  onClick="disp('help.html#rsvlist')"><li class="glyphicon glyphicon-question-sign" aria-hidden="true">&nbsp;この画面の操作方法についてはこちら>></li></a> 
-	</div>
+  <div class="row mb10 text-right">
+  <a href="help.html#rsvlist"  class="btn alert-info" target="window_name"  onClick="disp('help.html#rsvlist')"><li class="glyphicon glyphicon-question-sign" aria-hidden="true">&nbsp;この画面の操作方法についてはこちら>></li></a> 
+  </div>
     <table id ="rsv_input" class="table table-bordered table-condensed form-inline" >
       <thead>
-      	<tr>
+        <tr>
           <th width="5%">状態</th>
           <th width="10%">お問い合わせ<br>番号<br>/申込日</th>
           <th width="20%">使用日<br>/施設名<br>/行事名称</th>
@@ -106,7 +117,7 @@ require_once('func.php');
           <th width="20%">確認事項</th>
           <th width="10%">納付期限</th>
           <th width="10%">請求書<br>/使用許可書</th>
-      	</tr>
+        </tr>
       </thead>      
 <tbody>
 <?php 
@@ -117,20 +128,23 @@ $conErr = $db->connect();
 if (!empty($conErr)) { echo $conErr; die();}
 
 $rsvlist = $db->select_rsvlist($_SESSION['kyacd']);//客コード
+//echo "test:";
+//print_r($rsvlist);
+
 for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
   
     echo "<tr>";
     
-    if( $rsvlist[ $i ][ 'wrsvkb' ] == 2 ){
+    if( $rsvlist[ $i ][ 'kyono' ] > 0 ){
       echo "<td class=\"status1\">予約</td>";     
-    }else if( $rsvlist[ $i ][ 'wrsvkb' ] == 3 ){
-      echo "<td class=\"status3\">仮予約</td>";
-    }else if( $rsvlist[ $i ][ 'wrsvkb' ] == 4 ){
+    }else if( $rsvlist[ $i ][ 'rsvchgdt' ] > 0 ){
         echo "<td class=\"status3\">予約→変更済</td>";
-    }else if( $rsvlist[ $i ][ 'wrsvkb' ] == 6 ){
+    }else if( $rsvlist[ $i ][ 'expkb' ] == 2 ){
         echo "<td class=\"status3\">失効</td>";
-    }else if( $rsvlist[ $i ][ 'wrsvkb' ] == 9 ){
+    }else if( ( $rsvlist[ $i ][ 'candt' ] > 0 )  && ( $rsvlist[ $i ][ 'hkktdt' ] > 0 ) ){
         echo "<td class=\"status3\">予約取消</td>";
+    }else {
+      echo "<td class=\"status3\">仮予約</td>";
     }
 
     $rsvdt = date( "Y/m/d", strtotime( substr( $rsvlist[$i]['usedt'], 0, 4 )."-".substr( $rsvlist[$i]['usedt'], 4, 2 )."-".substr( $rsvlist[$i]['usedt'], 6, 2 )) );      //申込終了日
@@ -262,11 +276,7 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
         $doc_name ="請求書";
       }
 
-      if( $rsvlist[$i]['seifbd'] == 0) {
-      //echo $rsvlist[$i]['seiurl'];
-      //echo "<br>";
-//echo $rsvlist[$i]['seifile'];
-
+      if( ( $rsvlist[$i]['seifbd'] == 0 ) && ( $rsvlist[$i]['seideal'] == 1 ) ) {
         echo "<a href=\"".$rsvlist[$i]['seiurl'].$rsvlist[$i]['seifile']."\" class=\"btn-icon\"><img src=\"icon_btn_pdf.png\" alt=\"".$doc_name."\">".$doc_name."ダウンロード</a>";
         //echo "<a href=\"".$rsvlist[$i]['seiurl'].$rsvlist[$i]['seifile']."\" class=\"btn-icon\"><img src=\"icon_btn_pdf.png\" alt=\"".$doc_name."\">".$doc_name."ダウンロード</a>";
       }else{
@@ -275,7 +285,7 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
 
     }
   
-    echo "</td>";
+    echo "&nbsp;</td>";
     echo "</tr>";
 }
 ?>

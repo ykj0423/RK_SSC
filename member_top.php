@@ -29,8 +29,8 @@ include('include/menu.php');
 **/
 ?>
 <ul class="f120">
-    <li>連絡用のメールアドレスは変更可能です。<a href="mail_change.php"><b>こちら</b></a>からお手続きください</li>
-    <li>パスワードはご自身の覚えやすいものに変更可能です。<a href="pass_change.php"><b>こちら</b></a>からお手続きください</li>
+	<li>連絡用のメールアドレスは変更可能です。こちら<a href="mail_change.php"><span class="ml5 glyphicon glyphicon-circle-arrow-right"></span></a>からお手続きください</li>
+	<li>パスワードはご自身の覚えやすいものに変更可能です。こちら<a href="pass_change.php"><span class="ml5 glyphicon glyphicon-circle-arrow-right"></span></a>からお手続きください</li>
 </ul>
 </body>
 </html>

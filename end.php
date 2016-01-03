@@ -105,28 +105,29 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 /* --------------------*/
 /*  RK受付№取得処理  */
 /* --------------------*/
+$ukeno = get_ukeno($conn);
 //echo ("RK受付№取得処理<br>");
 //$sql = "SELECT MAX(ukeno)  AS ukeno FROM dt_roomr";
-$nen1 = date("y");
-$nen2 = date("y") +1;
+// $nen1 = date("y");
+// $nen2 = date("y") +1;
 
-$sql = "SELECT MAX(ukeno)  AS ukeno FROM dt_roomr where ukeno >= ".$nen1."000000 and ukeno <".$nen2."000000";
-$stmt = sqlsrv_query( $conn, $sql);
-if( $stmt === false ) {
-     die( print_r( sqlsrv_errors(), true));
-}
-//echo "ukeno== ".$sql;
-if( sqlsrv_fetch( $stmt ) === false) {
-     //die( print_r( sqlsrv_errors(), true));
-}
+// $sql = "SELECT MAX(ukeno)  AS ukeno FROM dt_roomr where ukeno >= ".$nen1."000000 and ukeno <".$nen2."000000";
+// $stmt = sqlsrv_query( $conn, $sql);
+// if( $stmt === false ) {
+//      die( print_r( sqlsrv_errors(), true));
+// }
+// //echo "ukeno== ".$sql;
+// if( sqlsrv_fetch( $stmt ) === false) {
+//      //die( print_r( sqlsrv_errors(), true));
+// }
 
-$max_ukeno = (int)sqlsrv_get_field( $stmt, 0);//nullの場合を考慮し、キャストする
+// $max_ukeno = (int)sqlsrv_get_field( $stmt, 0);//nullの場合を考慮し、キャストする
 
-if($max_ukeno === 0){
-	$max_ukeno = (int)$nen1."000000";
-}
+// if($max_ukeno === 0){
+// 	$max_ukeno = (int)$nen1."000000";
+// }
+//$ukeno =  $max_ukeno + 1;
 
-$ukeno =  $max_ukeno + 1;
 
 /*----------------------------------------------------*/
 $login = $_SESSION['wloginid'];
@@ -702,6 +703,8 @@ if($revflg){
 }
 
 
+
+
 /* 請求データ作成 */
 include("model/Seikyu.php");
 
@@ -766,6 +769,479 @@ if($revflg){//echo "test1";
 	//echo "請求";
 	//print_r($list);
 	$Seikyu->seikyu( $ukeno, $ukedt, $kyacd, $list );
+
+}
+
+
+/* --------------------*/
+/*  管理者留保			*/
+/* --------------------*/
+for ($i = 0 ; $i < $meisai_count; $i++) {
+	
+	//施設コード
+	$rmcd = $_POST[ 'rmcd'.$i ];
+	//時間帯
+	$timekb = $_POST[ 'timekb'.$i ];
+	
+	if( $rmcd == 301 || $rmcd == 1001 || $rmcd == 1002 ){
+		$mng_rec = array();
+	
+		if( $rmcd == 1001 ){
+			$mngrmcd = 1002; 
+			$mng_rec[] = array( 1002, $timekb );
+		}
+
+	    if( $rmcd == 1002 ){
+	        $mng_rec[] = array( 1001, $timekb );
+	    }
+
+	    if( $rmcd == 301 ){
+	        if( $timekb == 1 ){
+				$mng_rec[] = array( 301, 2 );
+	        }else if( $timekb == 2 ) {
+				$mng_rec[] = array( 301, 1 );
+				$mng_rec[] = array( 301, 3 );
+	        }else if( $timekb == 3 ) {
+				$mng_rec[] = array( 301, 2 );
+	        }
+	    }
+
+	}
+	//print_r($mng_rec);
+	$gyo = 0;
+    
+    for ($cnt = 0 ; $cnt < count($mng_rec); $cnt++) {
+    	
+    	/* --------------------*/
+		/*  RK受付№取得処理  */
+		/* --------------------*/
+		//新たに受付Noを取得
+		$ukeno = get_ukeno($conn);
+		
+		$gyo++;
+
+
+
+		//施設コード
+		$rmcd = $mng_rec[$cnt][0];//$_POST[ 'rmcd'.$i ];
+		
+		//ホールであればホール区分設定
+		if($rmcd==301){
+			$holekb = 1;
+		}
+
+		//許可番号
+		$kyono = 0;
+
+		//許可日
+		$kyodt = 0;
+
+		//申請書発行日
+		$shindt = 0;
+
+		//許可申請書発行日
+		$shindt = 0;
+		
+		//許可書ダウンロードURL
+		$kyourl = "";
+
+		//許可書ファイル名
+		$kyofile = "";
+
+		//許可書ダウンロード不可	
+		$kyofbd = 0;
+
+		//使用日付
+		$usedt = $_POST[ 'usedt'.$i ];
+
+		//曜日区分
+		$yobikb = get_wday( $usedt );
+		
+		//曜日
+		$weekday = array( "日", "月", "火", "水", "木", "金", "土" );//日本語曜日定義
+		$yobi = mb_convert_encoding( $weekday[ $yobikb ], "SJIS","UTF-8");
+		
+		//時間帯区分
+		$timekb = $mng_rec[$cnt][1];
+
+		//使用開始時間
+		if($timekb==1){
+			$stjkn=900;
+			$edjkn =1200;
+		}elseif($timekb==2){
+			$stjkn=1300;
+			$edjkn =1700;
+		}elseif($timekb==3){
+			$stjkn=1800;
+			$edjkn =2100;
+		}
+
+		//準備開始時間
+		$jnstjkn = 0;
+
+		//準備終了時間			
+		$jnedjkn = 0;
+
+		//本番開始時間
+		//ホール以外は開始・終了時間と同様
+		$hbstjkn = $stjkn;
+		$hbedjkn = $edjkn;			
+
+		//撤去開始時間
+		$tkstjkn = 0;
+
+		//撤去終了時間
+		$tkedjkn = 0;
+
+		//営利目的区分
+		$comlkb = 0;		
+		
+		//入場料・受講料区分
+		$feekb = 0;
+
+		//料金区分・増減率
+		//一般
+		$ratekb = 0;
+		$zgrt = 100;
+		
+		//料金種別
+		$ratesb = 0;//未使用
+
+		//使用人数
+		$ninzu = 0;
+
+		//施設単価
+		$rmtnk = 0;
+		$rmentnk = 0;
+		$rmtukin = 0;
+		$rmenkin = 0;
+		$rmkin = 0;
+		$hzkin = 0;
+		$trmkin = 0;
+		$thzkin = 0;
+		$tkin = 0;
+
+		//ピアノ区分
+		$pianokb = 0;
+
+		//入金額・償還金
+		$rmnykin = 0;
+		$hznykin = 0;
+		$synykin = 0;
+
+		//キャンセル日付
+		$candt = 0;
+		
+		//キャンセル区分
+		$cankb = 0;
+
+		//返還決定日付
+		$hkktdt = 0;
+
+		//返還日付
+		$hkdt = 0;
+
+		//返還金額
+		$hkkin = 0;
+		
+		//状態データ更新フラグ
+		$kskbn = 0;
+		
+		//間仕切り
+		$partkb = 0;
+		
+		//備考		
+		$biko = "";
+
+		//付箋1,2,3
+		$tag1 = 0;
+		$tag2 = 0;
+		$tag3 = 0;
+
+		//WEB予約状態区分
+		$wrsvkb = 0;
+		
+		//予約変更日
+		$rsvchgdt = 0;
+		
+		//管理項目	
+		$wloginid = $login;
+		$udate = date( "Ymd" );
+		$wudate = date( "Ymd" );
+		$utime = date( "His" );
+		$wutime = date( "His" );
+		$pgnm = "";
+
+		$sql = "INSERT INTO dt_roomrmei
+			(ukeno, gyo, rmcd, kyono, kyodt, shindt, kyourl, kyofile, kyofbd, usedt, yobi, yobikb,
+			timekb,stjkn,edjkn,jnstjkn,jnedjkn,hbstjkn,hbedjkn,tkstjkn,tkedjkn,
+			ratekb,ratesb,zgrt,ninzu,rmtnk,rmentnk,rmtukin,rmenkin,rmkin,hzkin,rmnykin,hznykin,synykin,
+			candt,cankb,hkktdt,hkdt,hkkin,kskbn,biko,tag1,tag2,tag3,
+			wrsvkb,rsvchgdt,comlkb,feekb,pianokb,partkb,login,udate,utime,ukedt,wloginid,wudate,wutime,pgnm)";
+	    
+	    $sql .= "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+	    $params = array($ukeno, $gyo, $rmcd, $kyono, $kyodt, $shindt, $kyourl, $kyofile, $kyofbd, $usedt, $yobi, $yobikb,
+			$timekb, $stjkn, $edjkn, $jnstjkn, $jnedjkn, $hbstjkn, $hbedjkn, $tkstjkn, $tkedjkn,
+			$ratekb, $ratesb, $zgrt, $ninzu, $rmtnk, $rmentnk, $rmtukin, $rmenkin, $rmkin, $hzkin, $rmnykin, $hznykin, $synykin,
+			$candt, $cankb, $hkktdt, $hkdt, $hkkin, $kskbn, $biko, $tag1, $tag2, $tag3,
+			$wrsvkb, $rsvchgdt, $comlkb, $feekb, $pianokb, $partkb, $login, $udate, $utime, $ukedt, $wloginid, $wudate, $wutime, $pgnm );
+	 
+		$stmt = sqlsrv_query( $conn, $sql, $params);
+
+		if( $stmt === false ) {
+			if( ($errors = sqlsrv_errors() ) != null) {
+				foreach( $errors as $error ) {
+					echo $sql."<br />";
+					print_r($params);
+					echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+					echo "code: ".$error[ 'code']."<br />";
+					echo "message: ".mb_convert_encoding( $error[ 'message'] ,  "UTF-8" )."<br />";
+					//print_r($params);
+				}
+			}
+		}
+
+		//受付日
+		$ukedt = date( 'Ymd' );
+		//年
+		$nen = date( "Y" );
+
+		//仮予約区分
+		$krkb = 0;
+
+		//仮予約メモ
+		$krmemo = "";
+
+		//受付者コード
+		$ukecd = 9999;//WEB予約
+
+		//受付方法
+		$ukehkb = 98;//WEB予約
+
+		//ホール区分
+		$holekb =0;//暫定
+
+		//会議名称
+		$kaigi = "";
+
+		//内容
+		$naiyo = "";
+
+		//顧客備考
+		$kbiko="";
+
+		//当日利用責任者
+		$sekinin = "";
+
+		//顧客更新区分
+		$kupdkb = 2;//2:更新しない
+
+		//予約種別区分
+		$rsbkb = 3;//1:一般、2:業務予約、3:使用不可
+
+		//利用目的区分
+		$riyokb = 0;
+
+		//納付期限
+		$paylmtdt = 0;
+
+		//失効区分
+		$expkb = 0;
+
+		//失効予告日
+		$expnocdt = 0;
+
+		//失効日
+		$expdt = 0;
+
+		//施設使用合計金額
+		$trmkin = 0;//暫定
+
+		//付属使用合計金額
+		$thzkin = 0;//暫定
+
+		//総合計使用料
+		$tkin = 0;//暫定
+
+		//WEB予約区分
+		$wrkkb = 1;
+
+		//管理項目
+		$wloginid = $login;
+		$udate = date( "Ymd" );
+		$wudate = date( "Ymd" );
+		$utime = date( "His" );
+		$wutime = date( "His" );
+		$ukecd = 9999;
+
+		/* 初期値 */
+		$trmkin=0;
+		$thzkin=0;
+		$tkin = $tkin + $trmkin + $thzkin;
+		$holekb = 0;//ホール区分
+		$ukehkb = 98;//WEB予約	
+
+		$kyacd = 0;
+		$dannm = mb_convert_encoding( "使用不可", "SJIS","UTF-8");
+		$dannm2 =  NULL;
+		$dannmk = NULL;//     $row['dannmk'];
+		$daihyo =  NULL;
+		$renraku =  NULL;
+		$tel1 =   NULL;
+		$tel2 =   NULL;
+		$fax =  NULL;
+		$url =   NULL;
+		$mail =   NULL;
+		$zipcd =  NULL;
+		$adr1 =   NULL;
+		$adr2 =   NULL;
+		$gyscd =  0;
+		$sihon =  0;
+		$jygsu =  0;
+		$kyakb =  0;
+		$kounoukb = 0; //後納区分
+
+
+		$sql = "INSERT INTO dt_roomr (ukeno, ukedt, nen, krkb, krmemo,ukecd,ukehkb,kyacd,
+			dannm,dannm2,dannmk,daihyo,renraku,tel1,tel2,fax,url,mail,zipcd,adr1,adr2,gyscd,sihon,jygsu,kyakb,
+			kounoukb,holekb,kaigi,naiyo,kbiko,sekinin,kupdkb,rsbkb,riyokb,paylmtdt,expkb,expnocdt,expdt,
+			trmkin,thzkin,tkin,login,udate,utime,wrkkb,wloginid,wudate,wutime)";
+		
+		$sql .= " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+		$params = array($ukeno, $ukedt, $nen, $krkb, $krmemo, $ukecd, $ukehkb, $kyacd,
+			$dannm, $dannm2, $dannmk, $daihyo, $renraku, $tel1, $tel2, $fax, $url, $mail, $zipcd, $adr1, $adr2, $gyscd, $sihon, $jygsu, $kyakb,
+			$kounoukb, $holekb, $kaigi,$naiyo, $kbiko, $sekinin, $kupdkb, $rsbkb, $riyokb, $paylmtdt, $expkb, $expnocdt, $expdt,
+			$trmkin, $thzkin, $tkin, $login, $udate, $utime, $wrkkb, $wloginid, $wudate, $wutime);
+
+
+		$stmt = sqlsrv_query( $conn, $sql, $params);
+
+		if( $stmt === false ) {
+		    if( ($errors = sqlsrv_errors() ) != null) {
+		        foreach( $errors as $error ) {
+		            echo "dt_roomr<br>".$sql;
+		            print_r($params);
+		            echo "<br>";
+					echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+		            echo "code: ".$error[ 'code']."<br />";
+		            echo "message: ".mb_convert_encoding( $error[ 'message'] ,  "UTF-8" )."<br />";
+		            die();
+		        }
+		    }
+		}
+
+		if($mng_rec[$cnt][0]==301){
+			/*時間帯更新*/
+			if( $mng_rec[1] == 1 ){
+	            $jkn_rec = array(9, 10, 11);
+	        }else if( $mng_rec[1] == 2 ) {
+	            $jkn_rec = array(13,14,15,16);
+	        }else if( $mng_rec[1] == 3 ) {
+	            $jkn_rec = array(18,19,20);
+	        }else if( $timekb == 4 ) {
+	            $jkn_rec = array(9,10,11,12,13,14,15,16,17);
+	        }else if( $timekb == 5 ) {
+	            $jkn_rec = array(13,14,15,15,16,17,18,19,20);
+	        }else if( $timekb == 6 ) {
+	        	$jkn_rec = array(9,10,11,12,13,14,15,15,16,17,18,19,20);
+	        }
+
+	        
+	        for ($cnt = 0 ; $cnt < count($jkn_rec); $cnt++) {
+	        //for ( $jkn = $stt; $jkn <= $end;  $jkn++) { // 3時間分回す
+	        	$sql = "SELECT * FROM ks_jkntai WHERE usedt = ".$usedt." AND rmcd = ".$mng_rec[0]." AND jikan = ".$jkn_rec[$cnt]." AND timekb = ".$mng_rec[1];
+
+	                $stmt = sqlsrv_query( $this->conn, $sql );
+	                
+	                if( $stmt === false) {
+	                    //echo $sql;
+	                    //die( print_r( sqlsrv_errors(), true) );
+	                }
+	            
+	                $has_rows = sqlsrv_has_rows ( $stmt );
+
+	                if ( $has_rows ){
+	                
+	                    while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+	                
+	                        if( $row['ukeno'] != 0 ){
+	                            //echo $sql;                                    
+	                            //die( "unexpected error" ); //想定外、先取りされているなど
+	                        }else{
+	                                                                //update
+	                            $sql = "UPDATE ks_jkntai SET ukeno=(?), gyo=(?),login=(?), udate=(?), utime=(?)";
+	                            $sql = $sql." WHERE usedt=(?) AND rmcd=(?) AND jikan=(?) AND timekb=(?)";
+	                            $params = array( $ukeno, $gyo, $login, parent::getUdate(), parent::getUtime() , $usedt, $mng_rec[0], $jkn_rec[$cnt], $mng_rec[1] );
+
+	                        }
+	                
+	                    }
+
+	                }else{
+	            
+	                    //insert
+	                    $sql = "INSERT INTO ks_jkntai ( usedt, jikan, rmcd, timekb, ukeno, gyo, login, udate, utime)";
+	                    $sql = $sql." VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	                    $params = array( $usedt, $jkn_rec[$cnt], $mng_rec[0], $mng_rec[1], $ukeno, $gyo, $login, parent::getUdate(), parent::getUtime() );
+
+	                }//if
+
+	                $stmt = sqlsrv_query( $this->conn, $sql, $params );
+	    
+	                if( $stmt === false) {
+	                    $tran = false;
+	                    //echo $sql;
+	                    //break;//exit for
+	                }
+                    
+              }//for
+    	
+    	}//301				
+	
+	}//mng_rec:end
+
+}//exit forvmeisai
+
+if( $revflg ) {
+     sqlsrv_commit( $this->conn );
+     return true;
+     //echo "Transaction committed.<br />";
+} else {
+     sqlsrv_rollback( $this->conn );
+     return false;
+     //echo "Transaction rolled back.<br />";
+}
+
+function get_ukeno($conn) 
+{
+	/* --------------------*/
+	/*  RK受付№取得処理  */
+	/* --------------------*/
+	$nen1 = date("y");
+	$nen2 = date("y") +1;
+
+	$sql = "SELECT MAX(ukeno)  AS ukeno FROM dt_roomr where ukeno >= ".$nen1."000000 and ukeno <".$nen2."000000";
+	$stmt = sqlsrv_query( $conn, $sql);
+	
+	if( $stmt === false ) {
+	     //die( print_r( sqlsrv_errors(), true));
+	}
+	
+	if( sqlsrv_fetch( $stmt ) === false) {
+	     //die( print_r( sqlsrv_errors(), true));
+	}
+
+	$max_ukeno = (int)sqlsrv_get_field( $stmt, 0);//nullの場合を考慮し、キャストする
+
+	if($max_ukeno === 0){
+		$max_ukeno = (int)$nen1."000000";
+	}
+
+	$ukeno =  $max_ukeno + 1;
+
+	return $ukeno;
 
 }
 
