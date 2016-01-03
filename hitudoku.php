@@ -16,7 +16,7 @@ if(isset($_SESSION['next_page'])){
 }else{
 	$next_page = 'search.php';
 }
-
+echo $next_page;
 if( isset( $_POST['submit'] ) ){
     header( 'location: '.$next_page );
 }

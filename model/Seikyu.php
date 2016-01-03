@@ -112,14 +112,14 @@ class Seikyu extends ModelBase {
             $paylmtdt = 0;
         }
         $seifile = null;
-        /*if( $kounoukb ==1){//後納であればセットしない
+        if( $kounoukb ==1){//後納であればセットしない
             //料金通知書
             $seifile = "T".$ukeno.".pdf";
         
         }else{
             //請求書ファイル名
             $seifile = "S".$ukeno.".pdf";
-        }*/
+        }
 
         /* 請求書明細 */
         $gyo_num = 0;

@@ -19,7 +19,11 @@
          </ul>
         <form class="navbar-form pull-right" action="login.php">
           <button type="button" class="btn btn-logout dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            <?php echo mb_convert_encoding( $_SESSION['dannm'], "utf8","SJIS"); ?>様&nbsp;ログイン中 <span class="caret"></span>
+            <?php 
+              if(isset($_SESSION['dannm'])){
+                echo mb_convert_encoding( $_SESSION['dannm'], "utf8","SJIS");  
+              }
+             ?>様&nbsp;ログイン中 <span class="caret"></span>
           </button>
           <ul class="dropdown-menu" role="menu">
             <li><input type="submit" class="btn btn-logout" value="ログアウト"></li>

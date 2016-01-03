@@ -1,17 +1,17 @@
 <?php
 @session_start();
-
-$errmsg = "";
-//header
-$pageTitle =  "予約照会";
-include('include/header.php');
-/*if( isset( $_SESSION['wloginid'] ) && ( !empty( $_SESSION['wloginid'] ) ) ){
-
+if( isset( $_SESSION['kyacd'] ) && ( !empty( $_SESSION['kyacd'] ) ) ){
+}else{
   //ログイン後予約照会に飛ぶように
   $_SESSION['next_page'] = 'rsvlist.php';
   header( 'location: login.php' );
 
-}*/
+}
+$errmsg = "";
+//header
+$pageTitle =  "予約照会";
+include('include/header.php');
+
 ?>
 <script src="js/jquery.dataTables.min.js"></script>
 <script>
@@ -126,8 +126,10 @@ require_once("model/db.php");
 $db = new DB;
 $conErr = $db->connect();
 if (!empty($conErr)) { echo $conErr; die();}
-
-$rsvlist = $db->select_rsvlist($_SESSION['kyacd']);//客コード
+$rsvlist = array();
+if(isset($_SESSION['kyacd'])){
+  $rsvlist = $db->select_rsvlist($_SESSION['kyacd']);//客コード
+}
 //echo "test:";
 //print_r($rsvlist);
 
