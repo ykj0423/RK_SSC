@@ -260,11 +260,11 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
     if(!empty($rsvlist[$i]['kyono'])){
 
       if( $rsvlist[$i]['kyofbd'] == 0) {
-          echo "<a href=\"".$kyourl.$rsvlist[$i]['kyofile']."\" class=\"btn-icon\"><img src=\"icon_btn_pdf.png\" alt=\"許可書\">使用許可書ダウンロード</a>";
+        echo "<a href=\"".$kyourl.$rsvlist[$i]['kyofile']."\" class=\"btn-icon\"><img src=\"icon_btn_pdf.png\" alt=\"許可書\">使用許可書ダウンロード</a>";
       }else{
         echo "許可番号：".$rsvlist[$i]['kyono'];
       }
-
+      echo "<br>";
     }
 
 
