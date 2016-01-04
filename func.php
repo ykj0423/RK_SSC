@@ -204,7 +204,7 @@ function judge_tyusyo( $shinon, $gyscd, $ninzu )
 	}
 
 	//小売業
-	if( $gyscd == 2 ){
+	if( $gyscd == 1 ){
 	
 		if( ( $shinon <= 5000 ) || ( $ninzu <= 50 ) ){
 			return true;

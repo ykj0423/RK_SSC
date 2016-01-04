@@ -102,7 +102,6 @@ include('include/err.php')
       <h3 class="panel-title">お知らせ</h3>
     </div>
     <div class="panel-body">
-      2016/01/03  定期メンテナンスのお知らせ
     </div>
   </div>
 </form>

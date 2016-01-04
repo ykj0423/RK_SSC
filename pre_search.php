@@ -10,7 +10,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta NAME="ROBOTS" CONTENT="NOINDEX,NOFOLLOW,NOARCHIVE">
-<title>空き状況</title>
+<title>空き状況(照会)</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/custom.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.css"/>
@@ -46,7 +46,7 @@ $rmcls = $db->listTB( $table, $idNm, $valNm,$wh );
 ?>
    <div class="row">
       	<div class="col-xs-6" style="padding:0">
-        <h1><span class="midashi">|</span>空き状況</h1>
+        <h1><span class="midashi">|</span>空き状況照会</h1>
        </div>
       	<div class="col-xs-6  text-right">
           <span class="f120">現在の時間：　<span id="currentTime"></span></span>
@@ -94,7 +94,7 @@ $span_stt="";
 $span_end ="";
 //対象日を取得
 $date_array = get_date_array( $sttdt , $enddt ,  $yobi , $today, $rsv_enddt ) ;
-
+//echo $rsv_enddt;
 
 /* 対象日の表示 */
 include('date.php');

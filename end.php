@@ -564,8 +564,8 @@ if($revflg){
 				$wrsvkb, $rsvchgdt, $comlkb, $feekb, $pianokb, $partkb, $login, $udate, $utime, $ukedt, $wloginid, $wudate, $wutime, $pgnm );
 		 
 			$stmt = sqlsrv_query( $conn, $sql, $params);
-echo $sql."<br />";
-print_r($params);
+//echo $sql."<br />";
+//print_r($params);
 			if( $stmt === false ) {
 				if( ($errors = sqlsrv_errors() ) != null) {
 					/*foreach( $errors as $error ) {
@@ -652,7 +652,7 @@ print_r($params);
 
 	if( $stmt === false ) {
 	    if( ($errors = sqlsrv_errors() ) != null) {
-	        foreach( $errors as $error ) {
+	    /*    foreach( $errors as $error ) {
 	            echo "dt_roomr<br>".$sql;
 	            print_r($params);
 	            echo "<br>";
@@ -660,7 +660,7 @@ print_r($params);
 	            echo "code: ".$error[ 'code']."<br />";
 	            echo "message: ".mb_convert_encoding( $error[ 'message'] ,  "UTF-8" )."<br />";
 	            die();
-	        }
+	        }*/
 	    }
 	}
 
@@ -742,7 +742,8 @@ if( $revflg ) {
 /*  管理者留保			*/
 /* --------------------*/
 for ($i = 0 ; $i < $meisai_count; $i++) {
-	//echo "meisai_count".$meisai_count;
+//echo "meisai_count".$meisai_count;
+//print_r($_POST);
 if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 			
 	
@@ -751,8 +752,8 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 	//時間帯
 	$timekb = $_POST[ 'timekb'.$i ];
 	$mng_rec = array();
-	if( $rmcd == 301 || $rmcd == 1001 || $rmcd == 1002 ){
-		
+	
+	if( $rmcd == 301 || $rmcd == 1001 || $rmcd == 1002 ){		
 	
 		if( $rmcd == 1001 ){
 			$mngrmcd = 1002; 
@@ -764,6 +765,7 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 	    }
 
 	    if( $rmcd == 301 ){
+	        
 	        if( $timekb == 1 ){
 				$mng_rec[] = array( 301, 2 );
 	        }else if( $timekb == 2 ) {
@@ -781,7 +783,7 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 
 	}
 
-//ho "812";
+//echo "812";
 //print_r($mng_rec);
 	$gyo = 0;
     
@@ -965,10 +967,10 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 		if( $stmt === false ) {
 			if( ($errors = sqlsrv_errors() ) != null) {
 				foreach( $errors as $error ) {
-					echo $sql."<br />";
-					print_r($params);
-					echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-					echo "code: ".$error[ 'code']."<br />";
+					//echo $sql."<br />";
+					//print_r($params);
+					//echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+					//echo "code: ".$error[ 'code']."<br />";
 					echo "message: ".mb_convert_encoding( $error[ 'message'] ,  "UTF-8" )."<br />";
 					//print_r($params);
 				}
