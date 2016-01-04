@@ -79,7 +79,6 @@ require_once('func.php');
  * @license    G&G Co.ltd.
  * @version    0.1
 **/
-
 ?>
   <div class="row mb20">
  <div class="col-xs-7">
@@ -136,7 +135,8 @@ if(isset($_SESSION['kyacd'])){
 for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
   
     echo "<tr>";
-    
+ 
+
     if( $rsvlist[ $i ][ 'kyono' ] > 0 ){
       echo "<td class=\"status1\">予約</td>";     
     }else if( $rsvlist[ $i ][ 'rsvchgdt' ] > 0 ){
@@ -146,7 +146,13 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
     }else if( ( $rsvlist[ $i ][ 'candt' ] > 0 )  && ( $rsvlist[ $i ][ 'hkktdt' ] > 0 ) ){
         echo "<td class=\"status3\">予約取消</td>";
     }else {
-      echo "<td class=\"status3\">仮予約</td>";
+      if($_SESSION['kyakb']==99 ){
+        echo "<td class=\"status1\">予約</td>";
+      }else if($_SESSION['kounoukb']==1 ){
+        echo "<td class=\"status1\">予約</td>";}
+      else{
+        echo "<td class=\"status3\">仮予約</td>";
+      }
     }
 
     $rsvdt = date( "Y/m/d", strtotime( substr( $rsvlist[$i]['usedt'], 0, 4 )."-".substr( $rsvlist[$i]['usedt'], 4, 2 )."-".substr( $rsvlist[$i]['usedt'], 6, 2 )) );      //申込終了日
