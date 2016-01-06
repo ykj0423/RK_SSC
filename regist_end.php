@@ -290,13 +290,11 @@ $sql .= " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
   
 $test = array( $kyacd, $dannm, $dannm2, $dannmk, $daihyo, $renraku, $tel1, $tel2, $fax, $url, $mail, $zipcd, $adr1, $adr2,
     $gyscd, $sihon, $jygsu, $kyakb, $wuserkb, $kounoukb, $wloginid, $wpwd, $sndflg, $biko, $login, $udate, $utime, $wlastlogindt, $wsdate, $wudate, $wutime);
-//print_r($test);
 
 $params = array( 
     $kyacd, convert_to_SJIS( $dannm ), convert_to_SJIS( $dannm2 ), convert_to_SJIS( $dannmk ) , convert_to_SJIS( $daihyo ) , convert_to_SJIS( $renraku ), 
     $tel1, $tel2, $fax, $url, $mail, $zipcd, convert_to_SJIS( $adr1 ), convert_to_SJIS( $adr2 ),
     $gyscd, $sihon, $jygsu, $kyakb, $wuserkb, $kounoukb, $wloginid, $wpwd, $sndflg, $biko, $login, $udate, $utime, $wlastlogindt, $wsdate, $wudate, $wutime);
-
         
 $stmt = sqlsrv_query( $conn, $sql, $params);
 
