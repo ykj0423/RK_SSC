@@ -59,21 +59,17 @@ include("search_entry.php");
 
 	<!--検索結果-->
     <div id="result">
-<div class="col-xs-5">
-
-
-        </div>
-      	<div class="text-right  col-xs-7">
-      		<a class="btn btn-lg btn-primary ml20"  href="top.php" role="button">ご利用登録・予約申込はこちら　>></a>
-
-    	  </div>
-    	</div>
-
+    <div class="col-xs-5">
+    </div>
+  	<div class="text-right  col-xs-7">
+  		<a class="btn btn-lg btn-primary ml20"  href="top.php" role="button">ご利用登録・予約申込はこちら　>></a>
+	  </div>
+  	</div>
 		<p>
-      		[凡例]
-      		空：予約可      		
-      		<span class="dgray" style="padding-left:5px;padding-right:5px">×</span>：予約不可
-      		<span class="dgray" style="padding-left:5px;padding-right:5px">休</span>：休館日
+    		[凡例]
+    		空：予約可      		
+    		<span class="dgray" style="padding-left:5px;padding-right:5px">×</span>：予約不可
+    		<span class="dgray" style="padding-left:5px;padding-right:5px">休</span>：休館日
       </p>
       <p class="text-right">
 	    <input type='submit' class="btn btn-default mr48p prev"  href="#" role="button" value="<<前へ"></a>
