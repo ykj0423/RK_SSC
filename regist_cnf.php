@@ -45,6 +45,7 @@ if( $conn === false ) {
 //エラーメッセージ
 include('include/err.php');
 //print_r($_POST);
+
 $check = true;
 
 if( empty( $_POST['dannm'] ) ){
@@ -63,11 +64,12 @@ if( empty( $_POST['renraku'] ) ){
   $check = false;
 }
 
-
 if( empty( $_POST['tel2_1'] ) || empty( $_POST['tel2_2'] ) || empty( $_POST['tel2_3'] ) ){
   echo "<span class=\"text-danger\">※連絡者TELを入力してください。</span>";
   $check = false;
 }
+
+
 
 if( empty( $_POST['mail'] ) ){
   echo "<span class=\"text-danger\">※メールアドレスを入力してください。</span>";
@@ -149,7 +151,7 @@ if( isset($_POST['renraku']) ){
         <td>
         <?php
             if( isset($_POST['tel2_1']) && isset($_POST['tel2_2']) && isset($_POST['tel2_3'])){
-              $tel2 = format_tel( $_POST['tel2_1'], $_POST['tel2_2'], $_POST['tel2_3'], "-" );
+              $tel2 = format_tel( mb_convert_kana($_POST['tel2_1'], "n", "UTF-8"), mb_convert_kana($_POST['tel2_2'], "n", "UTF-8"), mb_convert_kana($_POST['tel2_3'], "n", "UTF-8"), "-" );
               echo $tel2;
             }        
         ?>
@@ -160,7 +162,7 @@ if( isset($_POST['renraku']) ){
         <td>
         <?php
         if( isset($_POST['fax_1']) && isset($_POST['fax_2']) && isset($_POST['fax_3'])){
-            $fax = format_tel( $_POST['fax_1'], $_POST['fax_2'], $_POST['fax_3'], "-" );
+            $fax = format_tel( mb_convert_kana($_POST['fax_1'], "n", "UTF-8"), mb_convert_kana($_POST['fax_2'], "n", "UTF-8"), mb_convert_kana($_POST['fax_3'], "n", "UTF-8"), "-" );
             echo $fax;
         }   
         ?>
@@ -171,7 +173,8 @@ if( isset($_POST['renraku']) ){
         <td>
           <?php 
           if( isset($_POST['mail']) ){
-            $mail=$_POST['mail'];
+            //$mail=$_POST['mail'];
+            $mail = mb_convert_kana($_POST['mail'],"a","SJIS");
             echo $mail;
           }
           ?>
@@ -183,7 +186,7 @@ if( isset($_POST['renraku']) ){
           <?php
             
             if( isset($_POST['zipcd_1']) && isset($_POST['zipcd_2']) ){
-              $zipcd = format_zipcd( $_POST['zipcd_1'],  $_POST['zipcd_2'], "-" );
+              $zipcd = format_zipcd( mb_convert_kana($_POST['zipcd_1'], "n", "UTF-8"), mb_convert_kana($_POST['zipcd_2'], "n", "UTF-8"), "-" );
               echo "〒".$zipcd;
             }
 
@@ -230,7 +233,7 @@ if( isset($_POST['renraku']) ){
 $sihon = 0;
 
 if( isset($_POST['sihon']) ){
-  $sihon = $_POST['sihon'];
+  $sihon = mb_convert_kana($_POST['sihon'],"n","UTF-8");
 }
 
 echo $sihon;
@@ -244,8 +247,8 @@ echo $sihon;
 $jygsu = 0;
 
 if( isset($_POST['jygsu']) ){
-  $jygsu = $_POST['jygsu'];
-    echo  $jygsu;
+  $jygsu = mb_convert_kana($_POST['jygsu'],"n","UTF-8");
+  echo  $jygsu;
 }
 
         ?>名</td>
@@ -257,12 +260,12 @@ echo "<input type='hidden' name='daihyo' id='daihyo' value=\"".$_POST[ 'daihyo' 
 echo "<input type='hidden' name='renraku' id='renraku' value=\"".$_POST[ 'renraku' ]."\">";
 echo "<input type='hidden' name='tel2' id='tel2' value=\"".$tel2."\">";
 echo "<input type='hidden' name='fax' id='fax' value=\"".$fax."\">";
-echo "<input type='hidden' name='mail' id='mail' value=\"".$_POST[ 'mail' ]."\">";
+echo "<input type='hidden' name='mail' id='mail' value=\"".$mail."\">";
 echo "<input type='hidden' name='zipcd' id='zipcd' value=\"".$zipcd."\">";
 echo "<input type='hidden' name='adr1' id='adr1' value=\"".$_POST[ 'adr1' ]."\">";
 echo "<input type='hidden' name='adr2' id='adr2' value=\"".$_POST[ 'adr2' ]."\">";
 echo "<input type='hidden' name='gyscd' id='gyscd' value=\"".$gyscd."\">";
-echo "<input type='hidden' name='sihon' id='sihon' value=\"".$_POST[ 'sihon' ]."\">";
+echo "<input type='hidden' name='sihon' id='sihon' value=\"".$sihon."\">";
 echo "<input type='hidden' name='jygsu' id='jygsu' value=\"".$jygsu."\">";
 //$_SESSION['Kyaku'] = serialize( $Kyaku );
 ?>
