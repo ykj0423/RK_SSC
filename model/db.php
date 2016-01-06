@@ -134,7 +134,7 @@ class DB
     /*--------------------------------------------------------
     //  コンボやリスト用:（文字項目はutf8に変換した後）配列で渡す。
     ----------------------------------------------------------*/
-    public function select_rmcls()
+    public function select_rmcls( $webflg )
     {
         
         $ret = array();
@@ -142,7 +142,11 @@ class DB
         $ret['sqlErrCD'] =  0;
         $ret['sqlErrMsg'] = '';
 
-        $sql = ' select * from mm_rmcls where fild1 = 1';//web対象のもののみ抽出
+        $sql = ' select * from mm_rmcls';
+
+        if($webflg){
+            $sql = $sql.' where fild1 = 1';//web対象のもののみ抽出
+        }
 
         $result = sqlsrv_query( $this->con, $sql );
 
@@ -656,26 +660,17 @@ class DB
 	//[121] => Array ( [rmnmw] => トレーニング室 [capacity] => 0 ) ) 
 	-----------------------------------------------------------*/
 	//public function get_web_mroomr( $bldkb, $rmclkb )
-	public function get_web_mroomr( $rmclkb )
+	public function get_web_mroomr( $rmclkb ,$webflg )
 	{
 	
 		$ret = array();
 		//施設コード、WEB名称、定員、WEBリンク
-		//$sql = "select rmcd, rmnmw, capacity, weblink from mt_room"; 
 		$sql = "SELECT mt_room.rmcd, mt_room.rmnmw, mt_room.capacity, mt_room.oyakokb, mt_room.sumrmcd, mt_room.weblink2 AS weblink, "; 
         $sql = $sql." asa.tnk AS asatnk, hiru.tnk AS hirutnk , yoru.tnk AS yorutnk FROM mt_room "; 
         $sql = $sql." LEFT OUTER JOIN mt_rmtnk as asa on mt_room.rmcd = asa.rmcd "; 
         $sql = $sql." LEFT OUTER JOIN mt_rmtnk as hiru on mt_room.rmcd = hiru.rmcd ";
         $sql = $sql." LEFT OUTER JOIN mt_rmtnk as yoru on mt_room.rmcd = yoru.rmcd "; 
         
-		//if ( !empty ( $bldkb ) ){
-		//	$sql = $sql." where";
-		//	$sql = $sql." bldkb = ".$bldkb;
-		//	$sql = $sql." and ";
-		//} else {
-		//	$sql = $sql." where";
-		//}
-
 		if ( count ( $rmclkb )  > 0 ){		
 			
 			$sql = $sql." where ( mt_room.rmclkb = ".$rmclkb[0];
@@ -687,24 +682,25 @@ class DB
 			$sql = $sql." )";
 
 		}
-		
-        $sql = $sql." and mt_room.weboutkb = 1 "; 
+
+		if($webflg){
+            $sql = $sql." and mt_room.weboutkb = 1 "; 
+        }
+
         $sql = $sql." and asa.kyakb = 1 "; 
         $sql = $sql." and asa.stjkn = 900 and asa.edjkn = 1200 ";
         $sql = $sql." and hiru.kyakb = 1 "; 
         $sql = $sql." and hiru.stjkn = 1300 and hiru.edjkn = 1700 ";
         $sql = $sql." and yoru.kyakb = 1 "; 
         $sql = $sql." and yoru.stjkn = 1800 and yoru.edjkn = 2100 ";
-        //$sql = $sql." and stjkn = 1300 and edjkn = 1700 ";
-        //$sql = $sql." and stjkn = 1800 and edjkn = 2100 "; 
 
 		$sql = $sql." order by mt_room.rmcd";
 
 		$result = sqlsrv_query( $this->con, $sql );
 
 		if( $result === false ) {
-			 //echo $sql;
-			 die( print_r( sqlsrv_errors(), true));
+			 return false;
+			 //die( print_r( sqlsrv_errors(), true));
 		}
 
 		while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC) ) {				

@@ -41,7 +41,7 @@ $conErr = $db->connect();
 if ( !empty( $conErr ) ) { echo $conErr;  die("ただいま、システムメンテナンス中です。<br>ご利用のお客様には大変ご迷惑をおかけいたしまして、 まことに申し訳ございません。<br>メンテナンス終了まで、いましばらくお待ちください。"); } //接続不可時は終了
 
 /* 施設分類の取得 */
-$rmcls = $db->select_rmcls();
+$rmcls = $db->select_rmcls( true );
 
 if(!is_array($rmcls)){
   die("ただいま、システムメンテナンス中です。<br>ご利用のお客様には大変ご迷惑をおかけいたしまして、 まことに申し訳ございません。<br>メンテナンス終了まで、いましばらくお待ちください。");
@@ -289,7 +289,7 @@ $wh = '';
 
 //新コード----------------------------------------------------------------------------------------------------
 //$room = $db->get_web_mroomr( $_POST['bldkb'], $bunrui);//施設区分、施設分類
-$room = $db->get_web_mroomr( $bunrui );//施設区分
+$room = $db->get_web_mroomr( $bunrui , true );//施設区分
 
 for ($i = 0; $i < ( count( $room ) ) ; $i++ ) {
 	

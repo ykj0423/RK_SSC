@@ -9,7 +9,7 @@ $conErr = $db->connect();
 if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 
 /* 施設分類の取得 */
-$rmcls = $db->select_rmcls();
+$rmcls = $db->select_rmcls( false );
 
 /* 検索日付（自至） */
 //検索開始日

@@ -111,18 +111,22 @@ $renraku = $_POST['renraku'];
 /* 電話番号 */
 $tel1 = NULL;;
 $tel2 = $_POST['tel2'];
+$tel2 = mb_convert_kana($_POST['tel2'], "n", "SJIS");
 
 /* FAX番号 */
 $fax = $_POST['fax'];
+$fax = mb_convert_kana($_POST['fax'], "n", "SJIS");
 
 /* URL */
 $url = "";
 
 /* メールアドレス */
 $mail = $_POST['mail'];
+$mail = mb_convert_kana($_POST['mail'], "a", "SJIS");
 
 /* 郵便番号 */
 $zipcd = $_POST['zipcd'];
+$zipcd = mb_convert_kana($_POST['zipcd'], "n", "SJIS");
 
 /* 住所 */
 $adr1 = $_POST['adr1'];
@@ -133,9 +137,12 @@ $gyscd = $_POST['gyscd'];
 
 /* 資本金 */
 $sihon = $_POST['sihon'];
+$sihon = mb_convert_kana($_POST['sihon'], "n", "SJIS");
 
-/* 業種コード */
+/* 従業員数 */
 $jygsu= $_POST['jygsu'];
+$jygsu = mb_convert_kana($_POST['jygsu'], "n", "SJIS");
+
 //echo "中小企業判断（１）";
 /* 中小企業判断（１） */
 $kyakb = 1;//一般

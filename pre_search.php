@@ -107,7 +107,8 @@ $wh = '';
 
 //新コード
 //$room = $db->get_web_mroomr( $_POST['bldkb'], $bunrui);//施設区分、施設分類
-$room = $db->get_web_mroomr( $bunrui );//施設区分
+//$bunrui = array(1,2,3,4);
+$room = $db->get_web_mroomr( $bunrui ,false );//施設区分
 
 for ($i = 0; $i < ( count( $room ) ) ; $i++ ) {
 	
