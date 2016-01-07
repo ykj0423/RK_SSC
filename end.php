@@ -451,7 +451,8 @@ if($revflg){
 			$ninzu = 0;
 
 			if( isset ( $_POST[ 'ninzu'.$i ] ) ){
-				$ninzu = $_POST[ 'ninzu'.$i ];
+				//$ninzu = $_POST[ 'ninzu'.$i ];
+				$ninzu	= mb_convert_kana($_POST[ 'ninzu'.$i ], "n", "utf-8");
 			}
 
 			//施設単価

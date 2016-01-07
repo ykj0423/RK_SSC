@@ -92,6 +92,17 @@ if( empty( $_POST['adr1'] ) && empty( $_POST['adr2'] ) ){
   $check = false;
 }
 
+if( !ctype_digit( $_POST['sihon'] ) ){
+  echo "<span class=\"text-danger\">※資本金は数字で入力してください。（整数のみ）</span>";
+  $check = false;
+}
+
+if( !ctype_digit( $_POST['jygsu'] ) ){
+  echo "<span class=\"text-danger\">※従業員数は数字で入力してください。（整数のみ）</span>";
+  $check = false;
+}
+
+
 if( !$check ){ 
 
 ?>

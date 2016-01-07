@@ -151,12 +151,12 @@ include('include/err.php');
         <tr>
           <th>資本金または元入金<span class="red">(必須)</span></th>
           <td><input type="text" class="short txr" style="ime-mode: inactive;" name="sihon" id="sihon" maxlength="7" value="0">万円
-          <span class="ml10 note">(半角数字。事業者でない場合は0を入力)</span></td>
+          <span class="ml10 note">(半角数字。整数。事業者でない場合は0を入力)</span></td>
         </tr>
         <tr>
           <th >従業員数<span class="red">(必須)</span></th>
           <td><input type="text" class="short txr" style="ime-mode: inactive;" name="jygsu" id="jygsu" maxlength="7" value="0">名
-          <span class="ml10 note">(半角数字。事業者でない場合は0を入力)</span></td>
+          <span class="ml10 note">(半角数字。整数。事業者でない場合は0を入力)</span></td>
         </tr>
       </table>
       <div class="text-center mb20">
