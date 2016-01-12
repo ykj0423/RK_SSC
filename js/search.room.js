@@ -365,6 +365,18 @@ jQuery(function () {
 
 			}
 
+			//施設コードリスト
+			var sort_room = new Array();
+			
+			for(var i in strlist){
+				
+				if(sort_room.indexOf(strlist[i].rmcd) == -1){
+					sort_room.push(strlist[i].rmcd);
+					sort_room.sort();
+				}
+
+			}
+//console.log(sort_room);
 			for( var i = 0; i < ( sort_array.length-1 ); i++ ){
 				
 				var j = i+1;
@@ -376,13 +388,12 @@ jQuery(function () {
 				}
 				
 			}
-
+		
 			//日付チェックリストの作成
 			var discontinuity = true;//不連続フラグ
 
 			for(var i in strlist){
 				
-				//var wk_rmcd = strlist[i].rmcd;
 				var wk_usedt = strlist[i].usedt;
 				var room_usedt_array = new Array();
 				room_usedt_array.push( wk_usedt );
@@ -399,18 +410,46 @@ jQuery(function () {
 				room_usedt_array.sort();
 
 				if( sort_array.toString() != room_usedt_array.toString() ){
+					console.log("check1");
 					discontinuity = false;
 					break;
 				}
 
 			}
 
+			/* no 2*/
+			for(var i in sort_room){
+			
+				var room_usedt_array = new Array();
+				
+				for(var j in strlist){
+
+
+					if(sort_room[i] == strlist[j].rmcd){
+						console.log(strlist[j].rmcd);
+						if( room_usedt_array.length == 0 ){
+							room_usedt_array.push( strlist[j].usedt );	
+						}else if( $.inArray( strlist[j].usedt, room_usedt_array ) == -1 ){
+							room_usedt_array.push( strlist[j].usedt );
+							room_usedt_array.sort();				
+						}
+	
+					}
+				
+				}
+
+				if( sort_array.toString() != room_usedt_array.toString() ){
+					discontinuity = false;
+					break;
+				}	
+
+			}
+				
 			if( !discontinuity ){
 				alert("規定により、連続した複数日、複数施設のお申込みは受け付けできません。一日単位でお申込みいただくか、一施設単位でお申込みください。");
-				console.log(sort_array);
-				console.log(room_usedt_array);
 				return false;
 			}
+
 
 			//ここまで成功
 			var diff = true;//不連続フラグ
