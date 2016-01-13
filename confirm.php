@@ -238,7 +238,7 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 							
 							$ninzu = $_POST['ninzu'.$i];
 
-							if(! is_numeric($ninzu)){
+							if(!is_numeric($ninzu)){
 								$go = false;
 								echo "<span class=\"status2\">人数を正しく入力してください<br></span>";										
 							}
