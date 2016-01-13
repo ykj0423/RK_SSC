@@ -630,7 +630,7 @@ jQuery(function () {
 					var ninzu = parseInt($('#ninzu' + i ).val());
 
 					if( isNaN(ninzu)){
-						alert( "人数は数字で入力してください。" );
+						alert( "人数は半角数字で入力してください。" );
 						return false;
 					} 
 
