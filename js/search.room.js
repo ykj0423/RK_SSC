@@ -424,7 +424,6 @@ jQuery(function () {
 				
 				for(var j in strlist){
 
-
 					if(sort_room[i] == strlist[j].rmcd){
 						console.log(strlist[j].rmcd);
 						if( room_usedt_array.length == 0 ){

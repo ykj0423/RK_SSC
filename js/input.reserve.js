@@ -626,12 +626,21 @@ jQuery(function () {
 						alert( "人数を入力してください。" );
 						return false;
 					}
+					
 					var ninzu = parseInt($('#ninzu' + i ).val());
-					var teiin = parseInt($('#teiin' + i ).val());
+
+					if( isNaN(ninzu)){
+						alert( "人数は数字で入力してください。" );
+						return false;
+					} 
+
 					if( ninzu == 0 ){
 						alert( "人数は0以上で入力してください。" );
 						return false;
 					}
+					
+					var teiin = parseInt($('#teiin' + i ).val());
+					
 					if( ninzu > teiin ){
 						alert( "定員を超えています。人数をご確認ください。" );
 						return false;

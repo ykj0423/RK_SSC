@@ -135,9 +135,12 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 					    die( print_r( sqlsrv_errors(), true));				
 					}
 
-					$total=0;
-					$holekb=0;
-	        		for( $i=0; $i < $_POST['meisai_count']; $i++){
+					/* 初期値 */
+					$go = true;
+					$total = 0;
+					$holekb = 0;
+	        		
+	        		for( $i = 0; $i < $_POST['meisai_count']; $i++){
 	        			
 	        			//施設単価						
 						$kyakb = $_SESSION['kyakb'];
@@ -234,8 +237,13 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 
 							
 							$ninzu = $_POST['ninzu'.$i];
+
+							if(! is_numeric($ninzu)){
+								$go = false;
+								echo "<span class=\"status2\">人数を正しく入力してください<br></span>";										
+							}
+
 							echo "<td>".$ninzu."人</td>";							
-							
 							echo "<td>";
 
 							$comlkb = 0;
@@ -361,7 +369,7 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 
 						    }  
 							
-							$go = true;
+							//$go = true;
 							
 							if($holekb == 1){
 							
@@ -371,7 +379,7 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 							
 										$go = false;
 										echo "<span class=\"status2\">時間内訳を正しく入力してください<br></span>";
-										echo $sql;
+										//echo $sql;
 							
 									}
 							
