@@ -565,8 +565,7 @@ if($revflg){
 				$wrsvkb, $rsvchgdt, $comlkb, $feekb, $pianokb, $partkb, $login, $udate, $utime, $ukedt, $wloginid, $wudate, $wutime, $pgnm );
 		 
 			$stmt = sqlsrv_query( $conn, $sql, $params);
-//echo $sql."<br />";
-//print_r($params);
+
 			if( $stmt === false ) {
 				if( ($errors = sqlsrv_errors() ) != null) {
 					/*foreach( $errors as $error ) {
@@ -670,13 +669,11 @@ if($revflg){
 /* 請求データ作成 */
 include("model/Seikyu.php");
 
-if($revflg){//echo "test1";
+if($revflg){
 
 	$Seikyu = new Seikyu();
-	//echo "test1";
-	//$ukeno = 700;
-	$ukedt = date('Ymd');//20151214;
-	//$kyacd = 1; 
+
+	$ukedt = date('Ymd');
 
 	$list = array();
 
@@ -703,8 +700,6 @@ if($revflg){//echo "test1";
 		    $stmt = sqlsrv_query( $conn, $sql );
 		    
 		    if( $stmt === false) {
-		    	//echo "mt_rmtnk";
-		    	//echo $sql;
 		    	//die( print_r( sqlsrv_errors(), true) );
 			}
 
@@ -1090,7 +1085,6 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 			$kounoukb, $holekb, $kaigi,$naiyo, $kbiko, $sekinin, $kupdkb, $rsbkb, $riyokb, $paylmtdt, $expkb, $expnocdt, $expdt,
 			$trmkin, $thzkin, $tkin, $login, $udate, $utime, $wrkkb, $wloginid, $wudate, $wutime);
 
-//echo "<br>1122 ".$sql;
 		$stmt = sqlsrv_query( $conn, $sql, $params);
 
 		if( $stmt === false ) {
@@ -1107,10 +1101,9 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 		    }
 		}
 
-//		if($mng_rec[$cnt][0]==301){
+
 		if($rmcd==301){
 
-//echo "1146 <br>";			
 			/*時間帯更新*/
 			if( $mng_rec[$cnt][1] == 1 ){
 	            $jkn_rec = array(9, 10, 11);
@@ -1126,16 +1119,13 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 	        	$jkn_rec = array(9,10,11,12,13,14,15,15,16,17,18,19,20);
 	        }
 
-//print_r($jkn_rec);
 
 	        for ($cnt2 = 0 ; $cnt2 < count($jkn_rec); $cnt2++) {
 	        //for ( $jkn = $stt; $jkn <= $end;  $jkn++) { // 3時間分回す
 	        	$sql = "SELECT * FROM ks_jkntai WHERE usedt = ".$usedt." AND rmcd = ".$mng_rec[$cnt][0]." AND jikan = ".$jkn_rec[$cnt2]." AND timekb = ".$mng_rec[$cnt][1];
-//echo "<br>1158 ".$sql;
 	                $stmt = sqlsrv_query( $conn, $sql );
 	                
 	                if( $stmt === false) {
-	                    //echo $sql;
 	                    //die( print_r( sqlsrv_errors(), true) );
 	                }
 	            
@@ -1176,8 +1166,7 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 	                    $params = array( $usedt, $jkn_rec[$cnt2], $mng_rec[$cnt][0], $mng_rec[$cnt][1], $mng_ukeno, $gyo, $login, date( "Ymd" ), date( "His" ) );
 
 	                }//if
-//echo "<br>1195 ".$sql;
-//echo print_r($params);
+
 	                $stmt = sqlsrv_query( $conn, $sql, $params );
 	    
 	                if( $stmt === false) {
