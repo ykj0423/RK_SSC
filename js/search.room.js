@@ -237,7 +237,7 @@ jQuery(function () {
             var jkn1 = $("#" + datastr).attr('data-jkn1');		//時間（自）
             var jkn2 = $("#" + datastr).attr('data-jkn2');		//時間（至）
             var tnk = $("#" + datastr).attr('data-tnk');		//時間（至）
-            var oyakokb = $("#" + datastr).attr('data-oyakokb');//親子区分　1:単独 2:親 3:子(ct_oyako)
+            var oyakokb = $("#" + datastr).attr('data-oyakokb');//親子区分 1:単独 2:親 3:子(ct_oyako)
 			var sumrmcd = $("#" + datastr).attr('data-sumrmcd');//集約施設
             var teiin = $("#" + datastr).attr('data-teiin');	//定員
             var src = $("#" + imgstr).attr('src');
@@ -376,12 +376,17 @@ jQuery(function () {
 				}
 
 			}
-//console.log(sort_room);
+
+			/*日付不連続チェック*/
 			for( var i = 0; i < ( sort_array.length-1 ); i++ ){
 				
-				var j = i+1;
+				var j = i + 1;
 				
-				if( parseInt( parseInt(sort_array[j]) - parseInt(sort_array[i]) ) > 1 ){
+				var dateMsec_j = new Date( sort_array[j].substr(4,2) + '/' +sort_array[j].substr(6,2) + '/' + sort_array[j].substr(0,4)).getTime();
+				var dateMsec_i = new Date( sort_array[i].substr(4,2) + '/' +sort_array[i].substr(6,2) + '/' + sort_array[i].substr(0,4)).getTime();
+				var interval = Math.floor( ( dateMsec_j - dateMsec_i) / (1000 * 60 * 60 * 24) );
+
+				if( parseInt(interval) > 1 ){
 					alert("規定により、連続していないお申込みは受け付けできません。一日単位でお申し込みください。");
 					return false;
 					break;
@@ -389,35 +394,9 @@ jQuery(function () {
 				
 			}
 		
-			//日付チェックリストの作成
+			/* 施設ごとのの不連続チェック*/
 			var discontinuity = true;//不連続フラグ
 
-			for(var i in strlist){
-				
-				var wk_usedt = strlist[i].usedt;
-				var room_usedt_array = new Array();
-				room_usedt_array.push( wk_usedt );
-
-				for(var j in strlist){
-					if( $.inArray( strlist[j].usedt, room_usedt_array ) == -1 ){
-						room_usedt_array.push( strlist[j].usedt );						
-					}
-
-				}
-				
-				//配列比較
-				sort_array.sort();
-				room_usedt_array.sort();
-
-				if( sort_array.toString() != room_usedt_array.toString() ){
-					console.log("check1");
-					discontinuity = false;
-					break;
-				}
-
-			}
-
-			/* no 2*/
 			for(var i in sort_room){
 			
 				var room_usedt_array = new Array();
@@ -425,7 +404,7 @@ jQuery(function () {
 				for(var j in strlist){
 
 					if(sort_room[i] == strlist[j].rmcd){
-						console.log(strlist[j].rmcd);
+
 						if( room_usedt_array.length == 0 ){
 							room_usedt_array.push( strlist[j].usedt );	
 						}else if( $.inArray( strlist[j].usedt, room_usedt_array ) == -1 ){
@@ -449,37 +428,6 @@ jQuery(function () {
 				return false;
 			}
 
-
-			//ここまで成功
-			var diff = true;//不連続フラグ
-			
-			if(sort_array.length>1){
-				
-				diff = false;	
-				
-				for( var i = 0; i < sort_array.length; i++ ){
-					
-					for( var j = 0; j < sort_array.length ; j++ ){
-
-						if( i != j ){
-
-							var num = parseInt( parseInt( sort_array[j] ) - parseInt( sort_array[i] ) );
-							if( ( -2 < num ) && ( num < 2 ) ){											
-								diff = true;
-							}
-
-						}
-					
-					}			
-				
-				}
-			
-			}
-
-			if( !diff ){
-				alert("規定により、連続していないお申込みは受け付けできません。一日単位でお申し込みください");
-				return false;
-			}
 
 			if( sort_array.length > 7 ){
 				alert("規定により、連続して7日を超えるお申込みは受け付けできません。７日以内でお申し込みください。");
