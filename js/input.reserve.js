@@ -1,5 +1,14 @@
 jQuery(function () {
-			
+		
+		$('input[type=text]').on('blur', function(){
+		　　var txt = $(this).val();
+		　　var search_txt = "[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩ㍉㌔㌢㍍㌘㌧㌃㌶㍑㍗㌍㌦㌣㌫㍊㌻㎜㎝㎞㎎㎏㏄㎡㍻〝〟№㏍℡㊤㊥㊦㊧㊨㈱㈲㈹㍾㍽㍼]";
+		　　if(txt.match(search_txt)){
+		　　　alert("機種依存文字が入力されています。\n数字①Ⅰなどはご使用になれません。\n㈱㈲などは(株)(有)のようにご入力ください。");
+		　　}
+		
+		});	
+		
 		$("#naiyo").attr("disabled","disabled");
 		$("#naiyo").val='';
 		

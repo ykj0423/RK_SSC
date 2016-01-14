@@ -1,8 +1,18 @@
 jQuery(function () {
-//フォーム送信時
+ 
+	　$('input[type=text]').on('blur', function(){
+	　　var txt = $(this).val();
+	　　var search_txt = "[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩ㍉㌔㌢㍍㌘㌧㌃㌶㍑㍗㌍㌦㌣㌫㍊㌻㎜㎝㎞㎎㎏㏄㎡㍻〝〟№㏍℡㊤㊥㊦㊧㊨㈱㈲㈹㍾㍽㍼]";
+	　　if(txt.match(search_txt)){
+	　　　alert("機種依存文字が入力されています。\n数字①Ⅰなどはご使用になれません。\n㈱㈲などは(株)(有)のようにご入力ください。");
+	　　}
+	　});
+
+	//フォーム送信時
 	$('#regist_form').submit(function(){
 
 		// バリデーションチェックや、データの加工を行う。
+
 		if( $('#dannm').val()=='' ){
 			alert("利用者名を入力してください。");
 			$('#dannm').focus();
