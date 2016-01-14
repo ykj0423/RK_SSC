@@ -336,25 +336,15 @@ include('include/err.php');
       設定方法はご契約会社により異なります。<br><br>
     ◎今後、施設の使用をお申し込みの際は、予約受付やお支払に関するメールが送付されますので、メールアドレスをよくご確認ください。<br>
     ◎セキュリティを確保する為、初回ログイン後にパスワードの変更をおすすめします。<br>
-    <!-- もし「利用者登録完了メール」が届かなかった場合、メールアドレスの記載ミス等が考えられますので、<br>
-      下記までお問い合わせださい。<br><br>
-      ＊＊ お問合せ窓口  TEL:078-360-3200 （お問い合わせ時間：9:00～17:00）＊＊-->
     <br>ご不明な点は下記窓口までお問い合わせださい。<br>
-    <div class="alert alert-success" role="alert">
-    <h4>＊＊ お問い合わせ窓口＊＊</h4><h3>TEL:078-360-3200 お問い合わせ時間：9:00～17:00</h3> ※登録状況を確認するにあたり、「ログインID」をお知らせください。
+    <div style="text-align:center">
+    <img src="img/img_02.gif" width="864">
     </div>
-    </div>    
+    <br><br><br>
     <div class="alert alert-info" role="alert" >
-        <p class="lead">ご利用開始はこちらから>></p>
+        <p class="lead">ご利用開始はこちらから&gt;&gt;</p>
         <?php $_SESSION['next_page'] = "search.php" ;?>
-          <a class="btn btn-warning btn-lg mb20" href="login.php" role="button">ログイン>></a>
-        <!--a class="btn btn-primary btn-lg" href="login.php" role="button">空き状況・予約申込 >></a-->
-             <!--a class="btn btn-primary btn-lg" href="login.html" role="button">予約照会 >></a-->
-        <!--form role="form" method="POST" action="member_top.php">
-            <!--a class="btn btn-primary btn-lg" href="login.php" role="button">利用者情報変更 >></a-->
-            <!--input type="submit" name="submit" id="submit" value="利用者情報変更 " class="btn btn-primary btn-lg">
-            <input type="hidden" name="next_page" value="member_top.php" class="btn btn-primary btn-lg">
-        </form-->
+          <a class="btn btn-warning btn-lg mb20" href="login.php" role="button">ログイン&gt;&gt;</a>
     </div>
     </form>
     </div>
