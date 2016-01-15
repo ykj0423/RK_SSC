@@ -56,13 +56,14 @@ if ( !empty( $conErr ) ) { echo $conErr;  die(); } //接続不可時は終了
 			echo "<input type='hidden' name='kaigi' id='kaigi' value=\"".$_POST[ 'kaigi' ]."\">";
 			echo "<input type='hidden' name='riyokb' id='riyokb' value=\"".$_POST[ 'riyokb' ]."\">";
 			//echo "<input type='hidden' name='sekinin' id='sekinin' value=\"".$_POST[ 'sekinin' ]."\">";
-			$str_naiyo = "<input type='hidden' name='naiyo' id='riyokb' value=\"";
+			$str_naiyo = "<input type='hidden' name='naiyo' id='naiyo' value=\"";
 
 			if(isset($_POST[ 'naiyo' ])){
 				$str_naiyo .= $_POST[ 'naiyo' ];	
 			}
 			
 			$str_naiyo .= "\">";
+			echo $str_naiyo;
 			echo "<input type='hidden' name='sekinin' id='sekinin' value=\"".$_POST[ 'sekinin' ]."\">";
 		?>
 		<table id ="rsv_input" class="table table-bordered table-condensed  form-inline">
