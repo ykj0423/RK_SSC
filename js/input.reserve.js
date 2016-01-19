@@ -695,7 +695,7 @@ jQuery(function () {
 				objData[i]['feekb'] = $( '#feekb' + i ).val();//入場料
 				objData[i]['piano'] = $( '#piano' + i ).val();//グランドピアノ
 				objData[i]['partkb'] = $( '#partkb' + i ).val();//間仕切り
-				objData[i]['oyakokb'] = $( '#oyakokb' + i ).val();//間仕切り
+				//objData[i]['oyakokb'] = $( '#oyakokb' + i ).val();//間仕切り
 				//明細使用料
 				objData[i]['rmkin'] = objData[i]['tnk'];
 				objData[i]['hzkin'] = 0;//objData[i]['tnk'];
