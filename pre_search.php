@@ -65,16 +65,19 @@ include("search_entry.php");
   		<a class="btn btn-lg btn-primary ml20"  href="top.php" role="button">ご利用登録・予約申込はこちら　>></a>
 	  </div>
   	</div>
-		<p>
-    		[凡例]
-    		空：予約可      		
-    		<span class="dgray" style="padding-left:5px;padding-right:5px">×</span>：予約不可
-    		<span class="dgray" style="padding-left:5px;padding-right:5px">休</span>：休館日
+    <div class="col-xs-7">
+      <p>
+        [凡例]<br>
+        空：予約可
+        <span class="selcol" style="padding-left:5px;padding-right:5px">○</span>：選択中　
+        <span class="dgray" style="padding-left:5px;padding-right:5px">×</span>：予約不可<br>
+    　         朝：9:00～12:00 昼：13:00～17:00　夜:18:00～21:00
       </p>
-      <p class="text-right">
-	    <input type='submit' class="btn btn-default mr48p prev"  href="#" role="button" value="<<前へ"></a>
-      	<input type='submit' class="btn btn-default mr20 next"  href="#" role="button" value="次へ>>"></a>
-      </p>
+    </div>
+    <p class="text-right">
+    <input type='submit' class="btn btn-default mr48p prev"  href="#" role="button" value="<<前へ"></a>
+    	<input type='submit' class="btn btn-default mr20 next"  href="#" role="button" value="次へ>>"></a>
+    </p>
 <?php
 //TODO design-separatable
 echo "<table id =\"rsv\" class=\"table table-bordered table-condensed\">";
