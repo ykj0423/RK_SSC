@@ -506,7 +506,7 @@ if($revflg){
 				if( $_POST['partkb'.$i] == 1 ){
 					$partkb = $_POST['partkb'.$i];
 					//$biko .= "P閉める";
-					$biko = "P閉める".$biko;
+					$biko = "P閉める ".$biko;
 				}
 
 				if( $_POST['partkb'.$i] == 0 ){
