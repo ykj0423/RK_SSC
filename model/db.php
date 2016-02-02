@@ -712,34 +712,28 @@ class DB
 	}
 
 	/* 利用目的の取得 */
-	public function get_mm_riyo()
-	{
-	
-		$ret = array();
-		
-		$sql = "select code , name from mm_riyo"; 
-		//if (func_num_args() > 0)
-		//{
-		//	$sql = $sql." where  code = ".func_get_arg(0);;
-		//}
-		
-		$sql = $sql." order by code";
-    //echo $sql;
-    
-		$result = sqlsrv_query( $this->con, $sql );
+	public function get_mm_riyo($code)
+    {
 
-		if( $result === false ) {
-			 //echo $sql;
-			 die( print_r( sqlsrv_errors(), true));
-		}
+        $ret = array();
 
-		while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC) ) {			
-			array_push( $ret, $row );
-		}
+        $sql = "select code , name from mm_riyo";
+        $sql = $sql." where code = ".$code;
 
-		return $ret;
+        $result = sqlsrv_query( $this->con, $sql );
 
-	}
+        if( $result === false ) {
+             //echo $sql;
+             die( print_r( sqlsrv_errors(), true));
+        }
+
+        while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC) ) {          
+            array_push( $ret, $row );
+        }
+
+        return $ret;
+
+    }
 
 	//いきいき仕様
 	public function check_monthly_count( $kyakucd , $year , $month ){
