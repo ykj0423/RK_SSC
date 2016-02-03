@@ -80,16 +80,17 @@ require_once('func.php');
  * @version    0.1
 **/
 ?>
-  <div class="row mb20">
- <div class="col-xs-7">
+<div class="row mb20">
+	<div class="col-xs-7">
 <!--      <h4>お申込みされたご予約の一覧です</h4>-->
       <h4 class="status2">＊＊ 必ずお読みください＊＊</h4>
       <div class="alert alert-info" role="alert">
         <p class="h5">※使用許可のお取消は、受付までお問い合わせください。<br>&nbsp;&nbsp;&nbsp;&nbsp;また、<a href="torikesi.pdf" target="blank"><img src="icon_btn_pdf.png" alt=""><u>「神戸市産業振興センター使用許可取消申出書」</u></a>を受付までご提出ください。</p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
         <p class="h5">※使用料は、納付期限までにお支払いください。<br>&nbsp;&nbsp;&nbsp;&nbsp;納付期限を過ぎてもご入金いただけない場合、お申込みは自動的に失効いたします。</p><br>
+        <p class="h5">※請求書は受付後間もなくダウンロード可能となりますが、10分から20分程度お待ちください。<br>&nbsp;&nbsp;&nbsp;&nbsp;ダウンロードできない場合は、ブラウザの「最新の情報に更新」メニューもしくは「再読み込み」メニューを選択していただくか、<b>パソコンのF5キー</b>を押下し、表示を再新にしてご覧ください。</p><br>
         <p class="h5">※ご入金確認後、使用許可を行い「神戸市産業振興センター使用許可書」を発行いたします。<br>&nbsp;&nbsp;&nbsp;&nbsp;下記画面よりダウンロードの上、印刷し、必ずご使用当日にご持参ください。
-          <br><br>ダウンロードや印刷ができない場合は、受付までお問い合わせください。<br>なお、安全性確保の為、ダウンロードできるのは一度のみとしておりますのでご注意ください。
-        </p>    
+          <br><br>ダウンロードや印刷ができない場合は、お手数受付までお問い合わせください。<br>なお、安全性確保の為、ダウンロードできるのは一度のみとしておりますのでご注意ください。
+        </p>
       </div>
     </div>
     <div class="col-xs-5"><br>【状態の説明】<br>
@@ -102,7 +103,7 @@ require_once('func.php');
     </div>
   </div>
   <div class="row mb10 text-right">
-  <a href="help.html#rsvlist"  class="btn alert-info" target="window_name"  onClick="disp('help.html#rsvlist')"><li class="glyphicon glyphicon-question-sign" aria-hidden="true">&nbsp;この画面の操作方法についてはこちら>></li></a> 
+  <a href="help.html#rsvlist" class="btn alert-info" target="window_name"  onClick="disp('help.html#rsvlist')"><li class="glyphicon glyphicon-question-sign" aria-hidden="true">&nbsp;この画面の操作方法についてはこちら>></li></a> 
   </div>
     <table id ="rsv_input" class="table table-bordered table-condensed form-inline" >
       <thead>
@@ -117,19 +118,21 @@ require_once('func.php');
           <th width="10%">納付期限</th>
           <th width="10%">請求書<br>/使用許可書</th>
         </tr>
-      </thead>      
+      </thead>
 <tbody>
 <?php 
 require_once("model/db.php");
 
 $db = new DB;
 $conErr = $db->connect();
+
 if (!empty($conErr)) { echo $conErr; die();}
+
 $rsvlist = array();
+
 if(isset($_SESSION['kyacd'])){
   $rsvlist = $db->select_rsvlist($_SESSION['kyacd']);//客コード
 }
-//echo "test:";
 //print_r($rsvlist);
 
 for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
@@ -138,7 +141,7 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
  
 
     if( $rsvlist[ $i ][ 'kyono' ] > 0 ){
-      echo "<td class=\"status1\">予約</td>";     
+      echo "<td class=\"status1\">予約</td>";
     }else if( $rsvlist[ $i ][ 'rsvchgdt' ] > 0 ){
         echo "<td class=\"status3\">予約→変更済</td>";
     }else if( $rsvlist[ $i ][ 'expkb' ] == 2 ){
@@ -166,7 +169,6 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
     echo "<td>".$rsvdt."(".mb_convert_encoding($rsvlist[$i]['yobi'], "utf8", "SJIS").")<br>";//使用日
     echo mb_convert_encoding($rsvlist[$i]['rmnm'], "utf8", "SJIS")."<br>";//施設名
     echo "「".mb_convert_encoding($rsvlist[$i]['kaigi'], "utf8", "SJIS")."」<br>";//行事名
-    
 
     echo "<td><ul class=\"list\"><li>使用時間</li>";
 
@@ -178,7 +180,7 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
     }
 
     echo "<td><ul class=\"list\"><li>".format_jkn( $rsvlist[$i]['stjkn'], "時", "分" )."～".format_jkn( $rsvlist[$i]['edjkn'] , "時", "分" )."</li>";//使用時間
-    
+
     if( $rsvlist[$i]['rmcd'] == 301 ){
 
       if( ( !empty( $rsvlist[$i]['jnstjkn'] ) ) && ( !empty($rsvlist[$i]['jnedjkn'] ) ) ){
@@ -186,7 +188,7 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
       }
 
       if( ( !empty( $rsvlist[$i]['hbstjkn'] ) ) && ( !empty($rsvlist[$i]['hbedjkn'] ) ) ){
-       
+
         echo "<li>".format_jkn( $rsvlist[$i]['hbstjkn'], "時", "分" )."～".format_jkn( $rsvlist[$i]['hbedjkn'] , "時", "分" )."</li>";//使用時間
       }
 
@@ -198,42 +200,41 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
 
 
     echo "</ul></td>";
-    
+
     echo "<td>".$rsvlist[$i]['ninzu']."</td>";//人数
-    
+
     echo "<td><span class=\"small\"><ul class=\"list\">";
     echo "<li>・営利目的での使用に";
 
     if( $rsvlist[$i]['comlkb'] == 0 ){
-      echo "あてはまらない";  
+      echo "あてはまらない";
     }else{
-        echo "あてはまる";  
+        echo "あてはまる";
     }
 
     echo "</li>";
 
-    
     echo "<li>・入場料・受講料を徴収";
-    
+
     if( $rsvlist[$i]['feekb'] == 0 ){
-      echo "しない";  
+      echo "しない";
     }else{
-      echo "する";  
+      echo "する";
     }
-    
+
     echo "</li>";
 
     if( $rsvlist[$i]['rmcd'] == 301 ){
       echo "<li>・グランドピアノを使用";
       
       if( $rsvlist[$i]['pianokb'] == 0 ){
-        echo "しない";  
+        echo "しない";
       }else{
-          echo "する";  
+          echo "する";
       }
-      
+
       echo "</li>";
-    
+
     }
 
     if( $rsvlist[$i]['oyakokb'] == 2 ){
@@ -241,17 +242,17 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
       echo "<li>・間仕切りを";
       
       if( $rsvlist[$i]['partkb'] == 0){
-        echo "あける";  
+        echo "あける";
       }else{
-          echo "しめる";  
+          echo "しめる";
       }
 
       echo "</li>";
-    
+
     }
 
     echo "</ul></span></td>";
-    
+
     //納付期限
     if( ($rsvlist[$i]['kounoukb'] == 0) && ($rsvlist[$i]['paylmtdt'] > 0) ){    
       echo "<td>".$paylmtdt."</td>";    
@@ -265,12 +266,15 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
     //許可書
     if(!empty($rsvlist[$i]['kyono'])){
 
-      if( $rsvlist[$i]['kyofbd'] == 0) {
-        echo "<a href=\"".$kyourl.$rsvlist[$i]['kyofile']."\" class=\"btn-icon\"><img src=\"icon_btn_pdf.png\" alt=\"許可書\">使用許可書ダウンロード</a>";
-      }else{
-        echo "許可番号：".$rsvlist[$i]['kyono'];
-      }
+	    //if( $rsvlist[$i]['kyofbd'] == 0) {
+	    if( ( $rsvlist[$i]['kyofbd'] == 0) && ( !is_null( $rsvlist[$i]['kyofile'] ) ) ) {
+	     echo "<a href=\"".$kyourl.$rsvlist[$i]['kyofile']."\" class=\"btn-icon\"><img src=\"icon_btn_pdf.png\" alt=\"許可書\">使用許可書ダウンロード</a>";
+	    }else{
+	     echo "許可番号：".$rsvlist[$i]['kyono'];
+	    }
+		
       echo "<br>";
+
     }
 
 
@@ -287,20 +291,22 @@ for ( $i = 0; $i < count( $rsvlist ); $i++ ) {
         $seiurl = "http://reservekeeper.cloudapp.net/rk_ssc/pdf/sei/";
       }
 
-      if( ( $rsvlist[$i]['seifbd'] == 0 ) && ( $rsvlist[$i]['seideal'] == 1 ) ) {
+      if( ( $rsvlist[$i]['seifbd'] == 0 ) && ( $rsvlist[$i]['seideal'] == 0 ) ) {
+        echo $doc_name."作成中につきお待ちください";
+      }elseif( ( $rsvlist[$i]['seifbd'] == 0 ) && ( $rsvlist[$i]['seideal'] == 1 ) ) {
         echo "<a href=\"".$seiurl.$rsvlist[$i]['seifile']."\" class=\"btn-icon\"><img src=\"icon_btn_pdf.png\" alt=\"".$doc_name."\">".$doc_name."ダウンロード</a>";
-        //echo "<a href=\"".$rsvlist[$i]['seiurl'].$rsvlist[$i]['seifile']."\" class=\"btn-icon\"><img src=\"icon_btn_pdf.png\" alt=\"".$doc_name."\">".$doc_name."ダウンロード</a>";
       }else{
         echo $doc_name."番号：".$rsvlist[$i]['seino'];
       }
 
     }
-  
+
     echo "&nbsp;</td>";
     echo "</tr>";
+
 }
 ?>
-    </tbody>    
+    </tbody>
   </table>
 <a class="btn btn-default btn-lg" href="top.php" role="button">トップページへ戻る</a>
 <br><br>
