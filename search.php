@@ -51,7 +51,22 @@ if(!is_array($rmcls)){
 //検索開始日
 $today = date( "Y/m/d" );
 $rsv_sttdt = date( "Y/m/d", strtotime( "".$today." +14 day" ) );       //会議室申込開始日
-$rsv_enddt = date( "Y/m/d", strtotime( "".$today." +365 day" ) );      //申込期限日
+
+//申込期限日
+$included_days = 364;
+
+if(date("L")){
+  
+  $target_day = date("Y")."/02/29";
+
+  if(strtotime($today) <= strtotime($target_day)){
+    $included_days = 365; 
+  }
+
+}
+
+//申込期限日
+$rsv_enddt = date( "Y/m/d", strtotime( "".$today." +".$included_days." day" ) );
 $rsv_sttdt_hole = date( "Y/m/d", strtotime( "".$today." +3 month" ) ); //ホール申込開始日
 $rsv_before = date( "Y/m/d", strtotime( "".$today." +14 day" ) );      //申込終了日
 
@@ -158,45 +173,7 @@ if(is_array($rmcls)){
 
 }
 ?>
-      </td>
-          </tr>
-          <tr>
-            <!--th>使用年月</th>
-            <td>
-              <div id="cal" class="btn-group" data-toggle="buttons"-->
-                
-              <?php
-                
-                /*for ($i = 0; $i < 13; $i++) {
-                  
-                  if($cal_month > 12){
-                    $cal_month = 1;
-                    $cal_year = $cal_year + 1;
-                  }
-
-                  if( ($cal_year == $calbtn_year) && ($cal_month == $calbtn_month)){
-                    echo "<label class=\"btn btn-xs btn-cal active\">";                   
-                    echo "<input name=\"calbtn\" value=\"".$cal_year.str_pad($cal_month, 2, 0, STR_PAD_LEFT)."\" type=\"radio\" checked>";
-                  }else{
-                    echo "<label class=\"btn btn-xs btn-cal\">";
-                    echo "<input name=\"calbtn\" value=\"".$cal_year.str_pad($cal_month, 2, 0, STR_PAD_LEFT)."\" type=\"radio\">";
-                  }
- 
-                  if($i == 0){
-                    echo $cal_year."年<br>".$cal_month."月</label>";                   
-                  }else if($cal_month == 1){
-                    echo $cal_year."年<br>".$cal_month."月</label>";                  
-                  }else{
-                    echo "<br>".$cal_month."月</label>";
-                  }
-
-                  $cal_month++;  
-
-                }
-                */
-              ?>
-              <!--/div>
-            </td-->
+            </td>
           </tr>
           <tr>
             <th class="pt12">曜日</th>
@@ -251,9 +228,9 @@ if(is_array($rmcls)){
         <p>
           [凡例]<br>
           空：予約可
-          <span class="selcol" style="padding-left:5px;padding-right:5px">○</span>：選択中　
+          <span class="selcol" style="padding-left:5px;padding-right:5px">○</span>：選択中
           <span class="dgray" style="padding-left:5px;padding-right:5px">×</span>：予約不可<br>
-　         朝：9:00～12:00 昼：13:00～17:00　夜:18:00～21:00
+         朝：9:00～12:00　昼：13:00～17:00　夜:18:00～21:00
         </p>
       </div>
       <div class="text-right  col-xs-5">
@@ -269,8 +246,6 @@ if(is_array($rmcls)){
       <input type='submit' class="btn btn-default mr20 next" href="#" role="button" value="次へ>>"></a>
     </div>
 <?php
-//========================================================================================
-//TODO design-separatable
 echo "<table id =\"rsv\" class=\"table table-bordered table-condensed\">";
 echo "<tr class=\"head\">";
 echo "<th colspan=\"2\" rowspan=\"3\" width=\"300\">施設名</th>";
@@ -286,168 +261,94 @@ $table = 'mt_room';
 $idNm = "rmcd";
 $valNm = "rmnm";
 $wh = '';
+$jkn1 = "";
+$jkn2 = "";
 
-//新コード----------------------------------------------------------------------------------------------------
-//$room = $db->get_web_mroomr( $_POST['bldkb'], $bunrui);//施設区分、施設分類
 $room = $db->get_web_mroomr( $bunrui , true );//施設区分
 
 for ($i = 0; $i < ( count( $room ) ) ; $i++ ) {
-	
-  $rmcd = $room[ $i ][ 'rmcd' ];   			//施設コード
+
+	$rmcd = $room[ $i ][ 'rmcd' ];//施設コード
 	$rmnm = mb_convert_encoding($room[ $i ][ 'rmnmw' ], "utf8", "SJIS");//施設名称
-  $teiin = ltrim( $room[ $i ][ 'capacity' ], '0' );	//定員
-  $weblink = $room[ $i ][ 'weblink' ];   			//施設情報
-  //$tnk = $room[ $i ][ 'tnk' ];
-  $asatnk = $room[ $i ][ 'asatnk' ];
-  $hirutnk = $room[ $i ][ 'hirutnk' ];
-  $yorutnk = $room[ $i ][ 'yorutnk' ];
-  $oyakokb = $room[ $i ][ 'oyakokb' ]; 
+	$teiin = ltrim( $room[ $i ][ 'capacity' ], '0' );	//定員
+	$weblink = $room[ $i ][ 'weblink' ];  //施設情報
+	$asatnk = $room[ $i ][ 'asatnk' ];
+	$hirutnk = $room[ $i ][ 'hirutnk' ];
+	$yorutnk = $room[ $i ][ 'yorutnk' ];
+	$oyakokb = $room[ $i ][ 'oyakokb' ]; 
 	$sumrmcd = $room[ $i ][ 'sumrmcd' ]; 
 
-  echo "<tr class=\"dgray\">";
-  //施設情報
+	echo "<tr class=\"dgray\">";
+	//施設情報
  	echo "<th rowspan=\"3\"><span class=\"f150\">".$rmnm."</span><br>[定員]".$teiin;
  	echo "<a href=\"".$weblink."\" target=\"_blank\" class=\"btn btn-info btn-xs\" role=\"button\">施設情報を見る&nbsp;&gt;&gt;</a></th>";
-  //カレンダー
-  //本当は一気に取りたい
-  //朝
-  echo "<th>朝</th>";
-  $mor = $db->select_ksjkntai( $rmcd, 1, str_replace( "/", "", $sttdt ), str_replace( "/", "", $enddt ) );
-//print_r($mor);
-    for ($k = 0; $k < count( $date_array ) ; $k++) {
 
-      $usedt = str_replace( "/", "", $date_array[$k]['yyyy'].$date_array[$k]['mm'].$date_array[$k]['dd'] );
+	//予約カレンダー
+	for ( $timekb = 1; $timekb <= 3 ; $timekb++ ) {
 
-      if( $db->select_kscal( $usedt, 1 )){
-    		//$usedt = str_replace( "/", "", $sttdt ) + $k ;//仮
-    		
-        if( !array_key_exists( $usedt, $mor['data'] ) ){
-     
-          echo "<td class=\"can\" id=".$rmcd.$usedt."1\" ><a id=\"a-".$rmcd.$usedt."1\">";
-          echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."1\"></a>";
-          //各種定数化。
-          echo "<div id=\"data-".$rmcd.$usedt."1\" data-usedt=\"".$usedt."\" data-yobi=".$k." data-timekb=\"1\" data-jkn1=\"9:00\" data-jkn2=\"12:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$asatnk."\" data-oyakokb=\"".$oyakokb."\" data-sumrmcd=\"".$sumrmcd."\" data-teiin=\"".$teiin."\" />";
-          echo "</td>";
-    		
-        }elseif( array_key_exists( $usedt, $mor['data'] ) && ( $mor['data'][$usedt] == 0 ) ){
+		switch ($timekb) {
+			case 1:
+				echo "<th>朝</th>";
+				$jkn1 = "9:00";
+				$jkn2 = "12:00";
+				break;
+			case 2:
+				echo "</tr>";
+				echo "<tr class=\"dgray\" >";
+				echo "<th>昼</th>";
+				$jkn1 = "13:00";
+				$jkn2 = "17:00";
+				break;
+			case 3:
+				echo "</tr>";
+				echo "<tr class=\"dgray\" >";
+				echo "<th>夜</th>";
+				$jkn1 = "18:00";
+				$jkn2 = "21:00";
+				break;  
+			default:
+				break;
+		}
 
-    		  //空室の場合
-    			echo "<td class=\"can\"><a id=\"a-".$rmcd.$usedt."1\">";
-          echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."1\"></a>";
-          //各種定数化。
-    			echo "<div id=\"data-".$rmcd.$usedt."1\" data-usedt=\"".$usedt."\" data-yobi=".$k." data-timekb=\"1\" data-jkn1=\"9:00\" data-jkn2=\"12:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$asatnk."\" data-oyakokb=\"".$oyakokb."\" data-sumrmcd=\"".$sumrmcd."\"  data-teiin=\"".$teiin."\" />";
-          echo "</td>";
-            
-    		}else{
-    		  //満室の場合
-    			echo "<td>×</td>";          
-    		}
-      
-      }else{
-        echo "<td>×</td>";  
-      }
-    
-    }
+		$rsv_cal = $db->select_ksjknksi( $rmcd, $timekb, str_replace( "/", "", $sttdt ), str_replace( "/", "", $enddt ) );
 
-    echo "</tr>";
+		for ($k = 0; $k < count( $date_array ) ; $k++) {
 
-    //昼
-    echo "<tr class=\"dgray\" >";
-    echo "<th>昼</th>";
+		    $usedt = str_replace( "/", "", $date_array[$k]['yyyy'].$date_array[$k]['mm'].$date_array[$k]['dd'] );
 
-    $noon = $db->select_ksjkntai( $rmcd , 2 ,  str_replace( "/", "", $sttdt ) ,  str_replace( "/", "", $enddt ) );
+		    //空室の場合、選択可能とする
+		    if( ( !array_key_exists( $usedt, $rsv_cal['data'] ) ) || ( array_key_exists( $usedt, $rsv_cal['data'] ) && ( $rsv_cal['data'][$usedt] == 0 ) ) ){
 
-    for ( $k = 0; $k < count( $date_array ) ; $k++ ) {
-        
-        $usedt = str_replace( "/", "", $date_array[$k]['yyyy'].$date_array[$k]['mm'].$date_array[$k]['dd'] );
+				echo "<td class=\"can\"><a id=\"a-".$rmcd.$usedt.$timekb."\">";
+				echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt.$timekb."\"></a>";
+				echo "<div id=\"data-".$rmcd.$usedt.$timekb."\" data-usedt=\"".$usedt."\" data-yobi=".$k." data-timekb=\"".$timekb."\" data-jkn1=\"".$jkn1."\" data-jkn2=\"".$jkn2."\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$asatnk."\" data-oyakokb=\"".$oyakokb."\" data-sumrmcd=\"".$sumrmcd."\"  data-teiin=\"".$teiin."\" />";
+				echo "</td>";
 
-        if( $db->select_kscal( $usedt , 2 )){
+			}else{
+				//満室の場合
+				echo "<td>×</td>";
+			}
 
-          if( !array_key_exists( $usedt, $noon['data'] ) ){
-  		
-    	       echo "<td  class=\"can\"><a id=\"a-".$rmcd.$usedt."2\">";
-             echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."2\"></a>";
-             echo "<div id=\"data-".$rmcd.$usedt."2\" data-usedt=\"".$usedt."\" data-timekb=\"2\" data-jkn1=\"13:00\" data-jkn2=\"17:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$hirutnk."\" data-oyakokb=\"".$oyakokb."\" data-sumrmcd=\"".$sumrmcd."\"  data-teiin=\"".$teiin."\" />";
-             echo "</td>";
+		}//for
 
-  		    }elseif ( array_key_exists( $usedt, $noon['data'] ) && ( $noon['data'][$usedt] == 0 ) ) {
-              //echo "<td  class=\"can\"><a href=\"#\"><img src=\"icon/kara.jpg\"></a></td>";
-              echo "<td  class=\"can\"><a id=\"a-".$rmcd.$usedt."2\">";
-              echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."2\"></a>";
-              echo "<div id=\"data-".$rmcd.$usedt."2\" data-usedt=\"".$usedt."\" data-timekb=\"2\" data-jkn1=\"13:00\" data-jkn2=\"17:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$hirutnk."\" data-oyakokb=\"".$oyakokb."\" data-sumrmcd=\"".$sumrmcd."\"  data-teiin=\"".$teiin."\" />";
-              echo "</td>";
-          
-          }else{
-              echo "<td>×</td>";
-          }
+	}
 
-        }else{
-          echo "<td>×</td>";  
-        }
+	/* 3行ごとにテーブル仕切り（最終行は表示しない） */
+	if ( ( ( $i % 3 ) == 2 ) && ( $i <  ( count( $room ) -1 ) ) ) {
+	  
+	echo "</table>";
+	echo "<p class=\"text-right\">";
+	echo "<input type='submit' class=\"btn btn-default mr48p prev\" href=\"#\" role=\"button\" value=\"<<前へ\">";
+	echo "<input type='submit' class=\"btn btn-default mr20\ next\" href=\"#\" role=\"button\" value=\"次へ>>\">";
+	echo "</p>";
+	echo "<table  class=\"table table-bordered table-condensed rsv\">";
+	echo "<tr class=\"head\">";
+	echo "<th colspan=\"2\" rowspan=\"3\" width=\"300\">施設名</th>";
 
-    }
+	/* 対象日の表示 */
+	include('date.php');
 
-    echo "</tr>";
-
-    //夜
-    echo "<tr class=\"dgray\"  style=\" border-bottom: 2px solid;\">";
-    echo "<th>夜</th>";
-    
-	//$night = $db->select_ksjkntai( $rmcd , 3 , $sttdt , $enddt );
-    $night = $db->select_ksjkntai( $rmcd , 3 ,  str_replace( "/", "", $sttdt ) ,  str_replace( "/", "", $enddt ) );
-
-	for ( $k = 0; $k < count( $date_array ) ; $k++ ) {
-
-		  $usedt = str_replace( "/", "", $date_array[$k]['yyyy'].$date_array[$k]['mm'].$date_array[$k]['dd'] );
-      
-      if( $db->select_kscal( $usedt , 3 )){
-        
-          if($rmcd == 201 ){
-
-                echo "<td>×</td>"; 
-            
-          }else	if( !array_key_exists( $usedt, $night['data'] ) ){
-    		
-            echo "<td  class=\"can\"><a id=\"a-".$rmcd.$usedt."3\">";
-            echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."3\"></a>";
-            echo "<div id=\"data-".$rmcd.$usedt."3\" data-usedt=\"".$usedt."\" data-timekb=\"3\" data-jkn1=\"18:00\" data-jkn2=\"21:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$yorutnk."\" data-oyakokb=\"".$oyakokb."\" data-sumrmcd=\"".$sumrmcd."\"  data-teiin=\"".$teiin."\" />";
-            echo "</td>";	
-            
-          }elseif ( array_key_exists( $usedt, $night['data'] ) && ( $night['data'][$usedt] == 0 ) ) {
-                //echo "<td  class=\"can\"><a href=\"#\"><img src=\"icon/kara.jpg\"></a></td>";
-            echo "<td  class=\"can\"><a id=\"a-".$rmcd.$usedt."3\">";
-            echo "<img src=\"icon/kara.jpg\" alt=\"空\" class=\"mark\" id=\"img-".$rmcd.$usedt."3\"></a>";
-            echo "<div id=\"data-".$rmcd.$usedt."3\" data-usedt=\"".$usedt."\" data-timekb=\"3\" data-jkn1=\"18:00\" data-jkn2=\"21:00\" data-rmcd=\"".$rmcd."\" data-rmnm=\"".$rmnm."\" data-tnk=\"".$yorutnk."\" data-oyakokb=\"".$oyakokb."\" data-sumrmcd=\"".$sumrmcd."\"  data-teiin=\"".$teiin."\" />";
-            echo "</td>";		
-            
-          }else{
-            echo "<td>×</td>";
-          }
-      
-      }else{
-          echo "<td>×</td>";  
-      }
-
-    }
-
-    echo "</tr>";
-
-    /* 3行ごとにテーブル仕切り（最終行は表示しない） */
-    if ( ( ( $i % 3 ) == 2 ) && ( $i <  ( count( $room ) -1 ) ) ) {
-        
-      echo "</table>";
-      echo "<p class=\"text-right\">";
-      echo "<input type='submit' class=\"btn btn-default mr48p prev\" href=\"#\" role=\"button\" value=\"<<前へ\">";
-      echo "<input type='submit' class=\"btn btn-default mr20\ next\" href=\"#\" role=\"button\" value=\"次へ>>\">";
-      echo "</p>";
-      echo "<table  class=\"table table-bordered table-condensed rsv\">";
-	    echo "<tr class=\"head\">";
-      echo "<th colspan=\"2\" rowspan=\"3\" width=\"300\">施設名</th>";
-	
-		/* 対象日の表示 */
-		include('date.php');
-
-    }
+	}
 
 }
 

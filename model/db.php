@@ -231,7 +231,7 @@ class DB
     /*--------------------------------------------------------
     //  配列用:（文字項目はutf8に変換した後）配列で渡す。y.kamijo
     ----------------------------------------------------------*/
-    public function select_ksjkntai( $rmcd , $timekb , $sttdt , $enddt )
+    public function select_ksjknksi( $rmcd , $timekb , $sttdt , $enddt )
     {
         try{
 
@@ -246,24 +246,26 @@ class DB
                 $ret['data'][$date] = 0;
             }
             
-            $sql = " select usedt , ukeno from ks_jkntai ";
+            //$sql = " select usedt , ukeno from ks_jkntai ";
+            $sql = " select distinct usedt from ks_jknksi ";
+            
             if($timekb==1){
-                $timestr =" timekb in(1,4,6) ";
+                //$timestr =" timekb in(1,4,6) ";
+                $timestr =" jikan in(9,10,11) ";
             }
             if($timekb==2){
-                $timestr =" timekb in(2,4,5,6) ";
+                //$timestr =" timekb in(2,4,5,6) ";
+                $timestr =" jikan in(13,14,15,16) ";
             }
             if($timekb==3){
-                $timestr =" timekb in(3,5,6) ";
+                //$timestr =" timekb in(3,5,6) ";
+                $timestr =" jikan in(18,19,20) ";
             }
 
-            $sql .= " WHERE rmcd = ".$rmcd." AND ". $timestr." AND usedt >= ".$sttdt." AND usedt <= ".$enddt." AND ukeno <> 0";
-            
+            //$sql .= " WHERE rmcd = ".$rmcd." AND ". $timestr." AND usedt >= ".$sttdt." AND usedt <= ".$enddt." AND ukeno <> 0";
+            $sql .= " WHERE rmcd = ".$rmcd." AND ". $timestr." AND usedt >= ".$sttdt." AND usedt <= ".$enddt." AND rjyokb <> 0";
             //$sql .= " WHERE rmcd = ".$rmcd." AND timekb = ".$timekb." AND usedt >= ".$sttdt." AND usedt <= ".$enddt." AND ukeno <> 0";
-            //echo $sql;
-            //$sql .= " order by rmcd , usedt ";
-            //echo $sql;
-            //if (!empty($wh)) { $sql .= $wh; }
+            $sql .= " order by usedt ";
             
             $result = sqlsrv_query( $this->con, $sql );
 
@@ -277,14 +279,14 @@ class DB
             while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_NUMERIC)) {
 
                 $usedt  = $row[0];
-                $value  = $row[1];
+                //$value  = $row[1];
 
-                if (!is_numeric($value)) { 
+                //if (!is_numeric($value)) { 
                     //数値化できないものはutf8に変換して値を返す
-					$value = 0;
-                }
+				//	$value = 0;
+                //}
                     
-                $ret['data'][$usedt] = $value;                    
+                $ret['data'][$usedt] = 1;//$value;                    
                 $i++;
             }
 
