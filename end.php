@@ -1,7 +1,7 @@
 <?php
 @session_start();
 //if(empty($_SESSION['webrk']['user']['userid'])){/
-//	header("Location : top.php");	
+//	header("Location : top.php");
 //}
 ?>
 <!DOCTYPE html>
@@ -47,7 +47,7 @@ $checkkyaku =1 ;
 
 $meisai_count = $_POST['meisai_count'];
 
-$ini = parse_ini_file('config.ini');        
+$ini = parse_ini_file('config.ini');
 $serverName = $ini['SERVER_NAME'];
 $connectionInfo = array( "Database"=>$ini['DBNAME'], "UID"=>$ini['UID'], "PWD"=>$ini['PWD'] );
 $conn = sqlsrv_connect( $serverName, $connectionInfo);
@@ -74,7 +74,7 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 	$tel2 =  $row['tel2'];
 	$fax =  $row['fax'];
 	$url =  $row['url'];
-	$mail =  $row['mail'];	 
+	$mail =  $row['mail'];
 	$zipcd =  $row['zipcd'];
 	$adr1 =  $row['adr1'];
 	$adr2 =  $row['adr2'];
@@ -92,7 +92,6 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 /* --------------------*/
 $ukeno = get_ukeno($conn);
 
-/*----------------------------------------------------*/
 $login = $_SESSION['wloginid'];
 
 //明細件数の取得
@@ -243,14 +242,14 @@ if($revflg){
 	$ukehkb = 98;//WEB予約
 
 	for ($i = 0; $i < $meisai_count; $i++) {
-		
+
 		if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
-		
+
 			$gyo++;
 
 			//施設コード
 			$rmcd = $_POST[ 'rmcd'.$i ];
-			
+
 			//ホールであればホール区分設定
 			if($rmcd==301){
 				$holekb = 1;
@@ -267,14 +266,14 @@ if($revflg){
 
 			//許可申請書発行日
 			$shindt = 0;
-			
+
 			//許可書ダウンロードURL
 			$kyourl = "";
 
 			//許可書ファイル名
 			$kyofile = "";
 
-			//許可書ダウンロード不可	
+			//許可書ダウンロード不可
 			$kyofbd = 0;
 
 			//使用日付
@@ -282,28 +281,28 @@ if($revflg){
 
 			//曜日区分
 			$yobikb = get_wday( $usedt );
-			
+
 			//曜日
 			$weekday = array( "日", "月", "火", "水", "木", "金", "土" );//日本語曜日定義
 			$yobi = mb_convert_encoding( $weekday[ $yobikb ], "SJIS","UTF-8");
-			
+
 			//時間帯区分
 			$timekb = $_POST[ 'timekb'.$i ];
 
 			//使用開始時間
 			$stjkn = str_replace(":","",$_POST[ 'stjkn'.$i ]);
-			
+
 			//使用終了時間
 			$edjkn = str_replace(":","",$_POST[ 'edjkn'.$i ]);
 
 			//準備開始時間
 			$jstjkn_h = 0;
 			$jstjkn_m = 0;
-			
+
 			if(isset($_POST[ 'jnstjkn_h'.$i ] )){
 				$jstjkn_h =  $_POST[ 'jnstjkn_h'.$i ];
 			}
-			
+
 			if(isset($_POST[ 'jnstjkn_m'.$i ] )){
 				$jstjkn_m =  $_POST[ 'jnstjkn_m'.$i ];
 			}
@@ -313,11 +312,11 @@ if($revflg){
 			//準備終了時間
 			$jnedjkn_h = 0;
 			$jnedjkn_m = 0;
-			
+
 			if(isset($_POST[ 'jnedjkn_h'.$i ] )){
 				$jnedjkn_h =  $_POST[ 'jnedjkn_h'.$i ];
 			}
-			
+
 			if(isset($_POST[ 'jedjkn_m'.$i ] )){
 				$jnedjkn_m =  $_POST[ 'jedjkn_m'.$i ];
 			}
@@ -326,7 +325,7 @@ if($revflg){
 
 			//本番開始時間
 			if( $rmcd == 301 ){
-			
+
 				$hbstjkn = 0;
 				$hbedjkn = 0;
 				$hbstjkn_h = 0;
@@ -339,7 +338,7 @@ if($revflg){
 						$hbstjkn_h =  $_POST[ 'hstjkn_h'.$i ];
 					}
 				}
-				
+
 				if(isset($_POST[ 'hstjkn_m'.$i ] )){
 					if(!empty($_POST[ 'hstjkn_m'.$i ] )){
 						$hbstjkn_m =  $_POST[ 'hstjkn_m'.$i ];
@@ -349,13 +348,13 @@ if($revflg){
 				$hbstjkn = format_db_jkn( $hbstjkn_h ,  $hbstjkn_m );
 
 				if(isset($_POST[ 'hedjkn_h'.$i ] )){
-					if(!empty($_POST[ 'hedjkn_h'.$i ] )){	
+					if(!empty($_POST[ 'hedjkn_h'.$i ] )){
 						$hbedjkn_h =  $_POST[ 'hedjkn_h'.$i ];
 					}
 				}
-				
+
 				if(isset($_POST[ 'hedjkn_m'.$i ] )){
-					if(!empty($_POST[ 'hedjkn_m'.$i ] )){	
+					if(!empty($_POST[ 'hedjkn_m'.$i ] )){
 						$hbedjkn_m =  $_POST[ 'hedjkn_m'.$i ];
 					}
 				}
@@ -363,21 +362,21 @@ if($revflg){
 				$hbedjkn = format_db_jkn( $hbedjkn_h ,  $hbedjkn_m );
 
 			}else{
-			
+
 				//ホール以外は開始・終了時間と同様
 				$hbstjkn = str_replace(":","",$_POST[ 'stjkn'.$i ]);
 				$hbedjkn = str_replace(":","",$_POST[ 'edjkn'.$i ]);
-			
+
 			}
 
 			//撤去開始時間
 			$tkstjkn_h = 0;
 			$tkstjkn_m = 0;
-			
+
 			if(isset($_POST[ 'tkstjkn_h'.$i ] )){
 				$tkstjkn_h =  $_POST[ 'tkstjkn_h'.$i ];
 			}
-			
+
 			if(isset($_POST[ 'tkstjkn_m'.$i ] )){
 				$tkstjkn_m =  $_POST[ 'tkstjkn_m'.$i ];
 			}
@@ -387,11 +386,11 @@ if($revflg){
 			//撤去終了時間
 			$tkedjkn_h = 0;
 			$tkedjkn_m = 0;
-			
+
 			if(isset($_POST[ 'tkedjkn_h'.$i ] )){
 				$tkedjkn_h =  $_POST[ 'tkedjkn_h'.$i ];
 			}
-			
+
 			if(isset($_POST[ 'tkedjkn_m'.$i ] )){
 				$tkedjkn_m =  $_POST[ 'tkedjkn_m'.$i ];
 			}
@@ -404,32 +403,32 @@ if($revflg){
 			if(isset($_POST[ 'comlkb'.$i ] )){
 
 				if( $_POST[ 'comlkb'.$i ] == 1 ){
-					$comlkb = 1;	
-				}	
+					$comlkb = 1;
+				}
 
 			}
-			
+
 			//入場料・受講料区分
 			$feekb = 0;
 
 			if(isset($_POST[ 'feekb'.$i ] )){
 
 				if( $_POST[ 'feekb'.$i ] == 1 ){
-					$feekb = 1;	
-				}	
+					$feekb = 1;
+				}
 
 			}
-			
+
 			//料金区分・増減率
 			//一般
 			$ratekb = 1;
 			$zgrt = 100;
-			
+
 			//練習準備撤去
 			//（注意）本番開始、本番終了時間がセットされていなければ、準備撤去（料金区分:2）とみなす
 			if($hbstjkn==0 && $hbedjkn==0){
 				$ratekb = 2;
-				$zgrt=50;			
+				$zgrt=50;
 			}else{
 				//営利目的の場合は、料金区分：3
 				if( ( $comlkb == 1 ) && ( $feekb == 1 ) ){
@@ -437,7 +436,7 @@ if($revflg){
 					$zgrt = 150;
 				}
 			}
-			
+
 			//内部
 			if($kyakb==99){
 				$ratekb = 9;
@@ -477,7 +476,7 @@ if($revflg){
 
 			//キャンセル日付
 			$candt = 0;
-			
+
 			//キャンセル区分
 			$cankb = 0;
 
@@ -489,10 +488,10 @@ if($revflg){
 
 			//返還金額
 			$hkkin = 0;
-			
+
 			//状態データ更新フラグ
 			$kskbn = 0;
-			
+
 			//備考
 			if( isset($_POST['biko'.$i])){
 				$biko = $_POST[ 'biko'.$i ];
@@ -500,7 +499,7 @@ if($revflg){
 
 			//間仕切り
 			$partkb = 0;
-			
+
 			if( isset($_POST['partkb'.$i])){
 
 				if( $_POST['partkb'.$i] == 1 ){
@@ -512,11 +511,11 @@ if($revflg){
 				if( $_POST['partkb'.$i] == 0 ){
 					$partkb = $_POST['partkb'.$i];
 					//$biko .= "P開ける";
-					$biko = "P開ける ".$biko; 
+					$biko = "P開ける ".$biko;
 				}
 
 			}
-			
+
 			$biko = mb_convert_encoding($biko, "SJIS","UTF-8");
 
 			//付箋1,2,3
@@ -526,9 +525,9 @@ if($revflg){
 
 			//WEB予約状態区分
 			$wrsvkb = 1;
-			
+
 			if( $kounoukb ==1){
-			
+
 				$wrsvkb = 2;//予約
 
 			}else{
@@ -537,13 +536,13 @@ if($revflg){
 
 			}
 			if($kyakb==99){//内部
-				$wrsvkb = 2;//予約	
+				$wrsvkb = 2;//予約
 			}
 
 			//予約変更日
 			$rsvchgdt = 0;
-			
-			//管理項目	
+
+			//管理項目
 			$wloginid = $login;
 			$udate = date( "Ymd" );
 			$wudate = date( "Ymd" );
@@ -557,7 +556,7 @@ if($revflg){
 				ratekb,ratesb,zgrt,ninzu,rmtnk,rmentnk,rmtukin,rmenkin,rmkin,hzkin,rmnykin,hznykin,synykin,
 				candt,cankb,hkktdt,hkdt,hkkin,kskbn,biko,tag1,tag2,tag3,
 				wrsvkb,rsvchgdt,comlkb,feekb,pianokb,partkb,login,udate,utime,ukedt,wloginid,wudate,wutime,pgnm)";
-		    
+
 		    $sql .= "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		    $params = array($ukeno, $gyo, $rmcd, $kyono, $kyodt, $shindt, $kyourl, $kyofile, $kyofbd, $usedt, $yobi, $yobikb,
@@ -565,7 +564,7 @@ if($revflg){
 				$ratekb, $ratesb, $zgrt, $ninzu, $rmtnk, $rmentnk, $rmtukin, $rmenkin, $rmkin, $hzkin, $rmnykin, $hznykin, $synykin,
 				$candt, $cankb, $hkktdt, $hkdt, $hkkin, $kskbn, $biko, $tag1, $tag2, $tag3,
 				$wrsvkb, $rsvchgdt, $comlkb, $feekb, $pianokb, $partkb, $login, $udate, $utime, $ukedt, $wloginid, $wudate, $wutime, $pgnm );
-		 
+
 			$stmt = sqlsrv_query( $conn, $sql, $params);
 
 			if( $stmt === false ) {
@@ -602,8 +601,12 @@ if($revflg){
 				$stsu = 1;
 
 				//単価
-				$sttnk = 6500;
-				
+				if( $kyakb == 2 ){
+					$sttnk = 6500;
+				}elseif( $kyakb == 1 ){
+					$sttnk = 13000;
+				}
+
 				//金額
 				$stkin = intval( $sttnk ) * intval( $stsu );
 
@@ -682,7 +685,7 @@ if($revflg){
 	for ($i = 0 ; $i < $meisai_count; $i++) {
 
 		if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
-			
+
 			/* 施設略称 */
 			$rmnmr = "";
 			$sql = "SELECT rmnmr FROM mt_room WHERE rmcd = ".$_POST[ 'rmcd'.$i ];
@@ -690,17 +693,17 @@ if($revflg){
 			$stmt = sqlsrv_query( $conn, $sql);
 
 			while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
-		    	$rmnmr = $row['rmnmr'];                                   
+		    	$rmnmr = $row['rmnmr'];
 		    }
-		
+
 			//施設単価
 			$tnk = 0;
 			$kin = 0;
 
 			$sql = "SELECT tnk FROM mt_rmtnk WHERE rmcd = ".$_POST[ 'rmcd'.$i ]." AND kyakb = ".$kyacd." AND ratesb = 0 AND stjkn = ".$_POST[ 'stjkn'.$i ]." AND edjkn = ".$_POST[ 'edjkn'.$i ];
-		        
+
 		    $stmt = sqlsrv_query( $conn, $sql );
-		    
+
 		    if( $stmt === false) {
 		    	//die( print_r( sqlsrv_errors(), true) );
 			}
@@ -710,17 +713,17 @@ if($revflg){
 		        $tnk = $row['tnk'];	//通常単価
 		        $kin = $row['tnk'];	//金額
 
-		    }  
+		    }
 
 			$list[] = array(
 				'gyo' => $_POST[ 'gyo'.$i ], 'usedt' => $_POST[ 'usedt'.$i ], 'yobi' => '月', 'yobikb' => $_POST[ 'yobikb'.$i ],
-				'rmcd' => $_POST[ 'rmcd'.$i ], 'rmnmr' => $rmnmr, 'stjkn' => $_POST[ 'stjkn'.$i ], 'edjkn' => $_POST[ 'edjkn'.$i ], 
-				'hbstjkn' => $_POST[ 'hbstjkn'.$i ], 'hbedjkn' => $_POST[ 'hbedjkn'.$i ], 
-				'pianokb' => $_POST[ 'piano'.$i ],'tnk' => $tnk, 
-				'rmkin'=> $_POST[ 'rmkin'.$i ], 'hzkin'=>$_POST[ 'hzkin'.$i ]);		
+				'rmcd' => $_POST[ 'rmcd'.$i ], 'rmnmr' => $rmnmr, 'stjkn' => $_POST[ 'stjkn'.$i ], 'edjkn' => $_POST[ 'edjkn'.$i ],
+				'hbstjkn' => $_POST[ 'hbstjkn'.$i ], 'hbedjkn' => $_POST[ 'hbedjkn'.$i ],
+				'pianokb' => $_POST[ 'piano'.$i ],'tnk' => $tnk,
+				'rmkin'=> $_POST[ 'rmkin'.$i ], 'hzkin'=>$_POST[ 'hzkin'.$i ]);
 
 		}
-	
+
 	}
 
 	$Seikyu->seikyu( $ukeno, $ukedt, $kyacd, $list );
@@ -740,21 +743,19 @@ if( $revflg ) {
 /*  管理者留保			*/
 /* --------------------*/
 for ($i = 0 ; $i < $meisai_count; $i++) {
-//echo "meisai_count".$meisai_count;
-//print_r($_POST);
-if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
-			
-	
+
+	if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
+
 	//施設コード
 	$rmcd = $_POST[ 'rmcd'.$i ];
 	//時間帯
 	$timekb = $_POST[ 'timekb'.$i ];
 	$mng_rec = array();
-	
-	if( $rmcd == 301 || $rmcd == 1001 || $rmcd == 1002 ){		
-	
+
+	if( $rmcd == 301 || $rmcd == 1001 || $rmcd == 1002 ){
+
 		if( $rmcd == 1001 ){
-			$mngrmcd = 1002; 
+			$mngrmcd = 1002;
 			$mng_rec[] = array( 1002, $timekb );
 		}
 
@@ -763,7 +764,7 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 	    }
 
 	    if( $rmcd == 301 ){
-	        
+
 	        if( $timekb == 1 ){
 				$mng_rec[] = array( 301, 2 );
 	        }else if( $timekb == 2 ) {
@@ -781,23 +782,21 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 
 	}
 
-//echo "812";
-//print_r($mng_rec);
 	$gyo = 0;
-    
+
     for ($cnt = 0 ; $cnt < count($mng_rec); $cnt++) {
-    	
+
     	/* --------------------*/
 		/*  RK受付№取得処理  */
 		/* --------------------*/
 		//新たに受付Noを取得
 		$mng_ukeno = get_ukeno($conn);
-		
+
 		$gyo++;
 
 		//施設コード
 		$rmcd = $mng_rec[$cnt][0];//$_POST[ 'rmcd'.$i ];
-		
+
 		//ホールであればホール区分設定
 		if($rmcd==301){
 			$holekb = 1;
@@ -814,14 +813,14 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 
 		//許可申請書発行日
 		$shindt = 0;
-		
+
 		//許可書ダウンロードURL
 		$kyourl = "";
 
 		//許可書ファイル名
 		$kyofile = "";
 
-		//許可書ダウンロード不可	
+		//許可書ダウンロード不可
 		$kyofbd = 0;
 
 		//使用日付
@@ -829,11 +828,11 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 
 		//曜日区分
 		$yobikb = get_wday( $usedt );
-		
+
 		//曜日
 		$weekday = array( "日", "月", "火", "水", "木", "金", "土" );//日本語曜日定義
 		$yobi = mb_convert_encoding( $weekday[ $yobikb ], "SJIS","UTF-8");
-		
+
 		//時間帯区分
 		$timekb = $mng_rec[$cnt][1];
 
@@ -852,13 +851,13 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 		//準備開始時間
 		$jnstjkn = 0;
 
-		//準備終了時間			
+		//準備終了時間
 		$jnedjkn = 0;
 
 		//本番開始時間
 		//ホール以外は開始・終了時間と同様
 		$hbstjkn = $stjkn;
-		$hbedjkn = $edjkn;			
+		$hbedjkn = $edjkn;
 
 		//撤去開始時間
 		$tkstjkn = 0;
@@ -867,8 +866,8 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 		$tkedjkn = 0;
 
 		//営利目的区分
-		$comlkb = 0;		
-		
+		$comlkb = 0;
+
 		//入場料・受講料区分
 		$feekb = 0;
 
@@ -876,7 +875,7 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 		//一般
 		$ratekb = 0;
 		$zgrt = 100;
-		
+
 		//料金種別
 		$ratesb = 0;//未使用
 
@@ -904,7 +903,7 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 
 		//キャンセル日付
 		$candt = 0;
-		
+
 		//キャンセル区分
 		$cankb = 0;
 
@@ -916,14 +915,14 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 
 		//返還金額
 		$hkkin = 0;
-		
+
 		//状態データ更新フラグ
 		$kskbn = 0;
-		
+
 		//間仕切り
 		$partkb = 0;
-		
-		//備考		
+
+		//備考
 		$biko = "";
 
 		//付箋1,2,3
@@ -933,11 +932,11 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 
 		//WEB予約状態区分
 		$wrsvkb = 0;
-		
+
 		//予約変更日
 		$rsvchgdt = 0;
-		
-		//管理項目	
+
+		//管理項目
 		$wloginid = $login;
 		$udate = date( "Ymd" );
 		$wudate = date( "Ymd" );
@@ -951,7 +950,7 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 			ratekb,ratesb,zgrt,ninzu,rmtnk,rmentnk,rmtukin,rmenkin,rmkin,hzkin,rmnykin,hznykin,synykin,
 			candt,cankb,hkktdt,hkdt,hkkin,kskbn,biko,tag1,tag2,tag3,
 			wrsvkb,rsvchgdt,comlkb,feekb,pianokb,partkb,login,udate,utime,ukedt,wloginid,wudate,wutime,pgnm)";
-	    
+
 	    $sql .= "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 	    $params = array($mng_ukeno, $gyo, $rmcd, $kyono, $kyodt, $shindt, $kyourl, $kyofile, $kyofbd, $usedt, $yobi, $yobikb,
@@ -959,9 +958,9 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 			$ratekb, $ratesb, $zgrt, $ninzu, $rmtnk, $rmentnk, $rmtukin, $rmenkin, $rmkin, $hzkin, $rmnykin, $hznykin, $synykin,
 			$candt, $cankb, $hkktdt, $hkdt, $hkkin, $kskbn, $biko, $tag1, $tag2, $tag3,
 			$wrsvkb, $rsvchgdt, $comlkb, $feekb, $pianokb, $partkb, $login, $udate, $utime, $ukedt, $wloginid, $wudate, $wutime, $pgnm );
-	 
+
 		$stmt = sqlsrv_query( $conn, $sql, $params);
-//echo $sql; 
+
 		if( $stmt === false ) {
 			if( ($errors = sqlsrv_errors() ) != null) {
 				foreach( $errors as $error ) {
@@ -1053,12 +1052,12 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 		$thzkin=0;
 		$tkin = $tkin + $trmkin + $thzkin;
 		$holekb = 0;//ホール区分
-		$ukehkb = 98;//WEB予約	
+		$ukehkb = 98;//WEB予約
 
 		$kyacd = 0;
 		$dannm = mb_convert_encoding( "使用不可", "SJIS","UTF-8");
 		$dannm2 =  NULL;
-		$dannmk = NULL;//     $row['dannmk'];
+		$dannmk = NULL;//$row['dannmk'];
 		$daihyo =  NULL;
 		$renraku =  NULL;
 		$tel1 =   NULL;
@@ -1079,7 +1078,7 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 			dannm,dannm2,dannmk,daihyo,renraku,tel1,tel2,fax,url,mail,zipcd,adr1,adr2,gyscd,sihon,jygsu,kyakb,
 			kounoukb,holekb,kaigi,naiyo,kbiko,sekinin,kupdkb,rsbkb,riyokb,paylmtdt,expkb,expnocdt,expdt,
 			trmkin,thzkin,tkin,login,udate,utime,wrkkb,wloginid,wudate,wutime)";
-		
+
 		$sql .= " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		$params = array($mng_ukeno, $ukedt, $nen, $krkb, $krmemo, $ukecd, $ukehkb, $kyacd,
@@ -1103,7 +1102,6 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 		    }
 		}
 
-
 		if($rmcd==301){
 
 			/*時間帯更新*/
@@ -1121,16 +1119,41 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 	        	$jkn_rec = array(9,10,11,12,13,14,15,15,16,17,18,19,20);
 	        }
 
-
 	        for ($cnt2 = 0 ; $cnt2 < count($jkn_rec); $cnt2++) {
 	        //for ( $jkn = $stt; $jkn <= $end;  $jkn++) { // 3時間分回す
-	        	$sql = "SELECT * FROM ks_jkntai WHERE usedt = ".$usedt." AND rmcd = ".$mng_rec[$cnt][0]." AND jikan = ".$jkn_rec[$cnt2]." AND timekb = ".$mng_rec[$cnt][1];
+
+				$jkn_timekb = 0;
+
+                switch ( $jkn_rec[$jkn] ) {
+                	case 9:
+                	case 10:
+                	case 11:
+                	case 12:
+                		$jkn_timekb = 1;
+                		break;
+                	case 13:
+                	case 14:
+                	case 15:
+                	case 16:
+                	case 17:
+                		$jkn_timekb = 2;
+                		break;
+                	case 18:
+                	case 19:
+                	case 20:
+                		$jkn_timekb = 3;
+                		break;
+                	default:
+                		break;
+                }
+
+	        	$sql = "SELECT * FROM ks_jkntai WHERE usedt = ".$usedt." AND rmcd = ".$mng_rec[$cnt][0]." AND jikan = ".$jkn_rec[$cnt2]." AND timekb = ".$jkn_timekb;
 	                $stmt = sqlsrv_query( $conn, $sql );
-	                
+
 	                if( $stmt === false) {
 	                    //die( print_r( sqlsrv_errors(), true) );
 	                }
-	            
+
 	                //$has_rows = sqlsrv_has_rows ( $stmt );
 
 	                //if ( $has_rows===true ){
@@ -1139,17 +1162,17 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 	                		//echo "has_rows";
 	                		$has_rows==true;
 	                        /*if( $row['ukeno'] != 0 ){
-	                            //echo $sql;                                    
+	                            //echo $sql;
 	                            //die( "unexpected error" ); //想定外、先取りされているなど
 	                        }else{
-	                                                                //update
+	                        //update
 	                            $sql = "UPDATE ks_jkntai SET ukeno=(?), gyo=(?),login=(?), udate=(?), utime=(?)";
 	                            $sql = $sql." WHERE usedt=(?) AND rmcd=(?) AND jikan=(?) AND timekb=(?)";
 
 	                            $params = array( $ukeno, $gyo, $login, date( "Ymd" ), date( "His" ) , $usedt, $mng_rec[$cnt][0], $jkn_rec[$cnt2], $mng_rec[$cnt][1] );
 
 	                        }*/
-	                
+
 	                    }
 
 	                //}else{
@@ -1158,29 +1181,29 @@ if( isset( $_POST[ 'rmcd'.$i ] )&& ( !empty( $_POST[ 'rmcd'.$i ] ) ) ){
 	            		 $sql = "UPDATE ks_jkntai SET ukeno=(?), gyo=(?),login=(?), udate=(?), utime=(?)";
 	                            $sql = $sql." WHERE usedt=(?) AND rmcd=(?) AND jikan=(?) AND timekb=(?)";
 
-	                            $params = array( $mng_ukeno, $gyo, $login, date( "Ymd" ), date( "His" ) , $usedt, $mng_rec[$cnt][0], $jkn_rec[$cnt2], $mng_rec[$cnt][1] );
+	                            $params = array( $mng_ukeno, $gyo, $login, date( "Ymd" ), date( "His" ) , $usedt, $mng_rec[$cnt][0], $jkn_rec[$cnt2], $jkn_timekb );
 
 	            	}else{
 
 	                    //insert
 	                    $sql = "INSERT INTO ks_jkntai ( usedt, jikan, rmcd, timekb, ukeno, gyo, login, udate, utime)";
 	                    $sql = $sql." VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	                    $params = array( $usedt, $jkn_rec[$cnt2], $mng_rec[$cnt][0], $mng_rec[$cnt][1], $mng_ukeno, $gyo, $login, date( "Ymd" ), date( "His" ) );
+	                    $params = array( $usedt, $jkn_rec[$cnt2], $mng_rec[$cnt][0], $jkn_timekb, $mng_ukeno, $gyo, $login, date( "Ymd" ), date( "His" ) );
 
 	                }//if
 
 	                $stmt = sqlsrv_query( $conn, $sql, $params );
-	    
+
 	                if( $stmt === false) {
 	                    //$tran = false;
 	                    //echo $sql;
 	                    //break;//exit for
 	                }
-                    
+
               }//for
-    	
-    	}//301				
-	
+
+    	}//301
+
 	}//mng_rec:end
 }
 }//exit forvmeisai
@@ -1195,7 +1218,7 @@ if( $revflg ) {
      //echo "Transaction rolled back.<br />";
 }
 
-function get_ukeno($conn) 
+function get_ukeno($conn)
 {
 	/* --------------------*/
 	/*  RK受付№取得処理  */
@@ -1205,11 +1228,11 @@ function get_ukeno($conn)
 
 	$sql = "SELECT MAX(ukeno)  AS ukeno FROM dt_roomr where ukeno >= ".$nen1."000000 and ukeno <".$nen2."000000";
 	$stmt = sqlsrv_query( $conn, $sql);
-	
+
 	if( $stmt === false ) {
 	     //die( print_r( sqlsrv_errors(), true));
 	}
-	
+
 	if( sqlsrv_fetch( $stmt ) === false) {
 	     //die( print_r( sqlsrv_errors(), true));
 	}
@@ -1227,7 +1250,7 @@ function get_ukeno($conn)
 }
 
 ?>
-	
+
 <!-- main -->
 	<div class="row">
     	<div class="col-xs-6" style="padding:0">
@@ -1237,13 +1260,13 @@ function get_ukeno($conn)
   			<span class="f120">現在の時間： <span id="currentTime"></span></span>
 		</div>
 	</div>
-<?php	
+<?php
 	if(empty($notice)){
 		$notice = "ご希望の内容は、システムへ送信されましたが、まだ受付できておりません。<br>お申し込みが成立したかどうかは、改めてメールでお知らせします。";
 	}
 ?>
 	<h4 class="status2"><?php echo $notice; ?></h4>
-	
+
 	<br>
 	<li>受付は先着順となります。</li>
   	<li>お申し込みの受付状況は、<a href="rsvlist.php">予約照会画面</a>でもご覧いただけます。</li>
@@ -1251,10 +1274,10 @@ function get_ukeno($conn)
 <?php if( $revflg ){ ?>
 	<div class="alert alert-info" role="alert">
 	お問い合わせ番号：  <span style="font-size:1.2em"><?php echo $ukeno ?></span></div>
-<?php if( $holekb == 1 ){ ?>	
+<?php if( $holekb == 1 ){ ?>
 	<p>・ハーバーホールのご使用については、必ずこちらの<a href="#">「ご利用案内」</a>をご確認ください。</p>
 <?php } ?>
-<?php } ?>	
+<?php } ?>
 	<!--p>・展示場のご使用については、事前にこちらの<a href="#">「使用計画書」</a>をご提出ください。</p><br-->
 	<a class="btn btn-default btn-lg" href="top.php" role="button">トップページに戻る</a>
 	<a class="btn btn-primary btn-lg" href="search.php" role="button"><small>続けて申し込む場合・・・</small>空き状況へ&nbsp;&gt;&gt;</a>
